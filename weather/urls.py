@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import TemperatureView
+from .views import dashboardView,setPrefView,forecastView
 
 urlpatterns = [
-    path('current-temp/', TemperatureView.as_view(), name='current-time'),
-    # Add more URL patterns for other views if needed
+    path('dashboard/', dashboardView.as_view(), name='current-time'),
+    path('setpref',setPrefView.as_view(),name = 'set-temps'),
+    path('forecast/',forecastView.as_view(),name = 'forecast')
 ]
