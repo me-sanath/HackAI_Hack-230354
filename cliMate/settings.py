@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'accounts',
+    'weather',
     'rest_framework.authtoken'
 ]
 
@@ -59,6 +60,7 @@ REST_FRAMEWORK = {
 }
 
 ROOT_URLCONF = 'cliMate.urls'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 
 TEMPLATES = [
     {
