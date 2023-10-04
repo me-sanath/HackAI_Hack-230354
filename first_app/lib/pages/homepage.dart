@@ -140,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Image _image =
       Image.asset('assets/images/95.png', height: 200, fit: BoxFit.contain);
   String _formattedDate = DateFormat('E, dd MMM').format(DateTime.now());
+  String _message = '';
 
   Future<void> _fetchWeatherForCurrentLocation() async {
     final position = await Geolocator.getCurrentPosition(
@@ -184,6 +185,10 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       widget.onCityChange(cityName);
     } else {
+      setState(() {
+        _message = "Location not found!";
+      });
+      _showSearchDialog(context, _message);
       print('Failed to fetch weather data: ${response.statusCode}');
     }
   }
@@ -243,9 +248,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         SizedBox(width: 25), // Add some spacing
-                        Icon(
-                          Icons.search,
-                          size: 32,
+                        GestureDetector(
+                          onTap: () {
+                            _showSearchDialog(context, '');
+                          },
+                          child: Icon(
+                            Icons.search,
+                            size: 32,
+                          ),
                         ), // Search icon on the right
                       ],
                     ),
@@ -361,7 +371,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Column(
                           children: [
                             Text(
-                              _humidity.toString()+'%', // Replace with actual humidity value
+                              _humidity.toString() +
+                                  '%', // Replace with actual humidity value
                               style: GoogleFonts.alata(
                                 fontSize: 20,
                                 color: Colors.white,
@@ -402,7 +413,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           Column(
                             children: [
                               Text(
-                                _windSpeed.toString()+'km/h', // Replace with actual wind speed value
+                                _windSpeed.toString() +
+                                    'km/h', // Replace with actual wind speed value
                                 style: GoogleFonts.alata(
                                   fontSize: 20,
                                   color: Colors.white,
@@ -431,9 +443,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _showSearchDialog(BuildContext context) {
+  void _showSearchDialog(BuildContext context, _message) {
     String newCityName = "";
-
+    String error = _message;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -461,6 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: Text('Search'),
             ),
+            if (error.isNotEmpty) Text("Location Not Found!")
           ],
         );
       },
@@ -717,7 +730,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
           date: DateTime.parse(item['date']),
           minTemperature: item['min_temperature'],
           maxTemperature: item['max_temperature'],
-          description: item['description'],
+          code: item['weathearCode'],
         ));
       }
 
@@ -746,7 +759,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
             title: Text(date),
             subtitle: Text(
                 'Min: ${forecast.minTemperature}°C | Max: ${forecast.maxTemperature}°C'),
-            trailing: Text(forecast.description),
+            trailing: Text(forecast.code),
           );
         },
       ),
@@ -794,13 +807,13 @@ class WeatherForecast {
   final DateTime date;
   final double minTemperature;
   final double maxTemperature;
-  final String description;
+  final String code;
 
   WeatherForecast({
     required this.date,
     required this.minTemperature,
     required this.maxTemperature,
-    required this.description,
+    required this.code,
   });
 }
 

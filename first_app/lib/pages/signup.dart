@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'TemperaturePreferencesPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -7,6 +8,7 @@ class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SignUpPage(),
     );
   }
@@ -87,13 +89,13 @@ class _SignUpPageState extends State<SignUpPage> {
               255, 240, 249, 255), // Set the background color to light blue
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(right: 40.0, left: 40, top: 10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start, // Changed to start
                 children: [
                   SizedBox(height: 30),
                   Container(
-                    width: 300,
+                    width: 350,
                     padding: const EdgeInsets.all(16.0),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -102,7 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     child: Text(
                       'Sign Up',
-                      style: TextStyle(
+                      style: GoogleFonts.alata(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
@@ -111,13 +113,13 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(height: 100), // Increased the top spacing
                   Text(
                     'Welcome to cli-Mate, please Sign Up to continue',
-                    style: TextStyle(
+                    style: GoogleFonts.alata(
                       color: Colors.black,
                       fontSize: 18.0,
                     ),
                   ),
                   SizedBox(
-                      height: 40), // Increased spacing below the description
+                      height: 30), // Increased spacing below the description
                   _buildTextField(_nameController, 'Name:'),
                   SizedBox(height: 20),
                   _buildTextField(_emailController, 'Email:'),
@@ -141,7 +143,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
-                              30.0), // Adjust the radius for all sides
+                              20.0), // Adjust the radius for all sides
                           side: BorderSide(
                               color: Colors
                                   .black), // Set the border color to black
@@ -151,10 +153,15 @@ class _SignUpPageState extends State<SignUpPage> {
                         EdgeInsets.symmetric(
                             horizontal: 40.0,
                             vertical:
-                                20.0), // Increase padding for the horizontal direction
+                                15.0), // Increase padding for the horizontal direction
                       ),
                     ),
-                    child: Text('Sign Up'),
+                    child: Text(
+                      'Sign Up',
+                      style: GoogleFonts.alata(
+                        fontSize: 20,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -168,6 +175,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _buildTextField(TextEditingController controller, String labelText,
       {bool isPassword = false}) {
     return Container(
+      width: 350,
       decoration: BoxDecoration(
         color: Color.fromARGB(255, 190, 228, 255), // Set the background color
         borderRadius:
@@ -178,18 +186,18 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black
+            color: const Color.fromARGB(255, 77, 77, 77)
                 .withOpacity(0.5), // Shadow color (black with opacity)
-            spreadRadius: 2, // Spread radius
-            blurRadius: 5, // Blur radius
-            offset: Offset(0, 3), // Offset in the x and y direction
+            spreadRadius: 1, // Spread radius
+            blurRadius: 1, // Blur radius
+            offset: Offset(0, 2), // Offset in the x and y direction
           ),
         ],
       ),
       child: TextField(
         controller: controller,
         obscureText: isPassword,
-        style: TextStyle(
+        style: GoogleFonts.alata(
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ), // Text color

@@ -201,9 +201,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: Text(
                   'Log In',
                   style: GoogleFonts.alata(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold, // Add font weight if needed
+                    fontSize: 20,
+                    color: Colors.black, // Add font weight if needed
                   ),
                 ),
               ),
