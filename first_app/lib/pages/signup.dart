@@ -3,11 +3,6 @@ import 'TemperaturePreferencesPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-// If you want to run the page uncomment:
-// void main(){
-//   runApp(SignUp());
-// }
-
 class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -45,7 +40,6 @@ class _SignUpPageState extends State<SignUpPage> {
         'password': password,
       };
 
-      // Sanath send the data to django
       final response = await http.post(
         Uri.parse(
             'http://your-django-api-url/register/'), // Replace with your registration endpoint URL
@@ -56,7 +50,6 @@ class _SignUpPageState extends State<SignUpPage> {
       );
 
       if (response.statusCode == 200) {
-        // Sanath, successful registration, handle the response accordingly
         final String receivedUserId = 'user_id_from_django';
 
         setState(() {
@@ -72,7 +65,6 @@ class _SignUpPageState extends State<SignUpPage> {
           _message = 'Registration successful.';
         });
       } else {
-        // Sanath, registration failed, handle the error response
         setState(() {
           _message = 'Registration failed: ${response.body}';
         });
@@ -88,35 +80,127 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+      resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
+        child: Container(
+          color: const Color.fromARGB(
+              255, 240, 249, 255), // Set the background color to light blue
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start, // Changed to start
+                children: [
+                  SizedBox(height: 30),
+                  Container(
+                    width: 300,
+                    padding: const EdgeInsets.all(16.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 190, 228, 255),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 100), // Increased the top spacing
+                  Text(
+                    'Welcome to cli-Mate, please Sign Up to continue',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  SizedBox(
+                      height: 40), // Increased spacing below the description
+                  _buildTextField(_nameController, 'Name:'),
+                  SizedBox(height: 20),
+                  _buildTextField(_emailController, 'Email:'),
+                  SizedBox(height: 20),
+                  _buildTextField(_passwordController, 'Password:',
+                      isPassword: true),
+                  SizedBox(height: 20),
+                  _buildTextField(
+                      _confirmPasswordController, 'Confirm Password:',
+                      isPassword: true),
+                  SizedBox(height: 80),
+                  ElevatedButton(
+                    onPressed: _signUp,
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Color.fromARGB(255, 92, 187, 255),
+                      ),
+                      foregroundColor: MaterialStateProperty.all<Color>(
+                        Colors.black, // Set the font color to black
+                      ),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              30.0), // Adjust the radius for all sides
+                          side: BorderSide(
+                              color: Colors
+                                  .black), // Set the border color to black
+                        ),
+                      ),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.symmetric(
+                            horizontal: 40.0,
+                            vertical:
+                                20.0), // Increase padding for the horizontal direction
+                      ),
+                    ),
+                    child: Text('Sign Up'),
+                  ),
+                ],
+              ),
             ),
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
-            ),
-            TextField(
-              controller: _confirmPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Confirm Password'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _signUp,
-              child: Text('Sign Up'),
-            ),
-          ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String labelText,
+      {bool isPassword = false}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 190, 228, 255), // Set the background color
+        borderRadius:
+            BorderRadius.circular(15.0), // Adjust the radius as needed
+        border: Border.all(
+          width: 1.0,
+          color: Colors.blue, // Set the border color to blue for text fields
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black
+                .withOpacity(0.5), // Shadow color (black with opacity)
+            spreadRadius: 2, // Spread radius
+            blurRadius: 5, // Blur radius
+            offset: Offset(0, 3), // Offset in the x and y direction
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword,
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ), // Text color
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: TextStyle(color: Colors.black), // Label text color
+          border: InputBorder.none, // Remove the default input border
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: 10.0,
+            vertical: 10.0,
+          ),
         ),
       ),
     );
