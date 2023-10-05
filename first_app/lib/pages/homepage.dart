@@ -1,3 +1,4 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:first_app/main.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stts;
 
 //to run the current page, uncomment:
 void main() {
@@ -38,14 +40,42 @@ class BottomNavigationExample extends StatefulWidget {
 }
 
 class _BottomNavigationExampleState extends State<BottomNavigationExample> {
+  var _speechToText = stts.SpeechToText();
+  bool islistening = false;
   int _currentIndex = 0;
   final PageController _pageController = PageController();
   List<Widget> _screens = [];
   String _currentCity = "";
+  String text = "";
+
+  void listen() async {
+    if (!islistening) {
+      bool available = await _speechToText.initialize(
+        onStatus: (status) => print(text),
+        onError: (errorNotification) => print("$errorNotification"),
+      );
+      if (available) {
+        setState(() {
+          islistening = true;
+        });
+        _speechToText.listen(
+          onResult: (result) => setState(() {
+            text = result.recognizedWords;
+          }),
+        );
+      }
+    } else {
+      setState(() {
+        islistening = false;
+      });
+      _speechToText.stop();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _speechToText = stts.SpeechToText();
     _screens = [
       HomeScreen(
         userId: widget.userId,
@@ -81,16 +111,24 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
             },
           ),
           Positioned(
-            bottom: 16.0,
+            bottom: 30.0,
             right: 16.0,
-            child: FloatingActionButton(
-              onPressed: () {
-                // Satwik your stuff should be here
-                // Handle microphone button tap
-                // Add your microphone functionality here
-              },
-              child: Icon(Icons.mic),
-              backgroundColor: Color.fromARGB(255, 92, 187, 255),
+            child: AvatarGlow(
+              animate: islistening,
+              repeat: true,
+              endRadius: 60,
+              glowColor: Colors.blue,
+              duration: Duration(milliseconds: 2000),
+              child: FloatingActionButton(
+                onPressed: () {
+                  listen();
+                  // Satwik your stuff should be here
+                  // Handle microphone button tap
+                  // Add your microphone functionality here
+                },
+                child: Icon(islistening ? Icons.mic : Icons.mic_none),
+                backgroundColor: Color.fromARGB(255, 92, 187, 255),
+              ),
             ),
           ),
         ],
@@ -911,14 +949,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               SizedBox(height: 30),
-      
+
               Column(
                 children: [
                   CircleAvatar(
                     radius: 70.0,
                     backgroundColor: Color.fromARGB(255, 196, 196, 196),
-                    backgroundImage:
-                        AssetImage('assets/images/profile_image.png',),
+                    backgroundImage: AssetImage(
+                      'assets/images/profile_image.png',
+                    ),
                   ),
                   SizedBox(height: 16.0),
                   Container(
@@ -951,7 +990,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               SizedBox(height: 16.0),
-      
+
               // Temperature Sliders
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -977,7 +1016,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     label: '$_minTemperature °C',
                   ),
                   SizedBox(height: 16.0),
-      
+
                   // Maximum Temperature Slider
                   SizedBox(height: 16.0),
                   Text(
@@ -1000,7 +1039,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               ),
-      
+
               // Save Settings Button
               SizedBox(height: 16.0),
               Container(
@@ -1032,7 +1071,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
               ),
-      
+
               // Logout Button
               SizedBox(height: 16.0),
               Container(
@@ -1047,7 +1086,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     // Navigate to the main screen (main.dart)
                     // Navigator.pushReplacementNamed(context, '/main');
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPage()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LandingPage()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 92, 187, 255),
@@ -1060,7 +1100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Text(
                     'Logout',
                     style: GoogleFonts.alata(
-                      fontSize:20,
+                      fontSize: 20,
                       color: Colors.black,
                     ),
                   ),
