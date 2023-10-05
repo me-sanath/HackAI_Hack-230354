@@ -884,61 +884,186 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text('Name: $_userName'),
-              SizedBox(height: 16.0),
-              Text('Minimum Temperature: $_minTemperature °C'),
-              Slider(
-                value: _minTemperature,
-                onChanged: (value) {
-                  setState(() {
-                    _minTemperature = value;
-                  });
-                },
-                min: -50.0,
-                max: 70.0,
-                divisions: 120,
-                label: '$_minTemperature °C',
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(32.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 30),
+            Container(
+              width: 350,
+              padding: const EdgeInsets.all(16.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 190, 228, 255),
+                borderRadius: BorderRadius.circular(20),
               ),
-              SizedBox(height: 16.0),
-              Text('Maximum Temperature: $_maxTemperature °C'),
-              Slider(
-                value: _maxTemperature,
-                onChanged: (value) {
-                  setState(() {
-                    _maxTemperature = value;
-                  });
-                },
-                min: -50.0,
-                max: 70.0,
-                divisions: 120,
-                label: '$_maxTemperature °C',
+              child: Text(
+                'Profile',
+                style: GoogleFonts.alata(
+                  fontSize: 26,
+                  // fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
+            ),
+            SizedBox(height: 30),
+
+            Column(
+              children: [
+                CircleAvatar(
+                  radius: 80.0,
+                  backgroundColor: Colors.grey,
+                  backgroundImage:
+                      AssetImage('assets/images/profile_image.png'),
+                ),
+                SizedBox(height: 16.0),
+                Container(
+                  width: double.infinity,
+                  height: 100,
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 175, 222, 255),
+                        const Color.fromARGB(255, 6, 123, 208)
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(44.0),
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      // '$_userName',
+                      'Satwik Naik',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.alata(
+                        fontSize: 33.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16.0),
+
+            // Temperature Sliders
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Minimum Temperature Slider
+                SizedBox(height: 8.0),
+                Text(
+                  'Minimum Temperature: $_minTemperature °C',
+                  style: GoogleFonts.alata(
+                    fontSize: 21,
+                  ),
+                ),
+                Slider(
+                  value: _minTemperature,
+                  onChanged: (value) {
+                    setState(() {
+                      _minTemperature = value;
+                    });
+                  },
+                  min: -50.0,
+                  max: 70.0,
+                  divisions: 120,
+                  label: '$_minTemperature °C',
+                ),
+                SizedBox(height: 16.0),
+
+                // Maximum Temperature Slider
+                SizedBox(height: 16.0),
+                Text(
+                  'Maximum Temperature: $_maxTemperature °C',
+                  style: GoogleFonts.alata(
+                    fontSize: 21,
+                  ),
+                ),
+                Slider(
+                  value: _maxTemperature,
+                  onChanged: (value) {
+                    setState(() {
+                      _maxTemperature = value;
+                    });
+                  },
+                  min: -50.0,
+                  max: 70.0,
+                  divisions: 120,
+                  label: '$_maxTemperature °C',
+                ),
+              ],
+            ),
+
+            // Save Settings Button
+            SizedBox(height: 16.0),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                ),
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: ElevatedButton(
                 onPressed: () {
                   updateTemperatureSettings();
                 },
-                child: Text('Save Settings'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 92, 187, 255),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                ),
+                child: Text(
+                  'Save Preferences',
+                  style: GoogleFonts.alata(
+                    fontSize: 21,
+                    // fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
               ),
-            ],
-          ),
+            ),
+
+            // Logout Button
+            SizedBox(height: 16.0),
+            Container(
+              height: 60,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black,
+                ),
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigate to the main screen (main.dart)
+                  // Navigator.pushReplacementNamed(context, '/main');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 122, 200, 240),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 9.0, horizontal: 40.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                ),
+                child: Text(
+                  'Logout',
+                  style: GoogleFonts.alata(
+                    fontSize: 17,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
