@@ -9,6 +9,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stts;
+import 'package:flutter_tts/flutter_tts.dart';
 
 //to run the current page, uncomment:
 void main() {
@@ -40,6 +41,7 @@ class BottomNavigationExample extends StatefulWidget {
 }
 
 class _BottomNavigationExampleState extends State<BottomNavigationExample> {
+  FlutterTts flutterTts = FlutterTts();
   var _speechToText = stts.SpeechToText();
   bool islistening = false;
   int _currentIndex = 0;
@@ -70,6 +72,10 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
       });
       _speechToText.stop();
     }
+  }
+
+  void _speak() async {
+    await flutterTts.speak(text);
   }
 
   @override
@@ -122,6 +128,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
               child: FloatingActionButton(
                 onPressed: () {
                   listen();
+                  _speak();
                   // Satwik your stuff should be here
                   // Handle microphone button tap
                   // Add your microphone functionality here
@@ -200,47 +207,47 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _fetchWeatherData(String cityName) async {
+    // setState(() {
+    //   _cityName = cityName;
+    //   widget.onCityChange(cityName);
+    // });
 
-Future<void> _fetchWeatherData(String cityName) async {
-  // setState(() {
-  //   _cityName = cityName;
-  //   widget.onCityChange(cityName);
-  // });
+    try {
+      final Uri url = Uri.parse('http://127.0.0.1:8000/weather/dashboard/');
+      final Map<String, String> headers = {
+        'Authorization':
+            'Token 8a110bfa56f646b6cd69b227c063c41c1deb60a6', // TODO
+        'Content-Type': 'application/json',
+      };
 
-  try{
-  final Uri url = Uri.parse('http://127.0.0.1:8000/weather/dashboard/');
-  final Map<String, String> headers = {
-    'Authorization': 'Token 8a110bfa56f646b6cd69b227c063c41c1deb60a6', // TODO
-    'Content-Type': 'application/json',
-  };
+      final Map<String, dynamic> requestBody = {
+        'locationName': cityName,
+      };
 
-  final Map<String, dynamic> requestBody = {
-    'locationName': cityName,
-  };
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: jsonEncode(requestBody),
+      );
 
-  final response = await http.post(
-    url,
-    headers: headers,
-    body: jsonEncode(requestBody),
-  );
-
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-    setState(() {
-      _cityName = cityName;
-      _temperature = data['temperature'];
-      _humidity = data['humidity'];
-      _windSpeed = data['windspeed'];
-      _code = data['weathercode']; 
-    });
-    widget.onCityChange(cityName);
-  } else {
-    print('Failed to fetch weather data: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          _cityName = cityName;
+          _temperature = data['temperature'];
+          _humidity = data['humidity'];
+          _windSpeed = data['windspeed'];
+          _code = data['weathercode'];
+        });
+        widget.onCityChange(cityName);
+      } else {
+        print('Failed to fetch weather data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error, $e');
+    }
   }
-  } catch(e) {
-    print('Error, $e');
-  }
-}
 
   @override
   void initState() {
@@ -1068,29 +1075,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   borderRadius: BorderRadius.circular(16.0),
                 ),
-                child: 
-                  ElevatedButton(
-                    onPressed: () {
-                      updateTemperatureSettings();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 92, 187, 255),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                    ),
-                    child: Text(
-                      'Save Preferences',
-                      style: GoogleFonts.alata(
-                        fontSize: 20,
-                        // fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    updateTemperatureSettings();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 92, 187, 255),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
                   ),
-                
+                  child: Text(
+                    'Save Preferences',
+                    style: GoogleFonts.alata(
+                      fontSize: 20,
+                      // fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               ),
 
               // Logout Button
