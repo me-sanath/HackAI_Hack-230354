@@ -111,8 +111,8 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
             },
           ),
           Positioned(
-            bottom: 30.0,
-            right: 16.0,
+            bottom: 0.0,
+            right: 0.0,
             child: AvatarGlow(
               animate: islistening,
               repeat: true,
@@ -126,8 +126,8 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
                   // Handle microphone button tap
                   // Add your microphone functionality here
                 },
-                child: Icon(islistening ? Icons.mic : Icons.mic_none),
                 backgroundColor: Color.fromARGB(255, 92, 187, 255),
+                child: Icon(islistening ? Icons.mic : Icons.mic_none, size: 32),
               ),
             ),
           ),
@@ -977,7 +977,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       alignment: Alignment.center,
                       child: Text(
                         // '$_userName',
-                        'Satwik Naik',
+                        _userName,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.alata(
                           fontSize: 33.0,
