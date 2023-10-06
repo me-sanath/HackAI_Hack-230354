@@ -869,6 +869,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   double _minTemperature = -50.0;
   double _maxTemperature = 70.0;
   String _userName = "";
+  String _message = "";
 
   @override
   void initState() {
@@ -902,19 +903,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       // Sanath update the new mintemp and maxtemp here
       // Replace with your backend API endpoint to update temperature settings
-      final response = await http.put(
-        Uri.parse('YOUR_BACKEND_API_URL'),
-        body: jsonEncode({
-          'minTemperature': _minTemperature,
-          'maxTemperature': _maxTemperature,
-        }),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        print('Temperature settings updated successfully.');
+      if (_minTemperature >= _maxTemperature) {
+        setState(() {
+          _message = "Error! Minimum Temperature should be lesser";
+        });
       } else {
-        print('Failed to update temperature settings: ${response.statusCode}');
+        final response = await http.put(
+          Uri.parse('YOUR_BACKEND_API_URL'),
+          body: jsonEncode({
+            'minTemperature': _minTemperature,
+            'maxTemperature': _maxTemperature,
+          }),
+          headers: {'Content-Type': 'application/json'},
+        );
+
+        if (response.statusCode == 200) {
+          print('Temperature settings updated successfully.');
+        } else {
+          print(
+              'Failed to update temperature settings: ${response.statusCode}');
+        }
       }
     } catch (e) {
       print('Error: $e');
@@ -1041,6 +1049,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
 
               // Save Settings Button
+              Text(_message),
               SizedBox(height: 16.0),
               Container(
                 decoration: BoxDecoration(
@@ -1049,27 +1058,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   borderRadius: BorderRadius.circular(16.0),
                 ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    updateTemperatureSettings();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 92, 187, 255),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
+                child: 
+                  ElevatedButton(
+                    onPressed: () {
+                      updateTemperatureSettings();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 92, 187, 255),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                    ),
+                    child: Text(
+                      'Save Preferences',
+                      style: GoogleFonts.alata(
+                        fontSize: 20,
+                        // fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                  child: Text(
-                    'Save Preferences',
-                    style: GoogleFonts.alata(
-                      fontSize: 20,
-                      // fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
+                
               ),
 
               // Logout Button
