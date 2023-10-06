@@ -200,37 +200,43 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _fetchWeatherData(String cityName) async {
+
+Future<void> _fetchWeatherData(String cityName) async {
+  setState(() {
+    _cityName = cityName;
+    widget.onCityChange(cityName);
+  });
+
+  final Uri url = Uri.parse('http://127.0.0.1:8000/weather/dashboard/');
+  final Map<String, String> headers = {
+    'Authorization': 'Token 1efc2cf63dc81c2241885f6a2862486b5d05cb7a', // TODO
+    'Content-Type': 'application/json',
+  };
+
+  final Map<String, dynamic> requestBody = {
+    'locationName': cityName,
+  };
+
+  final response = await http.post(
+    url,
+    headers: headers,
+    body: jsonEncode(requestBody),
+  );
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
     setState(() {
       _cityName = cityName;
-      widget.onCityChange(cityName);
+      _temperature = data['temperature'];
+      _humidity = data['humidity'];
+      _windSpeed = data['windspeed'];
+      _weatherCode = data['weathercode']; 
     });
-    final response = await http.get(
-      Uri.parse(
-        // Sanath, Send the stuff here
-        'http://your-django-api-url/weather?city=$cityName', // Replace with your weather API URL
-      ),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      setState(() {
-        _cityName = cityName;
-        _temperature = data['temperature'];
-        _humidity = data['humidity'];
-        _windSpeed = data['wind_speed'];
-        _code = data['weathercode'];
-        _image = getImageForCode(_code);
-      });
-      widget.onCityChange(cityName);
-    } else {
-      setState(() {
-        _message = "Location not found!";
-      });
-      _showSearchDialog(context, _message);
-      print('Failed to fetch weather data: ${response.statusCode}');
-    }
+    widget.onCityChange(cityName);
+  } else {
+    print('Failed to fetch weather data: ${response.statusCode}');
   }
+}
 
   @override
   void initState() {

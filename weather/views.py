@@ -96,7 +96,7 @@ def weatherData(geocode):
 class dashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def post(self, request):
         location = request.data.get("locationName")
         if location:
             response = geocode(locationName=location)
@@ -115,7 +115,7 @@ class dashboardView(APIView):
 class forecastView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self,request):
+    def post(self,request):
         location = request.data.get("locationName")
         if location:
             response = geocode(locationName=location)
