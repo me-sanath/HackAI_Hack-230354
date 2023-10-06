@@ -193,23 +193,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (placemarks.isNotEmpty) {
       final cityName = placemarks.first.subAdministrativeArea;
-      setState(() {
-        _cityName = cityName!;
-      });
       _fetchWeatherData(cityName!);
+      setState(() {
+        _cityName = cityName;
+      });
     }
   }
 
 
 Future<void> _fetchWeatherData(String cityName) async {
-  setState(() {
-    _cityName = cityName;
-    widget.onCityChange(cityName);
-  });
+  // setState(() {
+  //   _cityName = cityName;
+  //   widget.onCityChange(cityName);
+  // });
 
+  try{
   final Uri url = Uri.parse('http://127.0.0.1:8000/weather/dashboard/');
   final Map<String, String> headers = {
-    'Authorization': 'Token 1efc2cf63dc81c2241885f6a2862486b5d05cb7a', // TODO
+    'Authorization': 'Token 8a110bfa56f646b6cd69b227c063c41c1deb60a6', // TODO
     'Content-Type': 'application/json',
   };
 
@@ -230,11 +231,14 @@ Future<void> _fetchWeatherData(String cityName) async {
       _temperature = data['temperature'];
       _humidity = data['humidity'];
       _windSpeed = data['windspeed'];
-      _weatherCode = data['weathercode']; 
+      _code = data['weathercode']; 
     });
     widget.onCityChange(cityName);
   } else {
     print('Failed to fetch weather data: ${response.statusCode}');
+  }
+  } catch(e) {
+    print('Error, $e');
   }
 }
 
