@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'homepage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 // If you want to run the page uncomment:
 // void main(){
@@ -12,6 +13,7 @@ class LoginApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: LoginPage(),
     );
   }
@@ -81,23 +83,129 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(35.0),
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        padding: const EdgeInsets.all(45.0),
+        color: const Color.fromARGB(255, 240, 249, 255),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Enter your email: '),
+            Container(
+              width: 300,
+              padding: const EdgeInsets.all(16.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 190, 228, 255),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'Log In',
+                style: GoogleFonts.alata(
+                  backgroundColor: const Color.fromARGB(255, 190, 228, 255),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Enter your password: '),
+            SizedBox(
+              height: 200,
             ),
-            ElevatedButton(
-              onPressed: _isLoading ? null : _login,
-              child: Text('Login'),
+            Text(
+              'Welcome back, please Log In to continue using cli-Mate:',
+              style: GoogleFonts.alata(
+                fontSize: 18,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(
+                    255, 190, 228, 255), // Background color
+                borderRadius: BorderRadius.circular(20.0), // Border radius
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 190, 190, 190),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Enter your email:',
+                  filled: true,
+                  fillColor: Color.fromARGB(255, 190, 228, 255),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(
+                    255, 190, 228, 255), // Background color
+                borderRadius: BorderRadius.circular(20.0), // Border radius
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 179, 179, 179),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Enter your password:',
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 190, 228, 255),
+                  border: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Color.fromARGB(255, 92, 187, 255)),
+                      borderRadius: BorderRadius.circular(20.0)),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Color.fromARGB(255, 92, 187, 255)),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 60,
+            ),
+            Container(
+              padding: EdgeInsets.all(10),
+              child: OutlinedButton(
+                onPressed: _isLoading ? null : _login,
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 92, 187, 255),
+                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  side: BorderSide(color: Colors.black),
+                ),
+                child: Text(
+                  'Log In',
+                  style: GoogleFonts.alata(
+                    fontSize: 20,
+                    color: Colors.black, // Add font weight if needed
+                  ),
+                ),
+              ),
             ),
             SizedBox(height: 20),
             Text(_isLoading ? 'Logging in...' : _message),
