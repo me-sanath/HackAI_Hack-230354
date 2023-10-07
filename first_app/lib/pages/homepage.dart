@@ -9,6 +9,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stts;
+import 'package:flutter_tts/flutter_tts.dart';
 
 //to run the current page, uncomment:
 void main() {
@@ -40,6 +41,7 @@ class BottomNavigationExample extends StatefulWidget {
 }
 
 class _BottomNavigationExampleState extends State<BottomNavigationExample> {
+  FlutterTts flutterTts = FlutterTts();
   var _speechToText = stts.SpeechToText();
   bool islistening = false;
   int _currentIndex = 0;
@@ -70,6 +72,10 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
       });
       _speechToText.stop();
     }
+  }
+
+  void _speak() async {
+    await flutterTts.speak(text);
   }
 
   @override
@@ -122,6 +128,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
               child: FloatingActionButton(
                 onPressed: () {
                   listen();
+                  _speak();
                   // Satwik your stuff should be here
                   // Handle microphone button tap
                   // Add your microphone functionality here
@@ -1079,29 +1086,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   borderRadius: BorderRadius.circular(16.0),
                 ),
-                child: 
-                  ElevatedButton(
-                    onPressed: () {
-                      updateTemperatureSettings();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 92, 187, 255),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                    ),
-                    child: Text(
-                      'Save Preferences',
-                      style: GoogleFonts.alata(
-                        fontSize: 20,
-                        // fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    updateTemperatureSettings();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 92, 187, 255),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.0),
                     ),
                   ),
-                
+                  child: Text(
+                    'Save Preferences',
+                    style: GoogleFonts.alata(
+                      fontSize: 20,
+                      // fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
               ),
 
               // Logout Button
