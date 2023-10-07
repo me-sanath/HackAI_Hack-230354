@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'TemperaturePreferencesPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends StatelessWidget {
   final FlutterSecureStorage storage;
@@ -60,11 +61,10 @@ class _SignUpPageState extends State<SignUpPage> {
       );
 
       if (response.statusCode == 200) {
-        final String receivedUserId = 'user_id_from_django';
+        final String token = 'user_id_from_django';
 
-        setState(() {
-          _userId = receivedUserId;
-        });
+        widget.prefs.setString('token', token);
+        widget.prefs.setString('name', name);
         setState(() {
           Navigator.push(
             context,
@@ -93,6 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Container(
+          height: MediaQuery.of(context).size.height,
           color: const Color.fromARGB(
               255, 240, 249, 255), // Set the background color to light blue
           child: Center(

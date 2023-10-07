@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'homepage.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,10 +30,9 @@ class LoginApp extends StatelessWidget {
 class LoginPage extends StatefulWidget {
   final FlutterSecureStorage storage;
   
-
   LoginPage({required this.storage});
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState(prefs: prefs);
 }
 
 class _LoginPageState extends State<LoginPage> {

@@ -443,7 +443,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
                 // Content (temperature) below the container
                 Positioned(
-                  top: MediaQuery.of(context).size.height * 0.5 + 20,
+                  top: 460,
                   left: 0,
                   right: 0,
                   child: Container(
