@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'TemperaturePreferencesPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class SignUp extends StatelessWidget {
+  final FlutterSecureStorage storage;
+
+  SignUp({required this.storage});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignUpPage(),
+      home: SignUpPage(storage: storage,),
     );
   }
 }
 
 class SignUpPage extends StatefulWidget {
+  final FlutterSecureStorage storage;
+
+  SignUpPage({required this.storage});
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
@@ -34,7 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
     final String email = _emailController.text;
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
-
+    
     if (password == confirmPassword) {
       final Map<String, dynamic> userData = {
         'name': name,
@@ -61,7 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => TemperaturePreferencesPage(userId: _userId),
+              builder: (context) => TemperaturePreferencesPage(userId: _userId,storage: widget.storage,),
             ),
           );
           _message = 'Registration successful.';

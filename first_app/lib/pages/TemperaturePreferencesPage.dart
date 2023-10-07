@@ -1,16 +1,18 @@
 import 'package:first_app/pages/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 // If you want to run the page uncomment:
 void main() {
+  final storage = FlutterSecureStorage();
   runApp(
     MaterialApp(
       home: Directionality(
         textDirection: TextDirection.ltr, // Set the text direction
-        child: TemperaturePreferencesPage(userId: 'poop',),
+        child: TemperaturePreferencesPage(userId: 'poop',storage: storage,),
       ),
     ),
   );
@@ -18,8 +20,8 @@ void main() {
 
 class TemperaturePreferencesPage extends StatefulWidget {
   final String userId;
-
-  TemperaturePreferencesPage({required this.userId});
+  final FlutterSecureStorage storage;
+  TemperaturePreferencesPage({required this.userId,required this.storage});
 
   @override
   _TemperaturePreferencesPageState createState() =>
@@ -54,7 +56,7 @@ class _TemperaturePreferencesPageState
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Dashboard(userId: widget.userId),
+            builder: (context) => Dashboard(userId: widget.userId,storage: widget.storage,),
           ),
         );
         _message = 'Preferences saved successfully.';

@@ -1,17 +1,22 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
+import 'package:first_app/pages/homepage.dart';
 import 'package:first_app/pages/login.dart';
 import 'package:first_app/pages/signup.dart';
+import 'package:first_app/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 //Use this to run app
 void main() {
-  runApp(MyApp());
+  final storage =  FlutterSecureStorage();
+  runApp(MyApp(storage: storage,));
 }
 
 class LocationData {
@@ -22,6 +27,10 @@ class LocationData {
 }
 
 class MyApp extends StatelessWidget {
+  final FlutterSecureStorage storage;
+
+  MyApp({required this.storage});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,17 +39,38 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LandingPage(),
+      home: LandingPage(storage: storage,),
     );
   }
 }
 
 class LandingPage extends StatefulWidget {
+  final FlutterSecureStorage storage;
+  LandingPage ({ required this.storage});
+  
   @override
   _LandingPageState createState() => _LandingPageState();
 }
 
 class _LandingPageState extends State<LandingPage> {
+  final Dio dio = Dio();
+  String _userId = '';
+  Future<void> checkAccessToken() async {
+    final String? accessToken = await widget.storage.read(key: 'access_token');
+    if (accessToken != null) {
+      // Token exists, navigate to the Dashboard
+      final String? receivedUserId = await widget.storage.read(key: 'username');
+      setState(() {
+        _userId = receivedUserId!;
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Dashboard(userId: _userId, storage: widget.storage),
+        ),
+      );
+    }
+  }
   LocationData _locationData = LocationData(
     37.7749, // Replace with your desired latitude
     -122.4194, // Replace with your desired longitude
@@ -48,7 +78,7 @@ class _LandingPageState extends State<LandingPage> {
   String? _placeName;
   bool _isLoading = false;
   double _temperature = 0.0;
-  int _code = 0;
+  double _code = 0;
   Image _image =
       Image.asset('assets/images/95.png', height: 220, fit: BoxFit.contain);
   String _formattedDate = DateFormat('E, dd MMM').format(DateTime.now());
@@ -56,6 +86,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
+    checkAccessToken();
     _initLocation();
   }
 
@@ -267,30 +298,6 @@ class _LandingPageState extends State<LandingPage> {
     }
   }
 
-  Future<void> fetchWeatherData(String placeName) async {
-    final response = await http.get(
-      Uri.parse(
-        // Sanath, Send the stuff here
-        'http://your-django-api-url/weather?city=$placeName', // Replace with your weather API URL
-      ),
-    );
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-
-      final double temperature = data['temperature'];
-      final int weatherCode = data['weather_code'];
-
-      setState(() {
-        _temperature = temperature;
-        _code = weatherCode;
-        _image = getImageForCode(_code);
-      });
-    } else {
-      // Handle the error (e.g., return an error message or throw an exception)
-      throw Exception('Failed to fetch weather data');
-    }
-  }
 
   Future<void> _initLocation() async {
     setState(() {
@@ -313,12 +320,16 @@ class _LandingPageState extends State<LandingPage> {
 
       if (placemarks.isNotEmpty) {
         final placeName = placemarks[0].subAdministrativeArea;
-        print('Place Name: $placeName');
+        final apiService = ApiService(dio);
+        String? token = await widget.storage.read(key: 'access_token');
+        final weatherData = await apiService.getDashboardData('Token $token', {'latitude':position.latitude,'longitude':position.longitude});
         setState(() {
           _placeName = placeName;
+          _temperature = weatherData.temperature;
+          _code = weatherData.weathercode;
+          _image = getImageForCode(_code.toInt());
           _isLoading = false;
         });
-        fetchWeatherData(_placeName!);
       } else {
         print('Location name not found');
         setState(() {
@@ -471,7 +482,7 @@ class _LandingPageState extends State<LandingPage> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SignUp(),
+                            builder: (context) => SignUp(storage: widget.storage),
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
@@ -506,7 +517,7 @@ class _LandingPageState extends State<LandingPage> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LoginApp(),
+                            builder: (context) => LoginApp(storage: widget.storage),
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
