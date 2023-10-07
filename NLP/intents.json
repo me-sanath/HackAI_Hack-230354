@@ -1,0 +1,53 @@
+{
+    "intents":[
+        {
+            "tag":"greetings",
+            "patterns":["hello","hii","wake up","namaste","hi"
+            ],
+            "responses":["Hello sir","Namaste Sir","Hii Sir","Welcome back Sir","How can I assist You Sir"
+            ]
+        },
+        {
+            "tag":"bye",
+            "patterns":["bye","goodbye","see you later","sleep","exit"
+            ],
+            "responses":["Bye.","I am going to sleep","See you later","Meet you later","Bye - Bye"
+            ]
+        },
+        {
+            "tag":"health",
+            "patterns":["how are you","how are you feeling","how are you feeling today","are you fine","are you good","are you alright","how r u"
+            ],
+            "responses":["I am fine. Thank you","I am fine. How are you? ","I am good. Thanks","I am good. How are you","Fine. Thanks"
+            ]
+        },
+        {
+            "tag":"temperature",
+            "patterns":["What's the temperature today","How is the temperature today","Tell me about today's Weather conditions","Is today a good day","What's the weather status today","Please tell me today's weather"
+            ],
+            "responses":["The sky is clear today","Today is a perfect day","Its a bit cloudy today","Its a bit cloudy","Its clear today"
+            ]
+        },
+        {
+            "tag":"time",
+            "patterns":["what is the time now ","whats the time","please tell me the time","what is the time"
+            ],
+            "responses":["time"
+            ]
+        },
+        {
+            "tag":"date",
+            "patterns":["what is the date today ","whats todays date","please tell me the date","what is the date"
+            ],
+            "responses":["date"
+            ]
+        },
+        {
+            "tag":"day",
+            "patterns":["what day is today ","whats todays day","please tell me the day","what is the day"
+            ],
+            "responses":["day"
+            ]
+        }
+    ]
+}

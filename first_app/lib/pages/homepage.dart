@@ -128,7 +128,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
               child: FloatingActionButton(
                 onPressed: () {
                   listen();
-                  _speak();
+                  // _speak();
                   // Satwik your stuff should be here
                   // Handle microphone button tap
                   // Add your microphone functionality here
