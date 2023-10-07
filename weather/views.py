@@ -97,20 +97,29 @@ class dashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        location = request.data.get("locationName")
-        if location:
+        location = request.data.get("locationName",None)
+        latitude = request.data.get("latitude",None)
+        longitude  =request.data.get('longitude')
+        
+        if location is not None:
             response = geocode(locationName=location)
-            if response["result"]:
-                weather = weatherData(response["data"]["geocode"])
-                if weather["result"]:
-                    return JsonResponse({"data":weather["data"]})
-                else:
-                    return Response({'reason':weather["data"]["message"]},status=422)
-            else:
-                return Response({'reason':response["data"]["message"]},status=422)
+        elif latitude is not None and longitude is not None:
+            response = {"result": True, "data": {"geocode": {"latitude": latitude, "longitude": longitude}}}
         else:
-            return Response({'reason':'no location data'},status=400)
+            return Response({'reason': 'no location data'}, status=400)
 
+        if response["result"]:
+            geocode_data = response["data"]["geocode"]
+            weather_response = weatherData(geocode_data)
+            
+            if weather_response["result"]:
+                return JsonResponse({"data": weather_response["data"]})
+            else:
+                return Response({'reason': weather_response["data"]["message"]}, status=422)
+        else:
+            return Response({'reason': response["data"]["message"]}, status=422)
+        
+        
 
 class forecastView(APIView):
     permission_classes = [IsAuthenticated]

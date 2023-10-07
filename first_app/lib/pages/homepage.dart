@@ -173,9 +173,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _cityName = "";
   double _temperature = 0.0;
-  double _humidity = 0.0;
+  double _humidity = 0;
   double _windSpeed = 0.0;
-  int _code = 0;
+  double _code = 0;
   Image _image =
       Image.asset('assets/images/95.png', height: 200, fit: BoxFit.contain);
   String _formattedDate = DateFormat('E, dd MMM').format(DateTime.now());
@@ -193,31 +193,40 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (placemarks.isNotEmpty) {
       final cityName = placemarks.first.subAdministrativeArea;
-      _fetchWeatherData(cityName!);
+      _fetchWeatherData(latitude: position.latitude,longitude: position.longitude);
       setState(() {
-        _cityName = cityName;
+        _cityName = cityName!;
       });
     }
   }
 
 
-Future<void> _fetchWeatherData(String cityName) async {
-  // setState(() {
-  //   _cityName = cityName;
-  //   widget.onCityChange(cityName);
-  // });
-
+Future<void> _fetchWeatherData({String cityName = 'None',double latitude = 0.0,double longitude = 0.0}) async {
+  
+  
   try{
-  final Uri url = Uri.parse('http://127.0.0.1:8000/weather/dashboard/');
+  
+  final Uri url = Uri.parse('https://955e-2406-7400-81-cff7-401b-682d-c52-e4d5.ngrok-free.app/weather/dashboard/');
   final Map<String, String> headers = {
-    'Authorization': 'Token 8a110bfa56f646b6cd69b227c063c41c1deb60a6', // TODO
+    'Authorization': 'Token 1efc2cf63dc81c2241885f6a2862486b5d05cb7a', // TODO
     'Content-Type': 'application/json',
   };
+  Map<String, dynamic> requestBody;
+  
+if(cityName == 'None'){
+  requestBody = {
+    'latitude': latitude,
+    'longitude':longitude,
 
-  final Map<String, dynamic> requestBody = {
-    'locationName': cityName,
   };
-
+}
+else{
+  requestBody = {'locationName' : '$cityName'};
+  setState(() {
+    _cityName = cityName;
+     widget.onCityChange(cityName);
+   });
+}
   final response = await http.post(
     url,
     headers: headers,
@@ -225,15 +234,17 @@ Future<void> _fetchWeatherData(String cityName) async {
   );
 
   if (response.statusCode == 200) {
+    print(response.body);
     final data = jsonDecode(response.body);
+    final data1 = data["data"];
     setState(() {
-      _cityName = cityName;
-      _temperature = data['temperature'];
-      _humidity = data['humidity'];
-      _windSpeed = data['windspeed'];
-      _code = data['weathercode']; 
+      //_cityName = cityName!;
+      _temperature = data1['temperature'];
+      _humidity = data1['humidity'].toDouble();
+      _windSpeed = data1['windspeed'];
+      _code = data1['weathercode'].toDouble(); 
     });
-    widget.onCityChange(cityName);
+    // widget.onCityChange(cityName!);
   } else {
     print('Failed to fetch weather data: ${response.statusCode}');
   }
@@ -517,7 +528,7 @@ Future<void> _fetchWeatherData(String cityName) async {
             ),
             TextButton(
               onPressed: () {
-                _fetchWeatherData(newCityName);
+                _fetchWeatherData(cityName: newCityName);
                 Navigator.of(context).pop();
               },
               child: Text('Search'),
