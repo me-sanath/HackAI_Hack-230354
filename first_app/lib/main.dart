@@ -8,10 +8,13 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //Use this to run app
-void main() {
-  runApp(MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  runApp(MyApp(prefs: prefs));
 }
 
 class LocationData {
@@ -22,6 +25,10 @@ class LocationData {
 }
 
 class MyApp extends StatelessWidget {
+  final SharedPreferences prefs;
+
+  MyApp({required this.prefs});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -30,12 +37,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LandingPage(),
+      home: LandingPage(prefs: prefs),
     );
   }
 }
 
 class LandingPage extends StatefulWidget {
+  final SharedPreferences prefs;
+
+  LandingPage({required this.prefs});
+
   @override
   _LandingPageState createState() => _LandingPageState();
 }
@@ -312,7 +323,7 @@ class _LandingPageState extends State<LandingPage> {
       );
 
       if (placemarks.isNotEmpty) {
-        final placeName = placemarks[0].subAdministrativeArea;
+        final placeName = placemarks[0].locality;
         print('Place Name: $placeName');
         setState(() {
           _placeName = placeName;
@@ -432,7 +443,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
                 // Content (temperature) below the container
                 Positioned(
-                  top: MediaQuery.of(context).size.height * 0.5 + 20,
+                  top: 460,
                   left: 0,
                   right: 0,
                   child: Container(
@@ -471,7 +482,7 @@ class _LandingPageState extends State<LandingPage> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SignUp(),
+                            builder: (context) => SignUp(prefs: widget.prefs),
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
@@ -506,7 +517,7 @@ class _LandingPageState extends State<LandingPage> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LoginApp(),
+                            builder: (context) => LoginApp(prefs: widget.prefs),
                           ),
                         ),
                         style: OutlinedButton.styleFrom(

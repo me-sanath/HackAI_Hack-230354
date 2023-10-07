@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'homepage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // If you want to run the page uncomment:
 // void main(){
@@ -10,26 +12,38 @@ import 'package:google_fonts/google_fonts.dart';
 // }
 
 class LoginApp extends StatelessWidget {
+  final SharedPreferences prefs;
+
+  LoginApp({required this.prefs});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: LoginPage(prefs: prefs),
     );
   }
 }
 
 class LoginPage extends StatefulWidget {
+  final SharedPreferences prefs;
+
+  LoginPage({required this.prefs});
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState(prefs: prefs);
 }
 
-class _LoginPageState extends State<LoginPage> {
+class LoginPageState extends State<LoginPage> {
+  final SharedPreferences prefs;
+
+  LoginPageState({required this.prefs});
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   String _message = '';
-  String _userId = '';
+  String token = '';
 
   Future<void> _login() async {
     setState(() {
@@ -55,16 +69,21 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       // Sanath, successful registration, handle the response accordingly
       //I have named the token as userid everywhere, if u modify the name the entirity might get fucked. So try to keep the name of the token as user id
-      final String receivedUserId = 'user_id_from_django';
+      final String token = 'user_id_from_django';
+      final String name = 'name of the user';
+      final double mintemp = 0.0;
+      final double maxtemp = 0.0;
 
-      setState(() {
-        _userId = receivedUserId;
-      });
+      prefs.setString('token', token);
+      prefs.setString('name', name);
+      prefs.setDouble('mintemp', mintemp);
+      prefs.setDouble('maxtemp', maxtemp);
+
       setState(() {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Dashboard(userId: _userId),
+            builder: (context) => Dashboard(prefs: prefs),
           ),
         );
         _message = 'Registration successful.';

@@ -3,23 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // If you want to run the page uncomment:
-void main() {
-  runApp(
-    MaterialApp(
-      home: Directionality(
-        textDirection: TextDirection.ltr, // Set the text direction
-        child: TemperaturePreferencesPage(userId: 'poop',),
-      ),
-    ),
-  );
-}
+// void main() {
+//   runApp(
+//     MaterialApp(
+//       home: Directionality(
+//         textDirection: TextDirection.ltr, // Set the text direction
+//         child: TemperaturePreferencesPage(),
+//       ),
+//     ),
+//   );
+// }
 
 class TemperaturePreferencesPage extends StatefulWidget {
-  final String userId;
+  final SharedPreferences prefs;
 
-  TemperaturePreferencesPage({required this.userId});
+  TemperaturePreferencesPage({required this.prefs});
 
   @override
   _TemperaturePreferencesPageState createState() =>
@@ -34,34 +35,20 @@ class _TemperaturePreferencesPageState
   String _message = '';
 
   Future<void> _saveTemperaturePreferences() async {
-    final Map<String, dynamic> tempPreferences = {
-      'min_temp': _minTemp,
-      'max_temp': _maxTemp,
-      'user': widget.userId,
-    };
-
-    // Sanath, send data to the backend
-    final response = await http.post(
-      Uri.parse('http://your-django-api-url/preferences/'), // Replace with your preferences endpoint URL
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(tempPreferences),
-    );
-
-    if (response.statusCode == 200) {
+    if(_minTemp >= _maxTemp){
+      _message = 'Error, Minimum Temperature should be lesser';
+    }
+    else{
+      widget.prefs.setDouble('mintemp', _minTemp);
+      widget.prefs.setDouble('maxtemp', _maxTemp);
       setState(() {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Dashboard(userId: widget.userId),
+            builder: (context) => Dashboard(prefs: widget.prefs),
           ),
         );
         _message = 'Preferences saved successfully.';
-      });
-    } else {
-      setState(() {
-        _message = 'Failed to save preferences: ${response.body}';
       });
     }
   }

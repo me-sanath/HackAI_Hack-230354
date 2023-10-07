@@ -10,30 +10,32 @@ import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stts;
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+//cant run this for now ;-;
 //to run the current page, uncomment:
-void main() {
-  runApp(Dashboard(userId: 'poop'));
-}
+// void main() {
+//   runApp(Dashboard());
+// }
 
 class Dashboard extends StatelessWidget {
-  final String userId;
+  final SharedPreferences prefs;
 
-  Dashboard({required this.userId});
+  Dashboard({required this.prefs});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BottomNavigationExample(userId: userId),
+      home: BottomNavigationExample(prefs: prefs),
     );
   }
 }
 
 class BottomNavigationExample extends StatefulWidget {
-  final String userId;
+  final SharedPreferences prefs;
 
-  BottomNavigationExample({required this.userId});
+  BottomNavigationExample({required this.prefs});
 
   @override
   _BottomNavigationExampleState createState() =>
@@ -47,8 +49,25 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
   List<Widget> _screens = [];
-  String _currentCity = "";
+  String _cityName = "";
   String text = "";
+
+  final GlobalKey<ForecastScreenState> forecastScreenKey = GlobalKey<ForecastScreenState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _speechToText = stts.SpeechToText();
+    _screens = [
+      HomeScreen(
+        prefs: widget.prefs,
+      ),
+      ForecastScreen(
+        prefs: widget.prefs,
+      ),
+      ProfileScreen(prefs: widget.prefs),
+    ];
+  }
 
   void listen() async {
     if (!islistening) {
@@ -76,24 +95,6 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 
   void _speak() async {
     await flutterTts.speak(text);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _speechToText = stts.SpeechToText();
-    _screens = [
-      HomeScreen(
-        userId: widget.userId,
-        onCityChange: (city) {
-          setState(() {
-            _currentCity = city;
-          });
-        },
-      ),
-      ForecastScreen(userId: widget.userId, cityName: _currentCity),
-      ProfileScreen(userId: widget.userId),
-    ];
   }
 
   @override
@@ -168,16 +169,16 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 }
 
 class HomeScreen extends StatefulWidget {
-  final String userId;
-  final Function(String) onCityChange; // Add this callback
+  final SharedPreferences prefs;
 
-  HomeScreen({required this.userId, required this.onCityChange});
+  HomeScreen({required this.prefs});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController _cityController = TextEditingController();
   String _cityName = "";
   double _temperature = 0.0;
   double _humidity = 0;
@@ -200,65 +201,68 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (placemarks.isNotEmpty) {
       final cityName = placemarks.first.subAdministrativeArea;
-      _fetchWeatherData(latitude: position.latitude,longitude: position.longitude);
+      widget.prefs.setString('cityName', cityName!);
+      _fetchWeatherData(
+          latitude: position.latitude, longitude: position.longitude);
       setState(() {
-        _cityName = cityName!;
+        _cityName = cityName;
       });
     }
   }
 
+  Future<void> _fetchWeatherData(
+      {String cityName = 'None',
+      double latitude = 0.0,
+      double longitude = 0.0}) async {
+    final String? token = widget.prefs.getString('token');
+    try {
+      final Uri url = Uri.parse(
+          'https://955e-2406-7400-81-cff7-401b-682d-c52-e4d5.ngrok-free.app/weather/dashboard/');
+      final Map<String, String> headers = {
+        'Authorization':
+            'Token 1efc2cf63dc81c2241885f6a2862486b5d05cb7a', // TODO
+        'Content-Type': 'application/json',
+      };
+      Map<String, dynamic> requestBody;
 
-Future<void> _fetchWeatherData({String cityName = 'None',double latitude = 0.0,double longitude = 0.0}) async {
-  
-  
-  try{
-  
-  final Uri url = Uri.parse('https://955e-2406-7400-81-cff7-401b-682d-c52-e4d5.ngrok-free.app/weather/dashboard/');
-  final Map<String, String> headers = {
-    'Authorization': 'Token 1efc2cf63dc81c2241885f6a2862486b5d05cb7a', // TODO
-    'Content-Type': 'application/json',
-  };
-  Map<String, dynamic> requestBody;
-  
-if(cityName == 'None'){
-  requestBody = {
-    'latitude': latitude,
-    'longitude':longitude,
+      if (cityName == 'None') {
+        requestBody = {
+          'latitude': latitude,
+          'longitude': longitude,
+        };
+      } else {
+        widget.prefs.setString('cityName', cityName);
+        requestBody = {'locationName': '$cityName'};
+        setState(() {
+          _cityName = cityName;
+        });
+      }
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: jsonEncode(requestBody),
+      );
 
-  };
-}
-else{
-  requestBody = {'locationName' : '$cityName'};
-  setState(() {
-    _cityName = cityName;
-     widget.onCityChange(cityName);
-   });
-}
-  final response = await http.post(
-    url,
-    headers: headers,
-    body: jsonEncode(requestBody),
-  );
-
-  if (response.statusCode == 200) {
-    print(response.body);
-    final data = jsonDecode(response.body);
-    final data1 = data["data"];
-    setState(() {
-      //_cityName = cityName!;
-      _temperature = data1['temperature'];
-      _humidity = data1['humidity'].toDouble();
-      _windSpeed = data1['windspeed'];
-      _code = data1['weathercode'].toDouble(); 
-    });
-    // widget.onCityChange(cityName!);
-  } else {
-    print('Failed to fetch weather data: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        print(response.body);
+        final data = jsonDecode(response.body);
+        final data1 = data["data"];
+        setState(() {
+          //_cityName = cityName!;
+          _temperature = data1['temperature'];
+          _humidity = data1['humidity'].toDouble();
+          _windSpeed = data1['windspeed'];
+          _code = data1['weathercode'].toDouble();
+          _image = getImageForCode(_code.toInt());
+        });
+        // widget.onCityChange(cityName!);
+      } else {
+        print('Failed to fetch weather data: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error, $e');
+    }
   }
-  } catch(e) {
-    print('Error, $e');
-  }
-}
 
   @override
   void initState() {
@@ -291,7 +295,7 @@ else{
                   top: 10,
                   left: 0,
                   child: Container(
-                    width: 350,
+                    width: MediaQuery.of(context).size.width * 0.83,
                     padding: const EdgeInsets.all(16.0),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -305,16 +309,16 @@ else{
                           Icons.location_on,
                           size: 32,
                         ), // Location icon on the left
-                        SizedBox(width: 15), // Add some spacing
+                        SizedBox(width: 10), // Add some spacing
                         Text(
-                          _cityName.isEmpty ? 'Weather App' : _cityName,
+                          _cityName.isEmpty ? 'Weather App' : _cityName.toUpperCase(),
                           style: GoogleFonts.alata(
                             backgroundColor:
                                 const Color.fromARGB(255, 190, 228, 255),
-                            fontSize: 24,
+                            fontSize: 19,
                           ),
                         ),
-                        SizedBox(width: 25), // Add some spacing
+                        SizedBox(width: 10), // Add some spacing
                         GestureDetector(
                           onTap: () {
                             _showSearchDialog(context, '');
@@ -348,7 +352,7 @@ else{
               ),
               Positioned(
                 top: 80, // Position below the container
-                left: 40,
+                left: 20,
                 right: 0,
                 child: Container(
                   padding: EdgeInsets.all(16),
@@ -358,7 +362,7 @@ else{
                       Text(
                         _temperature.toString() + '°',
                         style: GoogleFonts.alumniSans(
-                          fontSize: 150,
+                          fontSize: 132,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -370,15 +374,14 @@ else{
               ),
               // Image positioned half inside and half outside the container
               Positioned(
-                top: 240, // Adjust the position as needed
+                top: MediaQuery.of(context).size.height * 0.29, // Adjust the position as needed
                 left: 0,
                 right: 0,
                 child: _image,
               ),
               // Content (temperature) below the container
               Positioned(
-                top: MediaQuery.of(context).size.height * 0.5 +
-                    20, // Position below the container
+                top: MediaQuery.of(context).size.height * 0.55, // Position below the container
                 left: 0,
                 right: 0,
                 child: Container(
@@ -407,7 +410,7 @@ else{
                 ),
               ),
               Positioned(
-                top: MediaQuery.of(context).size.height * 0.5 + 140,
+                top: MediaQuery.of(context).size.height * 0.68,
                 left: 0,
                 right: 0,
                 height: 80,
@@ -419,86 +422,66 @@ else{
                 ),
               ),
               Positioned(
-                top: MediaQuery.of(context).size.height * 0.5 +
-                    140, // Position below the container
-                left: 20,
-                right: 0,
+                top: MediaQuery.of(context).size.height *
+                    0.68, // Position below the container
+                left: MediaQuery.of(context).size.width * 0.07,
+                right: MediaQuery.of(context).size.width * 0.1,
                 child: Container(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  padding: EdgeInsets.only(top: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(children: [
-                        Icon(
-                          Icons.water,
-                          size: 40,
-                          color: Colors.white,
-                        ), // Humidity icon
-                        SizedBox(width: 10), // Add some spacing
-                        Column(
-                          children: [
-                            Text(
-                              _humidity.toString() +
-                                  '%', // Replace with actual humidity value
-                              style: GoogleFonts.alata(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Text(
-                              'Humidity', // Replace with actual humidity value
-                              style: GoogleFonts.alata(
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ]) // Add more content here
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                top: MediaQuery.of(context).size.height * 0.5 +
-                    140, // Position below the container
-                left: 180,
-                right: 0,
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
+                      Icon(
+                        Icons.water,
+                        size: 40,
+                        color: Colors.white,
+                      ),
+                      SizedBox(height: 10), // Add some vertical spacing
+                      Column(
                         children: [
-                          Icon(
-                            Icons.speed,
-                            size: 40,
-                            color: Colors.white,
-                          ), // Wind speed icon
-                          SizedBox(width: 10), // Add some spacing
-                          Column(
-                            children: [
-                              Text(
-                                _windSpeed.toString() +
-                                    'km/h', // Replace with actual wind speed value
-                                style: GoogleFonts.alata(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                'Wind Speed', // Replace with actual wind speed value
-                                style: GoogleFonts.alata(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            _humidity.toString() +
+                                '%', // Replace with actual humidity value
+                            style: GoogleFonts.alata(
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Humidity', // Replace with actual humidity value
+                            style: GoogleFonts.alata(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                       ),
-                      // Add more content here
+                      SizedBox(width: 20),
+                      Icon(
+                        Icons.speed,
+                        size: 40,
+                        color: Colors.white,
+                      ), // Wind speed icon
+                      SizedBox(height: 10), // Add some vertical spacing
+                      Column(
+                        children: [
+                          Text(
+                            _windSpeed.toString() +
+                                'km/h', // Replace with actual wind speed value
+                            style: GoogleFonts.alata(
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Wind Speed', // Replace with actual wind speed value
+                            style: GoogleFonts.alata(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -519,6 +502,7 @@ else{
         return AlertDialog(
           title: Text('Search Weather'),
           content: TextField(
+            controller: _cityController,
             onChanged: (value) {
               newCityName = value;
             },
@@ -535,6 +519,7 @@ else{
             ),
             TextButton(
               onPressed: () {
+                widget.prefs.setString('cityName', newCityName);
                 _fetchWeatherData(cityName: newCityName);
                 Navigator.of(context).pop();
               },
@@ -757,30 +742,37 @@ else{
 }
 
 class ForecastScreen extends StatefulWidget {
-  final String userId;
-  final String cityName;
+  final SharedPreferences prefs;
 
-  ForecastScreen({required this.userId, required this.cityName});
+  ForecastScreen({required this.prefs});
 
   @override
-  _ForecastScreenState createState() => _ForecastScreenState();
+  ForecastScreenState createState() => ForecastScreenState();
 }
 
-class _ForecastScreenState extends State<ForecastScreen> {
-  String _cityName = "";
+class ForecastScreenState extends State<ForecastScreen> {
   List<WeatherForecast> _forecastData = [];
+  String _cityName = "";
 
   @override
   void initState() {
     super.initState();
-    _cityName = widget.cityName;
-    _fetchWeatherForecast(_cityName);
+    String? _cityName = widget.prefs.getString('cityName'); 
+    if(_cityName != null){
+      _fetchWeatherForecast(_cityName);
+    }
+    else{
+      print("City not found");
+    }
+  }
+
+  void updateCityName(String cityName) {
+    _fetchWeatherForecast(cityName);
   }
 
   Future<void> _fetchWeatherForecast(String cityName) async {
-    setState(() {
-      _cityName = cityName;
-    });
+    print("Hello");
+    print(cityName);
     final response = await http.get(
       Uri.parse(
         // Sanath, forecast details here
@@ -813,47 +805,90 @@ class _ForecastScreenState extends State<ForecastScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 20),
-            Container(
-              width: 350,
-              padding: const EdgeInsets.all(16.0),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 190, 228, 255),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                _cityName.isEmpty ? 'Weather Forecast' : _cityName,
-                style: GoogleFonts.alata(
-                  fontSize: 26,
-                  // fontWeight: FontWeight.bold,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        color: Color.fromARGB(255, 240, 249, 255),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 20),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.83,
+                  padding: const EdgeInsets.all(16.0),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 190, 228, 255),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    _cityName.isEmpty ? 'Weather Forecast' : _cityName,
+                    style: GoogleFonts.alata(
+                      fontSize: 26,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _forecastData.length,
+                  itemBuilder: (context, index) {
+                    final forecast = _forecastData[index];
+                    final date = DateFormat('EEE, MMM d').format(forecast.date);
+        
+                    return ListTile(
+                      title: Text(date),
+                      subtitle: Text(
+                          'Min: ${forecast.minTemperature}°C | Max: ${forecast.maxTemperature}°C'),
+                      trailing: Text(forecast.code),
+                    );
+                  },
+                ),
+              ],
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: _forecastData.length,
-              itemBuilder: (context, index) {
-                final forecast = _forecastData[index];
-                final date = DateFormat('EEE, MMM d').format(forecast.date);
-
-                return ListTile(
-                  title: Text(date),
-                  subtitle: Text(
-                      'Min: ${forecast.minTemperature}°C | Max: ${forecast.maxTemperature}°C'),
-                  trailing: Text(forecast.code),
-                );
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
+
+  // void _showSearchDialog(BuildContext context) {
+  //   String newCityName = "";
+
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text('Search Weather Forecast'),
+  //         content: TextField(
+  //           onChanged: (value) {
+  //             newCityName = value;
+  //           },
+  //           decoration: InputDecoration(
+  //             hintText: 'Enter city name',
+  //           ),
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: Text('Cancel'),
+  //           ),
+  //           TextButton(
+  //             onPressed: () {
+  //               _fetchWeatherForecast(newCityName);
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: Text('Search'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }
 
 class WeatherForecast {
@@ -871,9 +906,9 @@ class WeatherForecast {
 }
 
 class ProfileScreen extends StatefulWidget {
-  final String userId;
+  final SharedPreferences prefs;
 
-  ProfileScreen({required this.userId});
+  ProfileScreen({required this.prefs});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -901,9 +936,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final userData = jsonDecode(response.body);
 
         setState(() {
-          _userName = userData['name'] ?? '';
-          _minTemperature = userData['minTemperature'] ?? -50.0;
-          _maxTemperature = userData['maxTemperature'] ?? 70.0;
+          _userName = widget.prefs.getString('name') ?? "HackAI";
+          _minTemperature = widget.prefs.getDouble('mintemp') ?? -50.0;
+          _maxTemperature = widget.prefs.getDouble('maxtemp') ?? 70.0;
         });
       } else {
         print('Failed to fetch user data: ${response.statusCode}');
@@ -1109,8 +1144,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     // Navigate to the main screen (main.dart)
                     // Navigator.pushReplacementNamed(context, '/main');
+                    widget.prefs.remove('name');
+                    widget.prefs.remove('token');
+                    widget.prefs.remove('mintemp');
+                    widget.prefs.remove('maxtemp');
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LandingPage()));
+                        MaterialPageRoute(builder: (context) => LandingPage(prefs: widget.prefs)));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 92, 187, 255),
