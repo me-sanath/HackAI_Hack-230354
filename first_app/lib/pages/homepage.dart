@@ -802,61 +802,47 @@ class _ForecastScreenState extends State<ForecastScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_cityName.isEmpty ? 'Weather Forecast' : _cityName),
-      ),
-      body: ListView.builder(
-        itemCount: _forecastData.length,
-        itemBuilder: (context, index) {
-          final forecast = _forecastData[index];
-          final date = DateFormat('EEE, MMM d').format(forecast.date);
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 20),
+            Container(
+              width: 350,
+              padding: const EdgeInsets.all(16.0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 190, 228, 255),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                _cityName.isEmpty ? 'Weather Forecast' : _cityName,
+                style: GoogleFonts.alata(
+                  fontSize: 26,
+                  // fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: _forecastData.length,
+              itemBuilder: (context, index) {
+                final forecast = _forecastData[index];
+                final date = DateFormat('EEE, MMM d').format(forecast.date);
 
-          return ListTile(
-            title: Text(date),
-            subtitle: Text(
-                'Min: ${forecast.minTemperature}°C | Max: ${forecast.maxTemperature}°C'),
-            trailing: Text(forecast.code),
-          );
-        },
+                return ListTile(
+                  title: Text(date),
+                  subtitle: Text(
+                      'Min: ${forecast.minTemperature}°C | Max: ${forecast.maxTemperature}°C'),
+                  trailing: Text(forecast.code),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
-
-  // void _showSearchDialog(BuildContext context) {
-  //   String newCityName = "";
-
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text('Search Weather Forecast'),
-  //         content: TextField(
-  //           onChanged: (value) {
-  //             newCityName = value;
-  //           },
-  //           decoration: InputDecoration(
-  //             hintText: 'Enter city name',
-  //           ),
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: Text('Cancel'),
-  //           ),
-  //           TextButton(
-  //             onPressed: () {
-  //               _fetchWeatherForecast(newCityName);
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: Text('Search'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 }
 
 class WeatherForecast {
