@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'TemperaturePreferencesPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends StatelessWidget {
   final FlutterSecureStorage storage;
@@ -63,8 +62,6 @@ class _SignUpPageState extends State<SignUpPage> {
       if (response.statusCode == 200) {
         final String token = 'user_id_from_django';
 
-        widget.prefs.setString('token', token);
-        widget.prefs.setString('name', name);
         setState(() {
           Navigator.push(
             context,

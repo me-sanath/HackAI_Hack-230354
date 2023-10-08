@@ -53,6 +53,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   final PageController _pageController = PageController();
   List<Widget> _screens = [];
   String _cityName = "";
+  String _currentCity = "";
   String text = "";
 
   final GlobalKey<ForecastScreenState> forecastScreenKey = GlobalKey<ForecastScreenState>();
@@ -62,13 +63,19 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
     super.initState();
     _speechToText = stts.SpeechToText();
     _screens = [
-      HomeScreen(
-        prefs: widget.prefs,
+      HomeScreen( 
+        userId: widget.userId,
+        storage: widget.storage,
+        onCityChange: (city) {
+          setState(() {
+            _currentCity = city;
+          });
+        },
       ),
       ForecastScreen(
-        prefs: widget.prefs,
+        cityName: _cityName,storage: widget.storage,
       ),
-      ProfileScreen(prefs: widget.prefs),
+      ProfileScreen(userId: widget.userId,storage: widget.storage,),
     ];
   }
 
@@ -98,25 +105,6 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 
   void _speak() async {
     await flutterTts.speak(text);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _speechToText = stts.SpeechToText();
-    _screens = [
-      HomeScreen(
-        userId: widget.userId,
-        storage: widget.storage,
-        onCityChange: (city) {
-          setState(() {
-            _currentCity = city;
-          });
-        },
-      ),
-      ForecastScreen(userId: widget.userId, cityName: _currentCity),
-      ProfileScreen(userId: widget.userId,storage: widget.storage,),
-    ];
   }
 
   @override
@@ -546,7 +534,7 @@ else{
     );
   }
 
-  void _showSearchDialog(BuildContext context, _message) {
+ void _showSearchDialog(BuildContext context, _message) {
     String newCityName = "";
     String error = _message;
     showDialog(
@@ -555,7 +543,6 @@ else{
         return AlertDialog(
           title: Text('Search Weather'),
           content: TextField(
-            controller: _cityController,
             onChanged: (value) {
               newCityName = value;
             },
@@ -572,7 +559,6 @@ else{
             ),
             TextButton(
               onPressed: () {
-                widget.prefs.setString('cityName', newCityName);
                 _fetchWeatherData(cityName: newCityName);
                 Navigator.of(context).pop();
               },
@@ -584,6 +570,7 @@ else{
       },
     );
   }
+
 
   Image getImageForCode(int code) {
     switch (code) {
@@ -795,9 +782,9 @@ else{
 }
 
 class ForecastScreen extends StatefulWidget {
-  final SharedPreferences prefs;
-
-  ForecastScreen({required this.prefs});
+  final FlutterSecureStorage storage;
+  final String cityName;
+  ForecastScreen({required this.cityName, required this.storage});
 
   @override
   ForecastScreenState createState() => ForecastScreenState();
@@ -810,7 +797,7 @@ class ForecastScreenState extends State<ForecastScreen> {
   @override
   void initState() {
     super.initState();
-    String? _cityName = widget.prefs.getString('cityName'); 
+    String? _cityName = widget.cityName;
     if(_cityName != null){
       _fetchWeatherForecast(_cityName);
     }
@@ -989,9 +976,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         final userData = jsonDecode(response.body);
 
         setState(() {
-          _userName = widget.prefs.getString('name') ?? "HackAI";
-          _minTemperature = widget.prefs.getDouble('mintemp') ?? -50.0;
-          _maxTemperature = widget.prefs.getDouble('maxtemp') ?? 70.0;
+          
         });
       } else {
         print('Failed to fetch user data: ${response.statusCode}');
@@ -1197,10 +1182,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onPressed: () {
                     // Navigate to the main screen (main.dart)
                     // Navigator.pushReplacementNamed(context, '/main');
-                    widget.prefs.remove('name');
-                    widget.prefs.remove('token');
-                    widget.prefs.remove('mintemp');
-                    widget.prefs.remove('maxtemp');
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => LandingPage(storage:widget.storage)));
                   },

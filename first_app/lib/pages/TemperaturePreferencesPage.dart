@@ -4,7 +4,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // If you want to run the page uncomment:
 void main() {
@@ -41,8 +40,6 @@ class _TemperaturePreferencesPageState
       _message = 'Error, Minimum Temperature should be lesser';
     }
     else{
-      widget.prefs.setDouble('mintemp', _minTemp);
-      widget.prefs.setDouble('maxtemp', _maxTemp);
       setState(() {
         Navigator.push(
           context,
