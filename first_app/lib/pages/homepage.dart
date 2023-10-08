@@ -56,7 +56,8 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   String _currentCity = "";
   String text = "";
 
-  final GlobalKey<ForecastScreenState> forecastScreenKey = GlobalKey<ForecastScreenState>();
+  final GlobalKey<ForecastScreenState> forecastScreenKey =
+      GlobalKey<ForecastScreenState>();
 
   @override
   void initState() {
@@ -198,7 +199,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Image _image =
       Image.asset('assets/images/95.png', height: 200, fit: BoxFit.contain);
   String _formattedDate = DateFormat('E, dd MMM').format(DateTime.now());
-  String _message = '';
 
   Future<void> _fetchWeatherForCurrentLocation() async {
     final apiService = ApiService(dio);
@@ -352,7 +352,9 @@ else{
                         ), // Location icon on the left
                         SizedBox(width: 10), // Add some spacing
                         Text(
-                          _cityName.isEmpty ? 'Weather App' : _cityName.toUpperCase(),
+                          _cityName.isEmpty
+                              ? 'cli-Mate'
+                              : _cityName.toUpperCase(),
                           style: GoogleFonts.alata(
                             backgroundColor:
                                 const Color.fromARGB(255, 190, 228, 255),
@@ -415,14 +417,16 @@ else{
               ),
               // Image positioned half inside and half outside the container
               Positioned(
-                top: MediaQuery.of(context).size.height * 0.29, // Adjust the position as needed
+                top: MediaQuery.of(context).size.height *
+                    0.29, // Adjust the position as needed
                 left: 0,
                 right: 0,
                 child: _image,
               ),
               // Content (temperature) below the container
               Positioned(
-                top: MediaQuery.of(context).size.height * 0.55, // Position below the container
+                top: MediaQuery.of(context).size.height *
+                    0.55, // Position below the container
                 left: 0,
                 right: 0,
                 child: Container(
@@ -800,8 +804,7 @@ class ForecastScreenState extends State<ForecastScreen> {
     String? _cityName = widget.cityName;
     if(_cityName != null){
       _fetchWeatherForecast(_cityName);
-    }
-    else{
+    } else {
       print("City not found");
     }
   }
@@ -822,7 +825,7 @@ class ForecastScreenState extends State<ForecastScreen> {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      List<WeatherForecast> forecasts = [];
+    List<WeatherForecast> forecasts = [];
 
       for (var item in data) {
         forecasts.add(WeatherForecast(
@@ -842,56 +845,302 @@ class ForecastScreenState extends State<ForecastScreen> {
     }
   }
 
+  Image getImageForCode(int code) {
+    switch (code) {
+      case 0:
+        return Image.asset(
+          'assets/images/0.png',
+          height: 80,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 1:
+        return Image.asset(
+          'assets/images/123.png',
+          height: 64,
+          width: 64, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 2:
+        return Image.asset(
+          'assets/images/123.png',
+          height: 80,
+          width: 80, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 3:
+        return Image.asset(
+          'assets/images/123.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 77:
+        return Image.asset(
+          'assets/images/77.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 95:
+        return Image.asset(
+          'assets/images/95.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 45:
+        return Image.asset(
+          'assets/images/4548.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 48:
+        return Image.asset(
+          'assets/images/4548.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 56:
+        return Image.asset(
+          'assets/images/5657.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 57:
+        return Image.asset(
+          'assets/images/5657.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 66:
+        return Image.asset(
+          'assets/images/6667.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 67:
+        return Image.asset(
+          'assets/images/6667.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 85:
+        return Image.asset(
+          'assets/images/8586.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 86:
+        return Image.asset(
+          'assets/images/8586.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 96:
+        return Image.asset(
+          'assets/images/9699.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 99:
+        return Image.asset(
+          'assets/images/9699.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 51:
+        return Image.asset(
+          'assets/images/515355.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 53:
+        return Image.asset(
+          'assets/images/515355.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 55:
+        return Image.asset(
+          'assets/images/515355.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 61:
+        return Image.asset(
+          'assets/images/616365.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 63:
+        return Image.asset(
+          'assets/images/616365.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 65:
+        return Image.asset(
+          'assets/images/616365.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 71:
+        return Image.asset(
+          'assets/images/717375.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 73:
+        return Image.asset(
+          'assets/images/717375.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 75:
+        return Image.asset(
+          'assets/images/717375.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 80:
+        return Image.asset(
+          'assets/images/808182.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 81:
+        return Image.asset(
+          'assets/images/808182.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      case 82:
+        return Image.asset(
+          'assets/images/808182.png',
+          height: 64,
+          width: 50, // Cover the entire width
+          fit: BoxFit.contain,
+        );
+      default:
+        return Image.asset(
+          'assets/images/4548.png',
+          height: 1,
+          width: 220, // Cover the entire width
+          fit: BoxFit.contain,
+        ); // A default image for unknown values
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        color: Color.fromARGB(255, 240, 249, 255),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 20),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.83,
-                  padding: const EdgeInsets.all(16.0),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 190, 228, 255),
-                    borderRadius: BorderRadius.circular(20),
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: ListView( // Wrap everything in a ListView
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            width: MediaQuery.of(context).size.width * 0.8,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 190, 228, 255),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              _cityName.isEmpty ? 'Weather Forecast' : _cityName,
+              style: GoogleFonts.alata(
+                fontSize: 26,
+                // fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          ListView.builder(
+            itemCount: _forecastData.length,
+            shrinkWrap: true, // Ensure the inner ListView scrolls correctly
+            physics: NeverScrollableScrollPhysics(), // Disable outer ListView scrolling
+            itemBuilder: (context, index) {
+              final forecast = _forecastData[index];
+              final date = DateFormat('EEE, MMM d').format(forecast.date);
+              final weatherCode = forecast.code;
+              final image = getImageForCode(weatherCode as int);
+    
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(22),
                   ),
-                  child: Text(
-                    _cityName.isEmpty ? 'Weather Forecast' : _cityName,
-                    style: GoogleFonts.alata(
-                      fontSize: 26,
-                      // fontWeight: FontWeight.bold,
+                  elevation: 4, // Adjust elevation as needed
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22),
+                      gradient: RadialGradient(
+                        center: Alignment(0.0, 0.0),
+                        radius: 2,
+                        colors: [
+                          Color.fromARGB(255, 152, 212, 255),
+                          Color.fromARGB(255, 70, 177, 255),
+                        ],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Left side: Date
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${forecast.minTemperature}°C / ${forecast.maxTemperature}°C',
+                                style: GoogleFonts.alumniSans(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
+                              ),
+                              Text(
+                                date,
+                                style: GoogleFonts.archivo(fontSize: 20, color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          // Right side: Weather Image
+                          image,
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: _forecastData.length,
-                  itemBuilder: (context, index) {
-                    final forecast = _forecastData[index];
-                    final date = DateFormat('EEE, MMM d').format(forecast.date);
-        
-                    return ListTile(
-                      title: Text(date),
-                      subtitle: Text(
-                          'Min: ${forecast.minTemperature}°C | Max: ${forecast.maxTemperature}°C'),
-                      trailing: Text(forecast.code),
-                    );
-                  },
-                ),
-              ],
-            ),
+              );
+            },
           ),
-        ),
+          SizedBox(height: 50),
+        ],
       ),
-    );
+    ),
+  );
+
   }
 
   // void _showSearchDialog(BuildContext context) {
@@ -935,7 +1184,7 @@ class WeatherForecast {
   final DateTime date;
   final double minTemperature;
   final double maxTemperature;
-  final String code;
+  final int code;
 
   WeatherForecast({
     required this.date,
