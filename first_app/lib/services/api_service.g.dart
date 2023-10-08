@@ -82,7 +82,7 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<List<WeatherData>> getForecastData(
+  Future<WeatherForecastResponse> getForecastData(
     String token,
     Map<String, dynamic> body,
   ) async {
@@ -92,8 +92,8 @@ class _ApiService implements ApiService {
     _headers.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<List<WeatherData>>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<WeatherForecastResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -109,9 +109,7 @@ class _ApiService implements ApiService {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    var value = _result.data!
-        .map((dynamic i) => WeatherData.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = WeatherForecastResponse.fromJson(_result.data!);
     return value;
   }
 

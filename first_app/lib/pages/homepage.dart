@@ -12,13 +12,16 @@ import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stts;
 import 'package:flutter_tts/flutter_tts.dart';
-import '../services/api_service.dart'; 
+import '../services/api_service.dart';
 
 //cant run this for now ;-;
 //to run the current page, uncomment:
 void main() {
   final storage = FlutterSecureStorage();
-  runApp(Dashboard(userId: 'poop',storage: storage,));
+  runApp(Dashboard(
+    userId: 'poop',
+    storage: storage,
+  ));
 }
 
 class Dashboard extends StatelessWidget {
@@ -30,7 +33,10 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BottomNavigationExample(userId: userId,storage: storage,),
+      home: BottomNavigationExample(
+        userId: userId,
+        storage: storage,
+      ),
     );
   }
 }
@@ -64,7 +70,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
     super.initState();
     _speechToText = stts.SpeechToText();
     _screens = [
-      HomeScreen( 
+      HomeScreen(
         userId: widget.userId,
         storage: widget.storage,
         onCityChange: (city) {
@@ -74,9 +80,13 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         },
       ),
       ForecastScreen(
-        cityName: _cityName,storage: widget.storage,
+        cityName: _cityName,
+        storage: widget.storage,
       ),
-      ProfileScreen(userId: widget.userId,storage: widget.storage,),
+      ProfileScreen(
+        userId: widget.userId,
+        storage: widget.storage,
+      ),
     ];
   }
 
@@ -183,7 +193,10 @@ class HomeScreen extends StatefulWidget {
   final String userId;
   final Function(String) onCityChange; // Add this callback
   final FlutterSecureStorage storage;
-  HomeScreen({required this.userId, required this.onCityChange, required this.storage});
+  HomeScreen(
+      {required this.userId,
+      required this.onCityChange,
+      required this.storage});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -212,12 +225,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (placemarks.isNotEmpty) {
-      final cityName = placemarks.first.subAdministrativeArea;
+      final cityName = placemarks.first.locality;
+      print(cityName);
+      await widget.storage.write(key: 'city', value: cityName);
       String? token = await widget.storage.read(key: 'access_token');
       final dashboardData = await apiService.getDashboardData(
-              'Token $token',
-              {'latitude':position.latitude,'longitude':position.longitude},
-            );
+        'Token $token',
+        {'latitude': position.latitude, 'longitude': position.longitude},
+      );
       // _fetchWeatherData(latitude: position.latitude,longitude: position.longitude);
       setState(() {
         _cityName = cityName!;
@@ -230,80 +245,48 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _fetchWeatherData(
+      {String cityName = 'None',
+      double latitude = 0.0,
+      double longitude = 0.0}) async {
+    final apiService = ApiService(dio);
 
-Future<void> _fetchWeatherData({String cityName = 'None',double latitude = 0.0,double longitude = 0.0}) async {
-  try{
-  
-  final Uri url = Uri.parse('https://955e-2406-7400-81-cff7-401b-682d-c52-e4d5.ngrok-free.app/weather/dashboard/');
-  final Map<String, String> headers = {
-    'Authorization': 'Token 1efc2cf63dc81c2241885f6a2862486b5d05cb7a', // TODO
-    'Content-Type': 'application/json',
-  };
-  Map<String, dynamic> requestBody;
-  
-if(cityName == 'None'){
-  requestBody = {
-    'latitude': latitude,
-    'longitude':longitude,
+    try {
+      Map<String, dynamic> requestBody;
 
-  };
-}
-else{
-  requestBody = {'locationName' : '$cityName'};
-  setState(() {
-    _cityName = cityName;
-     widget.onCityChange(cityName);
-   });
-}
-  final response = await http.post(
-    url,
-    headers: headers,
-    body: jsonEncode(requestBody),
-  );
-
-  if (response.statusCode == 200) {
-    print(response.body);
-    final data = jsonDecode(response.body);
-    final data1 = data["data"];
-    setState(() {
-    //_cityName = cityName!;
-    if (data1.containsKey('temperature') && data1['temperature'] != null) {
-      _temperature = data1['temperature'].toDouble();
-    } else {
-      // Handle the case when temperature is missing or null
-      _temperature = 0.0; // Provide a default value or handle it as needed
+      if (cityName == 'None') {
+        requestBody = {
+          'latitude': latitude,
+          'longitude': longitude,
+        };
+      } else {
+        requestBody = {'locationName': '$cityName'};
+        await widget.storage.write(key: 'city', value: cityName);
+        setState(() {
+          _cityName = cityName;
+          widget.onCityChange(cityName);
+        });
+      }
+      await widget.storage.write(key: 'city', value: cityName);
+      String? token = await widget.storage.read(key: 'access_token');
+      final response = await apiService.getDashboardData(
+        'Token $token',
+        requestBody,
+      );
+      print(response);
+      setState(() {
+        _cityName = cityName;
+        _temperature = response.temperature;
+        _code = response.weathercode;
+        _humidity = response.humidity;
+        _windSpeed = response.windspeed;
+        _image = getImageForCode(_code.toInt());
+      });
+      // widget.onCityChange(cityName!);
+    } catch (e) {
+      print('Error, $e');
     }
-    
-    if (data1.containsKey('humidity') && data1['humidity'] != null) {
-      _humidity = data1['humidity'].toDouble();
-    } else {
-      // Handle the case when humidity is missing or null
-      _humidity = 0.0; // Provide a default value or handle it as needed
-    }
-    
-    if (data1.containsKey('windspeed') && data1['windspeed'] != null) {
-      _windSpeed = data1['windspeed'].toDouble();
-    } else {
-      // Handle the case when windspeed is missing or null
-      _windSpeed = 0.0; // Provide a default value or handle it as needed
-    }
-    
-    if (data1.containsKey('weathercode') && data1['weathercode'] != null) {
-      _code = data1['weathercode'].toDouble();
-    } else {
-      // Handle the case when weathercode is missing or null
-      _code = 0.0; // Provide a default value or handle it as needed
-    }
-    _image = getImageForCode(_code.toInt());
-  });
-    // widget.onCityChange(cityName!);
-  } else {
-    print('Failed to fetch weather data: ${response.statusCode}');
   }
-  } catch(e) {
-    print('Error, $e');
-  }
-}
 
   @override
   void initState() {
@@ -358,7 +341,7 @@ else{
                           style: GoogleFonts.alata(
                             backgroundColor:
                                 const Color.fromARGB(255, 190, 228, 255),
-                            fontSize: 19,
+                            fontSize: 22,
                           ),
                         ),
                         SizedBox(width: 10), // Add some spacing
@@ -538,7 +521,7 @@ else{
     );
   }
 
- void _showSearchDialog(BuildContext context, _message) {
+  void _showSearchDialog(BuildContext context, _message) {
     String newCityName = "";
     String error = _message;
     showDialog(
@@ -574,7 +557,6 @@ else{
       },
     );
   }
-
 
   Image getImageForCode(int code) {
     switch (code) {
@@ -795,14 +777,14 @@ class ForecastScreen extends StatefulWidget {
 }
 
 class ForecastScreenState extends State<ForecastScreen> {
+  final Dio dio = Dio();
   List<WeatherForecast> _forecastData = [];
-  String _cityName = "";
+  String _cityName = "Mumbai";
 
   @override
   void initState() {
     super.initState();
-    String? _cityName = widget.cityName;
-    if(_cityName != null){
+    if (_cityName != null) {
       _fetchWeatherForecast(_cityName);
     } else {
       print("City not found");
@@ -814,35 +796,43 @@ class ForecastScreenState extends State<ForecastScreen> {
   }
 
   Future<void> _fetchWeatherForecast(String cityName) async {
-    print("Hello");
-    print(cityName);
-    final response = await http.get(
-      Uri.parse(
-        // Sanath, forecast details here
-        'http://your-django-api-url/forecast?city=$cityName', // Replace with your weather forecast API URL
-      ),
+  final apiService = ApiService(dio);
+  cityName = (await widget.storage.read(key: 'city'))!;
+  setState(() {
+    _cityName = cityName.toUpperCase();
+  });
+  print("Hello");
+  print(cityName);
+  Map<String, dynamic> requestBody;
+  requestBody = {'locationName': cityName};
+
+  String? token = await widget.storage.read(key: 'access_token');
+  
+  try {
+    final data1 = await apiService.getForecastData(
+      'Token $token',
+      requestBody,
     );
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
     List<WeatherForecast> forecasts = [];
-
-      for (var item in data) {
-        forecasts.add(WeatherForecast(
-          date: DateTime.parse(item['date']),
-          minTemperature: item['min_temperature'],
-          maxTemperature: item['max_temperature'],
-          code: item['weathearCode'],
-        ));
-      }
-
-      setState(() {
-        _cityName = cityName;
-        _forecastData = forecasts;
-      });
-    } else {
-      print('Failed to fetch weather forecast data: ${response.statusCode}');
+    final data = data1.forecast;
+    for (var item in data) {
+      forecasts.add(WeatherForecast(
+        date: DateTime.parse(item.date as String),
+        minTemperature: item.min,
+        maxTemperature: item.max,
+        code: item.weatherCode,
+      ));
     }
+
+    setState(() {
+      _cityName = cityName.toUpperCase();
+      _forecastData = forecasts;
+    });
+  } catch (e) {
+    print("Error fetching forecast data: $e");
+    // Handle the error, e.g., show an error message to the user
+  }
   }
 
   Image getImageForCode(int code) {
@@ -851,14 +841,14 @@ class ForecastScreenState extends State<ForecastScreen> {
         return Image.asset(
           'assets/images/0.png',
           height: 80,
-          width: 50, // Cover the entire width
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 1:
         return Image.asset(
           'assets/images/123.png',
-          height: 64,
-          width: 64, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 2:
@@ -871,276 +861,281 @@ class ForecastScreenState extends State<ForecastScreen> {
       case 3:
         return Image.asset(
           'assets/images/123.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 77:
         return Image.asset(
           'assets/images/77.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 95:
         return Image.asset(
           'assets/images/95.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 45:
         return Image.asset(
           'assets/images/4548.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 48:
         return Image.asset(
           'assets/images/4548.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 56:
         return Image.asset(
           'assets/images/5657.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 57:
         return Image.asset(
           'assets/images/5657.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 66:
         return Image.asset(
           'assets/images/6667.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 67:
         return Image.asset(
           'assets/images/6667.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 85:
         return Image.asset(
           'assets/images/8586.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 86:
         return Image.asset(
           'assets/images/8586.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 96:
         return Image.asset(
           'assets/images/9699.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 99:
         return Image.asset(
           'assets/images/9699.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 51:
         return Image.asset(
           'assets/images/515355.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 53:
         return Image.asset(
           'assets/images/515355.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 55:
         return Image.asset(
           'assets/images/515355.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 61:
         return Image.asset(
           'assets/images/616365.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 63:
         return Image.asset(
           'assets/images/616365.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 65:
         return Image.asset(
           'assets/images/616365.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 71:
         return Image.asset(
           'assets/images/717375.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 73:
         return Image.asset(
           'assets/images/717375.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 75:
         return Image.asset(
           'assets/images/717375.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 80:
         return Image.asset(
           'assets/images/808182.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 81:
         return Image.asset(
           'assets/images/808182.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       case 82:
         return Image.asset(
           'assets/images/808182.png',
-          height: 64,
-          width: 50, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         );
       default:
         return Image.asset(
           'assets/images/4548.png',
-          height: 1,
-          width: 220, // Cover the entire width
+          height: 80,
+          width: 80, // Cover the entire width
           fit: BoxFit.contain,
         ); // A default image for unknown values
     }
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: ListView( // Wrap everything in a ListView
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            width: MediaQuery.of(context).size.width * 0.8,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 190, 228, 255),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              _cityName.isEmpty ? 'Weather Forecast' : _cityName,
-              style: GoogleFonts.alata(
-                fontSize: 26,
-                // fontWeight: FontWeight.bold,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: ListView(
+          // Wrap everything in a ListView
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              width: MediaQuery.of(context).size.width * 0.8,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 190, 228, 255),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                _cityName.isEmpty ? 'Weather Forecast' : '$_cityName\'s Forecast',
+                style: GoogleFonts.alata(
+                  fontSize: 22,
+                  // fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          SizedBox(height: 20),
-          ListView.builder(
-            itemCount: _forecastData.length,
-            shrinkWrap: true, // Ensure the inner ListView scrolls correctly
-            physics: NeverScrollableScrollPhysics(), // Disable outer ListView scrolling
-            itemBuilder: (context, index) {
-              final forecast = _forecastData[index];
-              final date = DateFormat('EEE, MMM d').format(forecast.date);
-              final weatherCode = forecast.code;
-              final image = getImageForCode(weatherCode as int);
-    
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(22),
-                  ),
-                  elevation: 4, // Adjust elevation as needed
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22),
-                      gradient: RadialGradient(
-                        center: Alignment(0.0, 0.0),
-                        radius: 2,
-                        colors: [
-                          Color.fromARGB(255, 152, 212, 255),
-                          Color.fromARGB(255, 70, 177, 255),
-                        ],
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Left side: Date
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${forecast.minTemperature}°C / ${forecast.maxTemperature}°C',
-                                style: GoogleFonts.alumniSans(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
-                              ),
-                              Text(
-                                date,
-                                style: GoogleFonts.archivo(fontSize: 20, color: Colors.white),
-                              ),
-                            ],
-                          ),
-                          // Right side: Weather Image
-                          image,
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-          SizedBox(height: 50),
-        ],
-      ),
-    ),
-  );
+            SizedBox(height: 20),
+            ListView.builder(
+              itemCount: _forecastData.length,
+              shrinkWrap: true, // Ensure the inner ListView scrolls correctly
+              physics:
+                  NeverScrollableScrollPhysics(), // Disable outer ListView scrolling
+              itemBuilder: (context, index) {
+                final forecast = _forecastData[index];
+                final date = DateFormat('EEE, MMM d').format(forecast.date);
+                final weatherCode = forecast.code;
+                final image = getImageForCode(weatherCode as int);
 
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    elevation: 4, // Adjust elevation as needed
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                        gradient: RadialGradient(
+                          center: Alignment(0.0, 0.0),
+                          radius: 2,
+                          colors: [
+                            Color.fromARGB(255, 152, 212, 255),
+                            Color.fromARGB(255, 70, 177, 255),
+                          ],
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Left side: Date
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${forecast.minTemperature}°C / ${forecast.maxTemperature}°C',
+                                  style: GoogleFonts.alumniSans(
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                Text(
+                                  date,
+                                  style: GoogleFonts.archivo(
+                                      fontSize: 20, color: Colors.white),
+                                ),
+                              ],
+                            ),
+                            // Right side: Weather Image
+                            image,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            SizedBox(height: 50),
+          ],
+        ),
+      ),
+    );
   }
 
   // void _showSearchDialog(BuildContext context) {
@@ -1204,6 +1199,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final Dio dio = Dio();
   double _minTemperature = -50.0;
   double _maxTemperature = 70.0;
   String _userName = "";
@@ -1216,26 +1212,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void fetchUserData() async {
-    try {
-      // Sanath get Name, mintemp and maxtemp here
-      // Replace with your backend API endpoint to fetch user data
-      final response = await http.get(Uri.parse('YOUR_BACKEND_API_URL'));
 
-      if (response.statusCode == 200) {
-        final userData = jsonDecode(response.body);
-
-        setState(() {
-          
-        });
-      } else {
-        print('Failed to fetch user data: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
   }
 
   void updateTemperatureSettings() async {
+    final apiService = ApiService(dio);
     try {
       // Sanath update the new mintemp and maxtemp here
       // Replace with your backend API endpoint to update temperature settings
@@ -1244,21 +1225,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _message = "Error! Minimum Temperature should be lesser";
         });
       } else {
-        final response = await http.put(
-          Uri.parse('YOUR_BACKEND_API_URL'),
-          body: jsonEncode({
-            'minTemperature': _minTemperature,
-            'maxTemperature': _maxTemperature,
-          }),
-          headers: {'Content-Type': 'application/json'},
-        );
-
-        if (response.statusCode == 200) {
-          print('Temperature settings updated successfully.');
-        } else {
-          print(
-              'Failed to update temperature settings: ${response.statusCode}');
-        }
+        setState(() {
+          _message = "";
+        });
+          String? token = await widget.storage.read(key: 'access_token');
+        final body = {
+          "min_temperature": _minTemperature,
+          "max_temperature": _maxTemperature,
+        };
+        await apiService.setTemperaturePreferences('Token $token', body);
+        setState(() {
+          _message = 'Preferences saved successfully.';
+        });
+        widget.storage.write(key: 'mintemp', value: _minTemperature.toString());
+        widget.storage.write(key: 'maxtemp', value: _maxTemperature.toString());
       }
     } catch (e) {
       print('Error: $e');
@@ -1320,8 +1300,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Align(
                       alignment: Alignment.center,
                       child: Text(
-                        // '$_userName',
-                        _userName,
+                        widget.userId,
                         textAlign: TextAlign.center,
                         style: GoogleFonts.alata(
                           fontSize: 33.0,
@@ -1428,11 +1407,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   borderRadius: BorderRadius.circular(16.0),
                 ),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async{
                     // Navigate to the main screen (main.dart)
                     // Navigator.pushReplacementNamed(context, '/main');
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LandingPage(storage:widget.storage)));
+                    await widget.storage.delete(key: 'access_token');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                LandingPage(storage: widget.storage)));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 92, 187, 255),

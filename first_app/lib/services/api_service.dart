@@ -1,4 +1,5 @@
 // ignore: file_names
+import 'package:first_app/pages/homepage.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 
@@ -18,7 +19,7 @@ abstract class ApiService {
   );
 
   @POST('weather/forecast/')
-  Future<List<WeatherData>> getForecastData(
+  Future<WeatherForecastResponse> getForecastData(
     @Header('Authorization') String token,
     @Body() Map<String, dynamic> body,
   );
@@ -98,4 +99,44 @@ class WeatherData {
   }
 
 }
+
+class WeatherForecastResponse {
+  final List<ForecastData> forecast;
+
+  WeatherForecastResponse({required this.forecast});
+
+  factory WeatherForecastResponse.fromJson(Map<String, dynamic> json) {
+    final forecastList = (json['forecast'] as List)
+        .map((item) => ForecastData.fromJson(item))
+        .toList();
+
+    return WeatherForecastResponse(forecast: forecastList);
+  }
+}
+
+class ForecastData {
+  final double min;
+  final double max;
+  final int weatherCode;
+  final String date;
+
+  ForecastData({
+    required this.min,
+    required this.max,
+    required this.weatherCode,
+    required this.date,
+  });
+
+  factory ForecastData.fromJson(Map<String, dynamic> json) {
+    return ForecastData(
+      min: json['min'].toDouble(),
+      max: json['max'].toDouble(),
+      weatherCode: json['weathercode'] as int,
+      date: json['date'] as String,
+    );
+  }
+}
+
+
+
 

@@ -4,6 +4,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../services/api_service.dart'; 
+import 'package:dio/dio.dart';
 
 // If you want to run the page uncomment:
 void main() {
@@ -30,16 +32,35 @@ class TemperaturePreferencesPage extends StatefulWidget {
 
 class _TemperaturePreferencesPageState
     extends State<TemperaturePreferencesPage> {
+      final Dio dio = Dio();
   double _minTemp = -50.0;
   double _maxTemp = 70.0;
 
   String _message = '';
 
   Future<void> _saveTemperaturePreferences() async {
+    final apiService = ApiService(dio);
     if(_minTemp >= _maxTemp){
       _message = 'Error, Minimum Temperature should be lesser';
     }
     else{
+      String? token = await widget.storage.read(key: 'access_token');
+      final body = {
+        "min_temperature": _minTemp,
+        "max_temperature": _maxTemp,
+      };
+      try {
+        await apiService.setTemperaturePreferences('Token $token', body);
+        setState(() {
+          _message = 'Preferences saved successfully.';
+        });
+        widget.storage.write(key: 'mintemp', value: _minTemp.toString());
+        widget.storage.write(key: 'maxtemp', value: _maxTemp.toString());
+      } catch (e) {
+        setState(() {
+          _message = 'Failed to save preferences: $e';
+        });
+      }
       setState(() {
         Navigator.push(
           context,

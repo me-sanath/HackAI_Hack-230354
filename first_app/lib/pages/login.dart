@@ -60,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
     await widget.storage.write(key: 'access_token', value: loginData.token);
     final String receivedUserId = loginData.name;
     await widget.storage.write(key: 'username', value: receivedUserId);
+    print(_userId);
     setState(() {
       _userId = receivedUserId;
         Navigator.push(
