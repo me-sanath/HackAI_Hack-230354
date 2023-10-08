@@ -43,9 +43,16 @@ dependencies:
   permission_handler: ^11.0.0
   speech_to_text: ^6.3.0
   flutter_tts: ^3.8.3
-  shared_preferences: ^2.2.1
+  dio: ^5.3.3
+  retrofit: ^4.0.2
+  json_annotation: ^4.8.1
+  flutter_secure_storage: ^9.0.0
+
 
 dev_dependencies:
+  retrofit_generator: '>=7.0.0 <8.0.0'   
+  json_serializable: ^6.6.2
+  build_runner: ^2.4.6
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter

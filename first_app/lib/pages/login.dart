@@ -1,102 +1,95 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'homepage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../services/api_service.dart'; 
 
 // If you want to run the page uncomment:
 // void main(){
-//   runApp(LoginApp());
+//   final storage = FlutterSecureStorage();
+//   runApp(LoginApp(storage: storage,));
 // }
 
 class LoginApp extends StatelessWidget {
-  final SharedPreferences prefs;
+   final FlutterSecureStorage storage;
 
-  LoginApp({required this.prefs});
-
+  LoginApp({required this.storage});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(prefs: prefs),
+      home: LoginPage(storage: storage),
     );
   }
 }
 
 class LoginPage extends StatefulWidget {
-  final SharedPreferences prefs;
-
-  LoginPage({required this.prefs});
-
+  final FlutterSecureStorage storage;
+  
+  LoginPage({required this.storage});
   @override
   LoginPageState createState() => LoginPageState(prefs: prefs);
 }
 
-class LoginPageState extends State<LoginPage> {
-  final SharedPreferences prefs;
-
-  LoginPageState({required this.prefs});
-
+class _LoginPageState extends State<LoginPage> {
+  final Dio dio = Dio();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   String _message = '';
-  String token = '';
+  String _userId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    checkAccessToken(); // Check if access_token exists when the widget initializes
+  }
 
   Future<void> _login() async {
+    final apiService = ApiService(dio);
     setState(() {
       _isLoading = true;
     });
-
     final email = _emailController.text;
     final password = _passwordController.text;
 
-    final response = await http.post(
-      //Sanath
-      Uri.parse(
-          'http://your-django-api-url/login/'), // Replace with your actual login endpoint URL
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'email': email,
-        'password': password,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      // Sanath, successful registration, handle the response accordingly
-      //I have named the token as userid everywhere, if u modify the name the entirity might get fucked. So try to keep the name of the token as user id
-      final String token = 'user_id_from_django';
-      final String name = 'name of the user';
-      final double mintemp = 0.0;
-      final double maxtemp = 0.0;
-
-      prefs.setString('token', token);
-      prefs.setString('name', name);
-      prefs.setDouble('mintemp', mintemp);
-      prefs.setDouble('maxtemp', maxtemp);
-
-      setState(() {
+    final loginData = await apiService.login({'email':email,'password':password});
+    await widget.storage.write(key: 'access_token', value: loginData.token);
+    final String receivedUserId = loginData.name;
+    await widget.storage.write(key: 'username', value: receivedUserId);
+    setState(() {
+      _userId = receivedUserId;
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Dashboard(prefs: prefs),
+            builder: (context) => Dashboard(userId: _userId,storage: widget.storage,),
           ),
         );
-        _message = 'Registration successful.';
+        _message = 'Login successful.';
+        _isLoading = false;
       });
-      _message = 'Login successful';
-    } else {
-      // Login failed, handle the error response
-      _message = 'Invalid email or password';
-    }
+  }
+    
 
-    setState(() {
-      _isLoading = false;
-    });
+  Future<void> checkAccessToken() async {
+    final String? accessToken = await widget.storage.read(key: 'access_token');
+    if (accessToken != null) {
+      // Token exists, navigate to the Dashboard
+      final String? receivedUserId = await widget.storage.read(key: 'username');
+      setState(() {
+        _userId = receivedUserId!;
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Dashboard(userId: _userId, storage: widget.storage),
+        ),
+      );
+    }
   }
 
   @override

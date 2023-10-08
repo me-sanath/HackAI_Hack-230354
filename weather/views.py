@@ -97,9 +97,10 @@ class dashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        print(request.data)
         location = request.data.get("locationName",None)
         latitude = request.data.get("latitude",None)
-        longitude  =request.data.get('longitude')
+        longitude  =request.data.get('longitude',None)
         
         if location is not None:
             response = geocode(locationName=location)
@@ -113,6 +114,7 @@ class dashboardView(APIView):
             weather_response = weatherData(geocode_data)
             
             if weather_response["result"]:
+                print(weather_response["data"])
                 return JsonResponse({"data": weather_response["data"]})
             else:
                 return Response({'reason': weather_response["data"]["message"]}, status=422)
@@ -126,27 +128,32 @@ class forecastView(APIView):
 
     def post(self,request):
         location = request.data.get("locationName")
-        if location:
+        latitude = request.data.get("latitude",None)
+        longitude  =request.data.get('longitude',None)
+        if location is not None:
             response = geocode(locationName=location)
-            if response["result"]:
-                latitude = response['data']['geocode']['latitude']
-                longitude = response['data']['geocode']['longitude']
-                
-                forecast_data = []
-                api_url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&daily=weathercode,temperature_2m_max,temperature_2m_min"
-                response = requests.get(api_url)
-                data = response.json()
-                for i in range(len(data["daily"]["time"])):
-                    forecast_entry = {
-                        "min": data["daily"]["temperature_2m_min"][i],
-                        "max": data["daily"]["temperature_2m_max"][i],
-                        "weathercode": data["daily"]["weathercode"][i],
-                        "date": data["daily"]["time"][i]
-                    }
-                    forecast_data.append(forecast_entry)
-                return JsonResponse({"forecast": forecast_data})
-            return Response({"reason":response["data"]["message"]},status=400)
-        return Response({"Failed"},status=400)
+        elif latitude is not None and longitude is not None:
+            response = {"result": True, "data": {"geocode": {"latitude": latitude, "longitude": longitude}}}
+        else:
+            return Response({'reason': 'no location data'}, status=400)
+        
+        if response["result"]:
+            latitude = response['data']['geocode']['latitude']
+            longitude = response['data']['geocode']['longitude']     
+            forecast_data = []
+            api_url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&daily=weathercode,temperature_2m_max,temperature_2m_min"
+            response = requests.get(api_url)
+            data = response.json()
+            for i in range(len(data["daily"]["time"])):
+                forecast_entry = {
+                    "min": data["daily"]["temperature_2m_min"][i],
+                    "max": data["daily"]["temperature_2m_max"][i],
+                    "weathercode": data["daily"]["weathercode"][i],
+                    "date": data["daily"]["time"][i]
+                }
+                forecast_data.append(forecast_entry)
+            return JsonResponse({"forecast": forecast_data})
+        return Response({"reason":response["data"]["message"]},status=400)
 
 
 class setPrefView(APIView):

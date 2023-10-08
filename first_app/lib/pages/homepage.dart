@@ -1,7 +1,9 @@
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:dio/dio.dart';
 import 'package:first_app/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
@@ -10,34 +12,33 @@ import 'package:intl/intl.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stts;
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../services/api_service.dart'; 
 
 //cant run this for now ;-;
 //to run the current page, uncomment:
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp(Dashboard(prefs: prefs));
+void main() {
+  final storage = FlutterSecureStorage();
+  runApp(Dashboard(userId: 'poop',storage: storage,));
 }
 
 class Dashboard extends StatelessWidget {
-  final SharedPreferences prefs;
-
-  Dashboard({required this.prefs});
+  final String userId;
+  final FlutterSecureStorage storage;
+  Dashboard({required this.userId, required this.storage});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BottomNavigationExample(prefs: prefs),
+      home: BottomNavigationExample(userId: userId,storage: storage,),
     );
   }
 }
 
 class BottomNavigationExample extends StatefulWidget {
-  final SharedPreferences prefs;
-
-  BottomNavigationExample({required this.prefs});
+  final String userId;
+  final FlutterSecureStorage storage;
+  BottomNavigationExample({required this.userId, required this.storage});
 
   @override
   _BottomNavigationExampleState createState() =>
@@ -97,6 +98,25 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 
   void _speak() async {
     await flutterTts.speak(text);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _speechToText = stts.SpeechToText();
+    _screens = [
+      HomeScreen(
+        userId: widget.userId,
+        storage: widget.storage,
+        onCityChange: (city) {
+          setState(() {
+            _currentCity = city;
+          });
+        },
+      ),
+      ForecastScreen(userId: widget.userId, cityName: _currentCity),
+      ProfileScreen(userId: widget.userId,storage: widget.storage,),
+    ];
   }
 
   @override
@@ -171,16 +191,17 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 }
 
 class HomeScreen extends StatefulWidget {
-  final SharedPreferences prefs;
-
-  HomeScreen({required this.prefs});
+  final String userId;
+  final Function(String) onCityChange; // Add this callback
+  final FlutterSecureStorage storage;
+  HomeScreen({required this.userId, required this.onCityChange, required this.storage});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController _cityController = TextEditingController();
+  final Dio dio = Dio();
   String _cityName = "";
   double _temperature = 0.0;
   double _humidity = 0;
@@ -191,6 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String _formattedDate = DateFormat('E, dd MMM').format(DateTime.now());
 
   Future<void> _fetchWeatherForCurrentLocation() async {
+    final apiService = ApiService(dio);
     final position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
@@ -202,69 +224,97 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (placemarks.isNotEmpty) {
       final cityName = placemarks.first.subAdministrativeArea;
-      widget.prefs.setString('cityName', cityName!);
-      print(cityName);
-      _fetchWeatherData(
-          latitude: position.latitude, longitude: position.longitude);
+      String? token = await widget.storage.read(key: 'access_token');
+      final dashboardData = await apiService.getDashboardData(
+              'Token $token',
+              {'latitude':position.latitude,'longitude':position.longitude},
+            );
+      // _fetchWeatherData(latitude: position.latitude,longitude: position.longitude);
       setState(() {
-        _cityName = cityName;
+        _cityName = cityName!;
+        _temperature = dashboardData.temperature;
+        _code = dashboardData.weathercode;
+        _humidity = dashboardData.humidity;
+        _windSpeed = dashboardData.windspeed;
+        _image = getImageForCode(_code.toInt());
       });
     }
   }
 
-  Future<void> _fetchWeatherData(
-      {String cityName = 'None',
-      double latitude = 0.0,
-      double longitude = 0.0}) async {
-    final String? token = widget.prefs.getString('token');
-    try {
-      final Uri url = Uri.parse(
-          'https://955e-2406-7400-81-cff7-401b-682d-c52-e4d5.ngrok-free.app/weather/dashboard/');
-      final Map<String, String> headers = {
-        'Authorization':
-            'Token 1efc2cf63dc81c2241885f6a2862486b5d05cb7a', // TODO
-        'Content-Type': 'application/json',
-      };
-      Map<String, dynamic> requestBody;
 
-      if (cityName == 'None') {
-        requestBody = {
-          'latitude': latitude,
-          'longitude': longitude,
-        };
-      } else {
-        widget.prefs.setString('cityName', cityName);
-        requestBody = {'locationName': '$cityName'};
-        setState(() {
-          _cityName = cityName;
-        });
-      }
-      final response = await http.post(
-        url,
-        headers: headers,
-        body: jsonEncode(requestBody),
-      );
+Future<void> _fetchWeatherData({String cityName = 'None',double latitude = 0.0,double longitude = 0.0}) async {
+  try{
+  
+  final Uri url = Uri.parse('https://955e-2406-7400-81-cff7-401b-682d-c52-e4d5.ngrok-free.app/weather/dashboard/');
+  final Map<String, String> headers = {
+    'Authorization': 'Token 1efc2cf63dc81c2241885f6a2862486b5d05cb7a', // TODO
+    'Content-Type': 'application/json',
+  };
+  Map<String, dynamic> requestBody;
+  
+if(cityName == 'None'){
+  requestBody = {
+    'latitude': latitude,
+    'longitude':longitude,
 
-      if (response.statusCode == 200) {
-        print(response.body);
-        final data = jsonDecode(response.body);
-        final data1 = data["data"];
-        setState(() {
-          //_cityName = cityName!;
-          _temperature = data1['temperature'];
-          _humidity = data1['humidity'].toDouble();
-          _windSpeed = data1['windspeed'];
-          _code = data1['weathercode'].toDouble();
-          _image = getImageForCode(_code.toInt());
-        });
-        // widget.onCityChange(cityName!);
-      } else {
-        print('Failed to fetch weather data: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error, $e');
+  };
+}
+else{
+  requestBody = {'locationName' : '$cityName'};
+  setState(() {
+    _cityName = cityName;
+     widget.onCityChange(cityName);
+   });
+}
+  final response = await http.post(
+    url,
+    headers: headers,
+    body: jsonEncode(requestBody),
+  );
+
+  if (response.statusCode == 200) {
+    print(response.body);
+    final data = jsonDecode(response.body);
+    final data1 = data["data"];
+    setState(() {
+    //_cityName = cityName!;
+    if (data1.containsKey('temperature') && data1['temperature'] != null) {
+      _temperature = data1['temperature'].toDouble();
+    } else {
+      // Handle the case when temperature is missing or null
+      _temperature = 0.0; // Provide a default value or handle it as needed
     }
+    
+    if (data1.containsKey('humidity') && data1['humidity'] != null) {
+      _humidity = data1['humidity'].toDouble();
+    } else {
+      // Handle the case when humidity is missing or null
+      _humidity = 0.0; // Provide a default value or handle it as needed
+    }
+    
+    if (data1.containsKey('windspeed') && data1['windspeed'] != null) {
+      _windSpeed = data1['windspeed'].toDouble();
+    } else {
+      // Handle the case when windspeed is missing or null
+      _windSpeed = 0.0; // Provide a default value or handle it as needed
+    }
+    
+    if (data1.containsKey('weathercode') && data1['weathercode'] != null) {
+      _code = data1['weathercode'].toDouble();
+    } else {
+      // Handle the case when weathercode is missing or null
+      _code = 0.0; // Provide a default value or handle it as needed
+    }
+    _image = getImageForCode(_code.toInt());
+  });
+    // widget.onCityChange(cityName!);
+  } else {
+    print('Failed to fetch weather data: ${response.statusCode}');
   }
+  } catch(e) {
+    print('Error, $e');
+  }
+}
 
   @override
   void initState() {
@@ -1157,9 +1207,9 @@ class WeatherForecast {
 }
 
 class ProfileScreen extends StatefulWidget {
-  final SharedPreferences prefs;
-
-  ProfileScreen({required this.prefs});
+  final String userId;
+  final FlutterSecureStorage storage;
+  ProfileScreen({required this.userId, required this.storage});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -1399,11 +1449,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     widget.prefs.remove('token');
                     widget.prefs.remove('mintemp');
                     widget.prefs.remove('maxtemp');
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                LandingPage(prefs: widget.prefs)));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LandingPage(storage:widget.storage)));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 92, 187, 255),
