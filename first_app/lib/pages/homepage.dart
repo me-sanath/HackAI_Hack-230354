@@ -89,32 +89,36 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
     ];
   }
 
+  // Function to start or stop speech recognition
   void listen() async {
     if (!islistening) {
       bool available = await _speechToText.initialize(
-        onStatus: (status) => print(text),
-        onError: (errorNotification) => print("$errorNotification"),
+        // Initialize Speech-to-Text with event handlers
+        onStatus: (status) => print(text), // Handle status changes
+        onError: (errorNotification) =>
+            print("$errorNotification"), // Handle errors
       );
       if (available) {
         setState(() {
-          islistening = true;
+          islistening = true; // Set listening to true
         });
         _speechToText.listen(
           onResult: (result) => setState(() {
-            text = result.recognizedWords;
+            text = result.recognizedWords; // Update recognized speech text
           }),
         );
       }
     } else {
       setState(() {
-        islistening = false;
+        islistening = false; // Set listening to false
       });
-      _speechToText.stop();
+      _speechToText.stop(); // Stop speech recognition
     }
   }
 
+// Function to speak the recognized speech text
   void _speak() async {
-    await flutterTts.speak(text);
+    await flutterTts.speak(text); // Use Flutter Text-to-Speech to speak text
   }
 
   @override
