@@ -796,43 +796,43 @@ class ForecastScreenState extends State<ForecastScreen> {
   }
 
   Future<void> _fetchWeatherForecast(String cityName) async {
-  final apiService = ApiService(dio);
-  cityName = (await widget.storage.read(key: 'city'))!;
-  setState(() {
-    _cityName = cityName.toUpperCase();
-  });
-  print("Hello");
-  print(cityName);
-  Map<String, dynamic> requestBody;
-  requestBody = {'locationName': cityName};
-
-  String? token = await widget.storage.read(key: 'access_token');
-  
-  try {
-    final data1 = await apiService.getForecastData(
-      'Token $token',
-      requestBody,
-    );
-
-    List<WeatherForecast> forecasts = [];
-    final data = data1.forecast;
-    for (var item in data) {
-      forecasts.add(WeatherForecast(
-        date: DateTime.parse(item.date as String),
-        minTemperature: item.min,
-        maxTemperature: item.max,
-        code: item.weatherCode,
-      ));
-    }
-
+    final apiService = ApiService(dio);
+    cityName = (await widget.storage.read(key: 'city'))!;
     setState(() {
       _cityName = cityName.toUpperCase();
-      _forecastData = forecasts;
     });
-  } catch (e) {
-    print("Error fetching forecast data: $e");
-    // Handle the error, e.g., show an error message to the user
-  }
+    // print("Hello");
+    // print(cityName);
+    Map<String, dynamic> requestBody;
+    requestBody = {'locationName': cityName};
+
+    String? token = await widget.storage.read(key: 'access_token');
+
+    try {
+      final data1 = await apiService.getForecastData(
+        'Token $token',
+        requestBody,
+      );
+
+      List<WeatherForecast> forecasts = [];
+      final data = data1.forecast;
+      for (var item in data) {
+        forecasts.add(WeatherForecast(
+          date: DateTime.parse(item.date as String),
+          minTemperature: item.min,
+          maxTemperature: item.max,
+          code: item.weatherCode,
+        ));
+      }
+
+      setState(() {
+        _cityName = cityName.toUpperCase();
+        _forecastData = forecasts;
+      });
+    } catch (e) {
+      print("Error fetching forecast data: $e");
+      // Handle the error, e.g., show an error message to the user
+    }
   }
 
   Image getImageForCode(int code) {
@@ -1060,7 +1060,9 @@ class ForecastScreenState extends State<ForecastScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                _cityName.isEmpty ? 'Weather Forecast' : '$_cityName\'s Forecast',
+                _cityName.isEmpty
+                    ? 'Weather Forecast'
+                    : '$_cityName\'s Forecast',
                 style: GoogleFonts.alata(
                   fontSize: 22,
                   // fontWeight: FontWeight.bold,
@@ -1211,9 +1213,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     fetchUserData();
   }
 
-  void fetchUserData() async {
-
-  }
+  void fetchUserData() async {}
 
   void updateTemperatureSettings() async {
     final apiService = ApiService(dio);
@@ -1228,7 +1228,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         setState(() {
           _message = "";
         });
-          String? token = await widget.storage.read(key: 'access_token');
+        String? token = await widget.storage.read(key: 'access_token');
         final body = {
           "min_temperature": _minTemperature,
           "max_temperature": _maxTemperature,
@@ -1407,7 +1407,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   borderRadius: BorderRadius.circular(16.0),
                 ),
                 child: ElevatedButton(
-                  onPressed: () async{
+                  onPressed: () async {
                     // Navigate to the main screen (main.dart)
                     // Navigator.pushReplacementNamed(context, '/main');
                     await widget.storage.delete(key: 'access_token');
