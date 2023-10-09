@@ -1,41 +1,40 @@
-import 'package:avatar_glow/avatar_glow.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:dio/dio.dart';
-import 'package:cliMate/main.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:intl/intl.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stts;
-import 'package:flutter_tts/flutter_tts.dart';
-import '../services/api_service.dart';
+import 'package:avatar_glow/avatar_glow.dart'; // Import for an avatar glow effect
+import 'package:curved_navigation_bar/curved_navigation_bar.dart'; // Import for a curved navigation bar
+import 'package:dio/dio.dart'; // Import for making HTTP requests
+import 'package:cliMate/main.dart'; // Importing the main.dart file (check if needed)
+import 'package:flutter/material.dart'; // Import for Flutter widgets
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // Import for secure data storage
+import 'package:http/http.dart' as http; // Import for making HTTP requests
+import 'dart:convert'; // Import for working with JSON data
+import 'package:geolocator/geolocator.dart'; // Import for geolocation services
+import 'package:geocoding/geocoding.dart'; // Import for reverse geocoding
+import 'package:intl/intl.dart'; // Import for date and time formatting
+import 'package:google_fonts/google_fonts.dart'; // Import for using Google Fonts
+import 'package:speech_to_text/speech_to_text.dart'
+    as stts; // Import for speech-to-text functionality
+import 'package:flutter_tts/flutter_tts.dart'; // Import for text-to-speech functionality
+import '../services/api_service.dart'; // Importing an ApiService (check if needed)
 
-//cant run this for now ;-;
-//to run the current page, uncomment:
 void main() {
   final storage = FlutterSecureStorage();
   runApp(Dashboard(
-    userId: 'poop',
-    storage: storage,
+    userId: 'Test_user', // User ID
+    storage: storage, // Storage for secure data storage
   ));
 }
 
 class Dashboard extends StatelessWidget {
-  final String userId;
-  final FlutterSecureStorage storage;
+  final String userId; // User ID
+  final FlutterSecureStorage storage; // Storage for secure data storage
   Dashboard({required this.userId, required this.storage});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false, // Disable the debug banner
       home: BottomNavigationExample(
-        userId: userId,
-        storage: storage,
+        userId: userId, // Pass the user ID to the dashboard
+        storage: storage, // Pass the storage object to the dashboard
       ),
     );
   }
@@ -155,7 +154,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
                   // Handle microphone button tap
                   // Add your microphone functionality here
                 },
-                backgroundColor: Color.fromARGB(255, 92, 187, 255),
+                backgroundColor: Color.fromARGB(255, 77, 91, 102),
                 child: Icon(islistening ? Icons.mic : Icons.mic_none, size: 32),
               ),
             ),
