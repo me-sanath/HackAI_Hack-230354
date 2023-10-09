@@ -1,4 +1,4 @@
-name: first_app
+name: cliMate
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -47,6 +47,23 @@ dependencies:
   retrofit: ^4.0.2
   json_annotation: ^4.8.1
   flutter_secure_storage: ^9.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/images/logo.png"
+  windows:
+    generate: true
+    image_path: "assets/images/logo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/images/logo.png"
 
 
 dev_dependencies:
@@ -83,6 +100,7 @@ flutter:
     - assets/images/717375.png
     - assets/images/808182.png
     - assets/images/profile_image.png
+    - assets/images/logo.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
