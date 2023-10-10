@@ -4,6 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 
 from django.http import JsonResponse
 from weather.models import WeatherPref
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+from django.utils import timezone
 
 import requests
 import logging
@@ -176,3 +179,55 @@ class setPrefView(APIView):
         weather_pref.maximumTemperature = max_temperature
         weather_pref.save()
         return Response({'message': 'Weather preferences updated successfully'})
+    
+class getAllUserData(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        response = {"result":False,"users":[]}
+        if user.is_superuser:
+            all_users = User.objects.all()
+            for user in all_users:
+                if not user.is_staff:
+                    weatherData = WeatherPref.objects.filter(user=user).first()
+                    if weatherData:
+                        try:
+                            latitude = weatherData.setLocation[0]
+                            longitude = weatherData.setLocation[1]
+                        except:
+                            latitude = None
+                            longitude = None
+                        notification = weatherData.toNofify
+                        last_sent = weatherData.lastNotified
+                        min_temp = weatherData.minumumTemperature
+                        max_temp = weatherData.maximumTemperature
+                        fc_token = weatherData.token
+                        token = Token.objects.get_or_create(user=user)[0]
+                        userData = {
+                            "identifier":token.key,
+                            "user_token": fc_token,
+                            "latitude": latitude,
+                            "longitude": longitude,
+                            "notification": notification,
+                            "last_notified": last_sent.timestamp() if last_sent is not None else None,
+                            "min_temp": min_temp,
+                            "max_temp":max_temp,
+                        }
+                        response["users"].append(userData)
+            response["result"]= True
+            return JsonResponse(response,status=200)
+        else:
+            return Response({"data":"Unauthorised"},status=403)
+        
+class onNotification(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        notification = request.data.get("notification")     
+        weather = WeatherPref.objects.filter(user = request.user).first()
+        weather.toNofify = notification
+        if notification == False:
+            weather.lastNotified = timezone.now()
+        weather.save()
+        return Response("Success",200)
