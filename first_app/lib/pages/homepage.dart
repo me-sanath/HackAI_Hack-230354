@@ -132,7 +132,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         });
         _speechToText.listen(
           onResult: (result) => setState(() {
-            var text = result.recognizedWords; // Update recognized speech text
+            inputWords = result.recognizedWords; // Update recognized speech text
           }),
         );
       }
@@ -171,8 +171,8 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
           // PageView to display different screens.
           PageView(
             controller: _pageController,
-            onChanged: (outString){
-              url = 'http://10.0.2.2:5000/process?Query='+outString.toString();
+            onChanged: (inputWords){
+              url = 'http://10.0.2.2:5000/process?Query='+inputWords.toString();
             }
             children: _screens,
             onPageChanged: (index) {
