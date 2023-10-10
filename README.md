@@ -72,31 +72,32 @@ Firebase is Google's mobile and web app development platform with a wide range o
 
 ## Screenshots
 
-![climate main](https://github.com/me-sanath/cli-Mate/assets/119714743/39a98f08-e0e4-4c53-a5e5-fdafa13e4396)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/39a98f08-e0e4-4c53-a5e5-fdafa13e4396" width="200">
 
-![climate signup empty](https://github.com/me-sanath/cli-Mate/assets/119714743/a8cfd3ef-b07c-4275-a332-ae796d90dd85)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/a8cfd3ef-b07c-4275-a332-ae796d90dd85" width="200">
 
-![climate sign up filled](https://github.com/me-sanath/cli-Mate/assets/119714743/7fb69a1d-d7e0-453c-8973-5d87696c3c72)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/7fb69a1d-d7e0-453c-8973-5d87696c3c72" width="200">
 
-![climate login](https://github.com/me-sanath/cli-Mate/assets/119714743/df863956-a821-4e8a-ba8e-1359780768a5)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/df863956-a821-4e8a-ba8e-1359780768a5" width="200">
 
-![climate temp pref](https://github.com/me-sanath/cli-Mate/assets/119714743/aa6cc8b1-5af5-4445-a9d8-d67b2e38ecc9)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/aa6cc8b1-5af5-4445-a9d8-d67b2e38ecc9" width="200">
 
-![climate homepage](https://github.com/me-sanath/cli-Mate/assets/119714743/4837012c-6963-4c0a-80af-01e2b7c62613)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/4837012c-6963-4c0a-80af-01e2b7c62613" width="200">
 
-![climate curr location forecast](https://github.com/me-sanath/cli-Mate/assets/119714743/e48fa3f0-081d-4177-bb5c-91539ef647d1)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/e48fa3f0-081d-4177-bb5c-91539ef647d1" width="200">
 
-![climate curr location forecast 2](https://github.com/me-sanath/cli-Mate/assets/119714743/d30d0a61-cd01-424c-9173-fd44adebe4cc)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/d30d0a61-cd01-424c-9173-fd44adebe4cc" width="200">
 
-![climate profile](https://github.com/me-sanath/cli-Mate/assets/119714743/16be71be-dad7-4f29-8b26-e6af3c6bf585)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/8b5d6d6a-9ecc-42e2-9674-1be0de356226" width="200">
 
-![climate search](https://github.com/me-sanath/cli-Mate/assets/119714743/8b5d6d6a-9ecc-42e2-9674-1be0de356226)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/2a51e720-5a34-4bfb-b3fb-4e6335bf376d" width="200">
 
-![climate search screen](https://github.com/me-sanath/cli-Mate/assets/119714743/2a51e720-5a34-4bfb-b3fb-4e6335bf376d)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/b291643e-b001-4274-84bf-31d9345c70ae" width="200">
 
-![climate search forecast](https://github.com/me-sanath/cli-Mate/assets/119714743/b291643e-b001-4274-84bf-31d9345c70ae)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/11b5fc44-4779-4d32-a0f0-0505bce1a704" width="200">
 
-![climate search forecast 2](https://github.com/me-sanath/cli-Mate/assets/119714743/11b5fc44-4779-4d32-a0f0-0505bce1a704)
+<img src="https://github.com/me-sanath/cli-Mate/assets/119714743/16be71be-dad7-4f29-8b26-e6af3c6bf585" width="200">
+
 
 
 ## Instructions
