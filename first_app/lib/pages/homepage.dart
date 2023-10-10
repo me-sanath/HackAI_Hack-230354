@@ -123,6 +123,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 
   @override
   void dispose() {
+    // Dispose of the page controller when this widget is disposed.
     _pageController.dispose();
     super.dispose();
   }
@@ -132,16 +133,19 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
     return Scaffold(
       body: Stack(
         children: [
+          // PageView to display different screens.
           PageView(
             controller: _pageController,
             children: _screens,
             onPageChanged: (index) {
               setState(() {
+                // Update the current index when the page changes.
                 _currentIndex = index;
               });
             },
           ),
           Positioned(
+            // Positioned widget for microphone button.
             bottom: 0.0,
             right: 0.0,
             child: AvatarGlow(
@@ -152,11 +156,8 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
               duration: Duration(milliseconds: 2000),
               child: FloatingActionButton(
                 onPressed: () {
+                  // Call the listen function when the microphone button is pressed.
                   listen();
-                  // _speak();
-                  // Satwik your stuff should be here
-                  // Handle microphone button tap
-                  // Add your microphone functionality here
                 },
                 backgroundColor: Color.fromARGB(255, 77, 91, 102),
                 child: Icon(islistening ? Icons.mic : Icons.mic_none, size: 32),
@@ -166,25 +167,30 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         ],
       ),
       bottomNavigationBar: CurvedNavigationBar(
-        index: _currentIndex,
-        color: const Color.fromARGB(255, 92, 187, 255),
-        buttonBackgroundColor: const Color.fromARGB(100, 240, 249, 255),
-        backgroundColor: const Color.fromARGB(100, 240, 249, 255),
-        animationDuration: Duration(milliseconds: 300),
-        height: 70.0,
+        index: _currentIndex, // The currently selected index.
+        color: const Color.fromARGB(255, 92, 187,
+            255), // Background color of the bottom navigation bar.
+        buttonBackgroundColor: const Color.fromARGB(
+            100, 240, 249, 255), // Background color of the active item.
+        backgroundColor: const Color.fromARGB(
+            100, 240, 249, 255), // Background color of the navigation bar.
+        animationDuration: Duration(
+            milliseconds: 300), // Duration of animation when switching tabs.
+        height: 70.0, // Height of the bottom navigation bar.
         items: <Widget>[
-          Icon(Icons.home, size: 35),
-          Icon(Icons.access_time, size: 35),
-          Icon(Icons.person, size: 35),
+          Icon(Icons.home, size: 35), // Icon for the Home tab.
+          Icon(Icons.access_time, size: 35), // Icon for the Access Time tab.
+          Icon(Icons.person, size: 35), // Icon for the Person tab.
         ],
         onTap: (index) {
+          // Callback function when a tab is tapped.
           setState(() {
-            _currentIndex = index;
+            _currentIndex = index; // Update the current index.
             _pageController.animateToPage(
               index,
               duration: Duration(milliseconds: 300),
               curve: Curves.ease,
-            );
+            ); // Animate to the selected page.
           });
         },
       ),
@@ -207,16 +213,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final Dio dio = Dio();
-  String _cityName = "";
-  double _temperature = 0.0;
-  double _humidity = 0;
-  double _windSpeed = 0.0;
-  double _code = 0;
-  Image _image =
-      Image.asset('assets/images/95.png', height: 200, fit: BoxFit.contain);
-  String _formattedDate = DateFormat('E, dd MMM').format(DateTime.now());
-  String _description = 'Loading...';
+  String _cityName = ""; // Stores the current city name.
+  double _temperature = 0.0; // Stores the current temperature.
+  double _humidity = 0; // Stores the current humidity.
+  double _windSpeed = 0.0; // Stores the current wind speed.
+  double _code = 0; // Stores the weather code.
+  Image _image = Image.asset('assets/images/95.png',
+      height: 200, fit: BoxFit.contain); // Default weather image.
+  String _formattedDate =
+      DateFormat('E, dd MMM').format(DateTime.now()); // Formatted date string.
+  String _description = 'Loading...'; // Stores the current weather description.
 
+// Map that associates weather codes with their descriptions.
   Map<int, String> weatherDescriptions = {
     0: 'Clear Sky',
     1: 'Mainly Clear',
@@ -260,7 +268,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (placemarks.isNotEmpty) {
-      final cityName = placemarks.first.locality;
+      final cityName =
+          placemarks.first.locality; // Get the city name from placemarks.
       print(cityName);
       await widget.storage.write(key: 'city', value: cityName);
       String? token = await widget.storage.read(key: 'access_token');
@@ -270,46 +279,62 @@ class _HomeScreenState extends State<HomeScreen> {
       );
       // _fetchWeatherData(latitude: position.latitude,longitude: position.longitude);
       setState(() {
-        _cityName = cityName!;
-        _temperature = dashboardData.temperature;
-        _code = dashboardData.weathercode;
-        _humidity = dashboardData.humidity;
-        _windSpeed = dashboardData.windspeed;
-        _image = getImageForCode(_code.toInt());
-        _description = weatherDescriptions[_code.toInt()] ?? 'Sunny Weather';
+        _cityName = cityName!; // Update the city name.
+        _temperature = dashboardData.temperature; // Update the temperature.
+        _code = dashboardData.weathercode; // Update the weather code.
+        _humidity = dashboardData.humidity; // Update the humidity.
+        _windSpeed = dashboardData.windspeed; // Update the wind speed.
+        _image =
+            getImageForCode(_code.toInt()); // Get and update the weather image.
+        _description = weatherDescriptions[_code.toInt()] ??
+            'Sunny Weather'; // Update the weather description.
       });
     }
   }
 
-  Future<void> _fetchWeatherData(
-      {String cityName = 'None',
-      double latitude = 0.0,
-      double longitude = 0.0}) async {
+  Future<void> _fetchWeatherData({
+    String cityName = 'None',
+    double latitude = 0.0,
+    double longitude = 0.0,
+  }) async {
     final apiService = ApiService(dio);
 
     try {
       Map<String, dynamic> requestBody;
 
       if (cityName == 'None') {
+        // If cityName is not provided, fetch weather data by latitude and longitude.
         requestBody = {
           'latitude': latitude,
           'longitude': longitude,
         };
       } else {
+        // If cityName is provided, fetch weather data by city name.
         requestBody = {'locationName': '$cityName'};
         await widget.storage.write(key: 'city', value: cityName);
+
+        // Update the local state and notify the parent widget about the city change.
         setState(() {
           _cityName = cityName;
           widget.onCityChange(cityName);
         });
       }
+
+      // Write the selected city to storage for future reference.
       await widget.storage.write(key: 'city', value: cityName);
+
+      // Get the user's access token from storage.
       String? token = await widget.storage.read(key: 'access_token');
+
+      // Fetch weather data from the API using the provided request body.
       final response = await apiService.getDashboardData(
         'Token $token',
         requestBody,
       );
+
       print(response);
+
+      // Update the local state with the fetched weather data.
       setState(() {
         _cityName = cityName;
         _temperature = response.temperature;
@@ -319,7 +344,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _image = getImageForCode(_code.toInt());
         _description = weatherDescriptions[_code.toInt()] ?? 'Sunny Weather';
       });
-      // widget.onCityChange(cityName!);
     } catch (e) {
       print('Error, $e');
     }
