@@ -1,12 +1,13 @@
-import 'package:cliMate/pages/homepage.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../services/api_service.dart'; 
-import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// Import necessary packages and libraries
+import 'package:cliMate/pages/homepage.dart'; // Import the homepage page
+import 'package:flutter/material.dart'; // Flutter's material package
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // For secure storage
+import 'package:google_fonts/google_fonts.dart'; // Google Fonts for text styling
+import 'package:http/http.dart' as http; // HTTP requests
+import 'dart:convert'; // JSON decoding and encoding
+import '../services/api_service.dart'; // Import API service
+import 'package:dio/dio.dart'; // Dio for making HTTP requests
+import 'package:firebase_messaging/firebase_messaging.dart'; // Firebase Cloud Messaging (FCM)
 
 // If you want to run the page uncomment:
 // void main() {
@@ -24,8 +25,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 class TemperaturePreferencesPage extends StatefulWidget {
   final String userId;
   final FlutterSecureStorage storage;
-  
-  TemperaturePreferencesPage({required this.userId,required this.storage});
+
+  TemperaturePreferencesPage({required this.userId, required this.storage});
 
   @override
   _TemperaturePreferencesPageState createState() =>
@@ -34,39 +35,56 @@ class TemperaturePreferencesPage extends StatefulWidget {
 
 class _TemperaturePreferencesPageState
     extends State<TemperaturePreferencesPage> {
-      final Dio dio = Dio();
+  final Dio dio = Dio();
   double _minTemp = -50.0;
   double _maxTemp = 70.0;
   String _message = '';
 
+// Function to save temperature preferences
   Future<void> _saveTemperaturePreferences() async {
     final apiService = ApiService(dio);
-    if(_minTemp >= _maxTemp){
+
+    // Check if the minimum temperature is greater than or equal to the maximum temperature
+    if (_minTemp >= _maxTemp) {
       _message = 'Error, Minimum Temperature should be lesser';
-    }
-    else{
+    } else {
+      // Retrieve the access token from storage
       String? token = await widget.storage.read(key: 'access_token');
+
+      // Prepare the request body with minimum and maximum temperature values
       final body = {
         "min_temperature": _minTemp,
         "max_temperature": _maxTemp,
       };
+
       try {
+        // Send an API request to set temperature preferences with the access token
         await apiService.setTemperaturePreferences('Token $token', body);
+
+        // Update the message to indicate successful preferences saving
         setState(() {
           _message = 'Preferences saved successfully.';
         });
+
+        // Update stored minimum and maximum temperature values
         widget.storage.write(key: 'mintemp', value: _minTemp.toString());
         widget.storage.write(key: 'maxtemp', value: _maxTemp.toString());
       } catch (e) {
+        // Handle the case where saving preferences fails and update the message
         setState(() {
           _message = 'Failed to save preferences: $e';
         });
       }
+
+      // Navigate to the Dashboard screen
       setState(() {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Dashboard(userId: widget.userId,storage: widget.storage,),
+            builder: (context) => Dashboard(
+              userId: widget.userId,
+              storage: widget.storage,
+            ),
           ),
         );
         _message = 'Preferences saved successfully.';
@@ -85,6 +103,8 @@ class _TemperaturePreferencesPageState
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 10),
+
+              // Title Container
               Container(
                 width: 350,
                 padding: const EdgeInsets.all(16.0),
@@ -102,7 +122,7 @@ class _TemperaturePreferencesPageState
                 ),
               ),
               SizedBox(height: 30),
-      
+
               // Temperature Sliders
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -128,7 +148,7 @@ class _TemperaturePreferencesPageState
                     label: '$_minTemp °C',
                   ),
                   SizedBox(height: 16.0),
-                  
+
                   // Maximum Temperature Slider
                   SizedBox(height: 16.0),
                   Text(
@@ -151,7 +171,7 @@ class _TemperaturePreferencesPageState
                   ),
                 ],
               ),
-      
+
               // Save Settings Button
               SizedBox(height: 50.0),
               Container(

@@ -16,12 +16,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 //Use this to run app
-void main() async{
-  final storage =  FlutterSecureStorage();
+void main() async {
+  final storage = FlutterSecureStorage();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseApi(storage: storage).initNotification();
-  runApp(MyApp(storage: storage,));
+  runApp(MyApp(
+    storage: storage,
+  ));
 }
 
 class LocationData {
@@ -44,15 +46,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LandingPage(storage: storage,),
+      home: LandingPage(
+        storage: storage,
+      ),
     );
   }
 }
 
 class LandingPage extends StatefulWidget {
   final FlutterSecureStorage storage;
-  LandingPage ({ required this.storage});
-  
+  LandingPage({required this.storage});
+
   @override
   _LandingPageState createState() => _LandingPageState();
 }
@@ -71,11 +75,13 @@ class _LandingPageState extends State<LandingPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => Dashboard(userId: _userId, storage: widget.storage),
+          builder: (context) =>
+              Dashboard(userId: _userId, storage: widget.storage),
         ),
       );
     }
   }
+
   LocationData _locationData = LocationData(
     37.7749, // Replace with your desired latitude
     -122.4194, // Replace with your desired longitude
@@ -303,7 +309,6 @@ class _LandingPageState extends State<LandingPage> {
     }
   }
 
-
   Future<void> _initLocation() async {
     setState(() {
       _isLoading = true;
@@ -327,7 +332,8 @@ class _LandingPageState extends State<LandingPage> {
         final placeName = placemarks[0].subAdministrativeArea;
         final apiService = ApiService(dio);
         String? token = await widget.storage.read(key: 'access_token');
-        final weatherData = await apiService.getDashboardData('Token $token', {'latitude':position.latitude,'longitude':position.longitude});
+        final weatherData = await apiService.getDashboardData('Token $token',
+            {'latitude': position.latitude, 'longitude': position.longitude});
         setState(() {
           _placeName = placeName;
           _temperature = weatherData.temperature;
@@ -353,7 +359,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -487,7 +493,8 @@ class _LandingPageState extends State<LandingPage> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SignUp(storage: widget.storage),
+                            builder: (context) =>
+                                SignUp(storage: widget.storage),
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
@@ -522,7 +529,8 @@ class _LandingPageState extends State<LandingPage> {
                         onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => LoginApp(storage: widget.storage),
+                            builder: (context) =>
+                                LoginApp(storage: widget.storage),
                           ),
                         ),
                         style: OutlinedButton.styleFrom(
