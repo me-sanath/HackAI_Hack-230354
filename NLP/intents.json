@@ -48,6 +48,581 @@
             ],
             "responses":["day"
             ]
+        },
+        {
+            "tag":"upperLimit10",
+            "patterns":["Hey Mate, Set the upper limit to 10 degree Celcius ","Set the upper limit to 10 degree Celcius","Hey Mate,upper limit to 10 degree Celcius","Hey Mate, Set the upper limit to 10"
+            ],
+            "responses":["OK, Setting the upper limit to 10 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit11",
+            "patterns":["Hey Mate, Set the upper limit to 11 degree Celcius ","Set the upper limit to 11 degree Celcius","Hey Mate,upper limit to 11 degree Celcius","Hey Mate, Set the upper limit to 11"
+            ],
+            "responses":["OK, Setting the upper limit to 11 degree celcius."
+            ]
+        },{
+            "tag":"upperLimit12",
+            "patterns":["Hey Mate, Set the upper limit to 12 degree Celcius ","Set the upper limit to 12 degree Celcius","Hey Mate,upper limit to 12 degree Celcius","Hey Mate, Set the upper limit to 12"
+            ],
+            "responses":["OK, Setting the upper limit to 12 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit13",
+            "patterns":["Hey Mate, Set the upper limit to 13 degree Celcius ","Set the upper limit to 13 degree Celcius","Hey Mate,upper limit to 13 degree Celcius","Hey Mate, Set the upper limit to 13"
+            ],
+            "responses":["OK, Setting the upper limit to 13 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit14",
+            "patterns":["Hey Mate, Set the upper limit to 14 degree Celcius ","Set the upper limit to 14 degree Celcius","Hey Mate,upper limit to 14 degree Celcius","Hey Mate, Set the upper limit to 14"
+            ],
+            "responses":["OK, Setting the upper limit to 14 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit15",
+            "patterns":["Hey Mate, Set the upper limit to 15 degree Celcius ","Set the upper limit to 15 degree Celcius","Hey Mate,upper limit to 15 degree Celcius","Hey Mate, Set the upper limit to 15"
+            ],
+            "responses":["OK, Setting the upper limit to 15 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit16",
+            "patterns":["Hey Mate, Set the upper limit to 16 degree Celcius ","Set the upper limit to 16 degree Celcius","Hey Mate,upper limit to 16 degree Celcius","Hey Mate, Set the upper limit to 16"
+            ],
+            "responses":["OK, Setting the upper limit to 16 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit17",
+            "patterns":["Hey Mate, Set the upper limit to 17 degree Celcius ","Set the upper limit to 17 degree Celcius","Hey Mate,upper limit to 17 degree Celcius","Hey Mate, Set the upper limit to 17"
+            ],
+            "responses":["OK, Setting the upper limit to 17 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit18",
+            "patterns":["Hey Mate, Set the upper limit to 18 degree Celcius ","Set the upper limit to 18 degree Celcius","Hey Mate,upper limit to 18 degree Celcius","Hey Mate, Set the upper limit to 18"
+            ],
+            "responses":["OK, Setting the upper limit to 18 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit19",
+            "patterns":["Hey Mate, Set the upper limit to 19 degree Celcius ","Set the upper limit to 19 degree Celcius","Hey Mate,upper limit to 19 degree Celcius","Hey Mate, Set the upper limit to 19"
+            ],
+            "responses":["OK, Setting the upper limit to 19 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit20",
+            "patterns":["Hey Mate, Set the upper limit to 20 degree Celcius ","Set the upper limit to 20 degree Celcius","Hey Mate,upper limit to 20 degree Celcius","Hey Mate, Set the upper limit to 20"
+            ],
+            "responses":["OK, Setting the upper limit to 20 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit21",
+            "patterns":["Hey Mate, Set the upper limit to 21 degree Celcius ","Set the upper limit to 21 degree Celcius","Hey Mate,upper limit to 21 degree Celcius","Hey Mate, Set the upper limit to 21"
+            ],
+            "responses":["OK, Setting the upper limit to 21 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit22",
+            "patterns":["Hey Mate, Set the upper limit to 22 degree Celcius ","Set the upper limit to 22 degree Celcius","Hey Mate,upper limit to 22 degree Celcius","Hey Mate, Set the upper limit to 22"
+            ],
+            "responses":["OK, Setting the upper limit to 22 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit23",
+            "patterns":["Hey Mate, Set the upper limit to 23 degree Celcius ","Set the upper limit to 23 degree Celcius","Hey Mate,upper limit to 23 degree Celcius","Hey Mate, Set the upper limit to 23"
+            ],
+            "responses":["OK, Setting the upper limit to 23 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit24",
+            "patterns":["Hey Mate, Set the upper limit to 24 degree Celcius ","Set the upper limit to 24 degree Celcius","Hey Mate,upper limit to 24 degree Celcius","Hey Mate, Set the upper limit to 24"
+            ],
+            "responses":["OK, Setting the upper limit to 24 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit25",
+            "patterns":["Hey Mate, Set the upper limit to 25 degree Celcius ","Set the upper limit to 25 degree Celcius","Hey Mate,upper limit to 25 degree Celcius","Hey Mate, Set the upper limit to 25"
+            ],
+            "responses":["OK, Setting the upper limit to 25 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit26",
+            "patterns":["Hey Mate, Set the upper limit to 26 degree Celcius ","Set the upper limit to 26 degree Celcius","Hey Mate,upper limit to 26 degree Celcius","Hey Mate, Set the upper limit to 26"
+            ],
+            "responses":["OK, Setting the upper limit to 26 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit27",
+            "patterns":["Hey Mate, Set the upper limit to 27 degree Celcius ","Set the upper limit to 27 degree Celcius","Hey Mate,upper limit to 27 degree Celcius","Hey Mate, Set the upper limit to 27"
+            ],
+            "responses":["OK, Setting the upper limit to 27 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit28",
+            "patterns":["Hey Mate, Set the upper limit to 28 degree Celcius ","Set the upper limit to 28 degree Celcius","Hey Mate,upper limit to 28 degree Celcius","Hey Mate, Set the upper limit to 28"
+            ],
+            "responses":["OK, Setting the upper limit to 28 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit29",
+            "patterns":["Hey Mate, Set the upper limit to 29 degree Celcius ","Set the upper limit to 29 degree Celcius","Hey Mate,upper limit to 29 degree Celcius","Hey Mate, Set the upper limit to 29"
+            ],
+            "responses":["OK, Setting the upper limit to 29 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit30",
+            "patterns":["Hey Mate, Set the upper limit to 30 degree Celcius ","Set the upper limit to 30 degree Celcius","Hey Mate,upper limit to 30 degree Celcius","Hey Mate, Set the upper limit to 30"
+            ],
+            "responses":["OK, Setting the upper limit to 30 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit31",
+            "patterns":["Hey Mate, Set the upper limit to 31 degree Celcius ","Set the upper limit to 31 degree Celcius","Hey Mate,upper limit to 31 degree Celcius","Hey Mate, Set the upper limit to 31"
+            ],
+            "responses":["OK, Setting the upper limit to 31 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit32",
+            "patterns":["Hey Mate, Set the upper limit to 32 degree Celcius ","Set the upper limit to 32 degree Celcius","Hey Mate,upper limit to 32 degree Celcius","Hey Mate, Set the upper limit to 32"
+            ],
+            "responses":["OK, Setting the upper limit to 32 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit33",
+            "patterns":["Hey Mate, Set the upper limit to 33 degree Celcius ","Set the upper limit to 33 degree Celcius","Hey Mate,upper limit to 33 degree Celcius","Hey Mate, Set the upper limit to 33"
+            ],
+            "responses":["OK, Setting the upper limit to 33 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit34",
+            "patterns":["Hey Mate, Set the upper limit to 34 degree Celcius ","Set the upper limit to 34 degree Celcius","Hey Mate,upper limit to 34 degree Celcius","Hey Mate, Set the upper limit to 34"
+            ],
+            "responses":["OK, Setting the upper limit to 34 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit35",
+            "patterns":["Hey Mate, Set the upper limit to 35 degree Celcius ","Set the upper limit to 35 degree Celcius","Hey Mate,upper limit to 35 degree Celcius","Hey Mate, Set the upper limit to 35"
+            ],
+            "responses":["OK, Setting the upper limit to 35 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit36",
+            "patterns":["Hey Mate, Set the upper limit to 36 degree Celcius ","Set the upper limit to 36 degree Celcius","Hey Mate,upper limit to 36 degree Celcius","Hey Mate, Set the upper limit to 36"
+            ],
+            "responses":["OK, Setting the upper limit to 36 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit37",
+            "patterns":["Hey Mate, Set the upper limit to 37 degree Celcius ","Set the upper limit to 37 degree Celcius","Hey Mate,upper limit to 37 degree Celcius","Hey Mate, Set the upper limit to 37"
+            ],
+            "responses":["OK, Setting the upper limit to 37 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit38",
+            "patterns":["Hey Mate, Set the upper limit to 38 degree Celcius ","Set the upper limit to 38 degree Celcius","Hey Mate,upper limit to 38 degree Celcius","Hey Mate, Set the upper limit to 38"
+            ],
+            "responses":["OK, Setting the upper limit to 38 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit39",
+            "patterns":["Hey Mate, Set the upper limit to 39 degree Celcius ","Set the upper limit to 39 degree Celcius","Hey Mate,upper limit to 39 degree Celcius","Hey Mate, Set the upper limit to 39"
+            ],
+            "responses":["OK, Setting the upper limit to 39 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit40",
+            "patterns":["Hey Mate, Set the upper limit to 40 degree Celcius ","Set the upper limit to 40 degree Celcius","Hey Mate,upper limit to 40 degree Celcius","Hey Mate, Set the upper limit to 40"
+            ],
+            "responses":["OK, Setting the upper limit to 40 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit41",
+            "patterns":["Hey Mate, Set the upper limit to 41 degree Celcius ","Set the upper limit to 41 degree Celcius","Hey Mate,upper limit to 41 degree Celcius","Hey Mate, Set the upper limit to 41"
+            ],
+            "responses":["OK, Setting the upper limit to 41 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit42",
+            "patterns":["Hey Mate, Set the upper limit to 42 degree Celcius ","Set the upper limit to 42 degree Celcius","Hey Mate,upper limit to 42 degree Celcius","Hey Mate, Set the upper limit to 42"
+            ],
+            "responses":["OK, Setting the upper limit to 42 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit43",
+            "patterns":["Hey Mate, Set the upper limit to 43 degree Celcius ","Set the upper limit to 43 degree Celcius","Hey Mate,upper limit to 43 degree Celcius","Hey Mate, Set the upper limit to 43"
+            ],
+            "responses":["OK, Setting the upper limit to 43 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit44",
+            "patterns":["Hey Mate, Set the upper limit to 44 degree Celcius ","Set the upper limit to 44 degree Celcius","Hey Mate,upper limit to 44 degree Celcius","Hey Mate, Set the upper limit to 44"
+            ],
+            "responses":["OK, Setting the upper limit to 44 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit45",
+            "patterns":["Hey Mate, Set the upper limit to 45 degree Celcius ","Set the upper limit to 45 degree Celcius","Hey Mate,upper limit to 45 degree Celcius","Hey Mate, Set the upper limit to 45"
+            ],
+            "responses":["OK, Setting the upper limit to 45 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit46",
+            "patterns":["Hey Mate, Set the upper limit to 46 degree Celcius ","Set the upper limit to 46 degree Celcius","Hey Mate,upper limit to 46 degree Celcius","Hey Mate, Set the upper limit to 46"
+            ],
+            "responses":["OK, Setting the upper limit to 46 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit47",
+            "patterns":["Hey Mate, Set the upper limit to 47 degree Celcius ","Set the upper limit to 47 degree Celcius","Hey Mate,upper limit to 47 degree Celcius","Hey Mate, Set the upper limit to 47"
+            ],
+            "responses":["OK, Setting the upper limit to 47 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit48",
+            "patterns":["Hey Mate, Set the upper limit to 48 degree Celcius ","Set the upper limit to 48 degree Celcius","Hey Mate,upper limit to 48 degree Celcius","Hey Mate, Set the upper limit to 48"
+            ],
+            "responses":["OK, Setting the upper limit to 48 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit49",
+            "patterns":["Hey Mate, Set the upper limit to 49 degree Celcius ","Set the upper limit to 49 degree Celcius","Hey Mate,upper limit to 49 degree Celcius","Hey Mate, Set the upper limit to 49"
+            ],
+            "responses":["OK, Setting the upper limit to 49 degree celcius."
+            ]
+        },
+        {
+            "tag":"upperLimit50",
+            "patterns":["Hey Mate, Set the upper limit to 50 degree Celcius ","Set the upper limit to 50 degree Celcius","Hey Mate,upper limit to 50 degree Celcius","Hey Mate, Set the upper limit to 50"
+            ],
+            "responses":["OK, Setting the upper limit to 50 degree celcius."
+            ]
+        },
+
+
+        {
+            "tag":"lowerLimit10",
+            "patterns":["Hey Mate, Set the lower limit to 10 degree Celcius ","Set the lower limit to 10 degree Celcius","Hey Mate,lower limit to 10 degree Celcius","Hey Mate, Set the lower limit to 10"
+            ],
+            "responses":["OK, Setting the lower limit to 10 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit11",
+            "patterns":["Hey Mate, Set the lower limit to 11 degree Celcius ","Set the lower limit to 11 degree Celcius","Hey Mate,lower limit to 11 degree Celcius","Hey Mate, Set the lower limit to 11"
+            ],
+            "responses":["OK, Setting the lower limit to 11 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit12",
+            "patterns":["Hey Mate, Set the lower limit to 12 degree Celcius ","Set the lower limit to 12 degree Celcius","Hey Mate,lower limit to 12 degree Celcius","Hey Mate, Set the lower limit to 12"
+            ],
+            "responses":["OK, Setting the lower limit to 12 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit13",
+            "patterns":["Hey Mate, Set the lower limit to 13 degree Celcius ","Set the lower limit to 13 degree Celcius","Hey Mate,lower limit to 13 degree Celcius","Hey Mate, Set the lower limit to 13"
+            ],
+            "responses":["OK, Setting the lower limit to 13 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit14",
+            "patterns":["Hey Mate, Set the lower limit to 14 degree Celcius ","Set the lower limit to 14 degree Celcius","Hey Mate,lower limit to 14 degree Celcius","Hey Mate, Set the lower limit to 14"
+            ],
+            "responses":["OK, Setting the lower limit to 14 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit15",
+            "patterns":["Hey Mate, Set the lower limit to 15 degree Celcius ","Set the lower limit to 15 degree Celcius","Hey Mate,lower limit to 15 degree Celcius","Hey Mate, Set the lower limit to 15"
+            ],
+            "responses":["OK, Setting the lower limit to 15 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit16",
+            "patterns":["Hey Mate, Set the lower limit to 16 degree Celcius ","Set the lower limit to 16 degree Celcius","Hey Mate,lower limit to 16 degree Celcius","Hey Mate, Set the lower limit to 16"
+            ],
+            "responses":["OK, Setting the lower limit to 16 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit17",
+            "patterns":["Hey Mate, Set the lower limit to 17 degree Celcius ","Set the lower limit to 17 degree Celcius","Hey Mate,lower limit to 17 degree Celcius","Hey Mate, Set the lower limit to 17"
+            ],
+            "responses":["OK, Setting the lower limit to 17 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit18",
+            "patterns":["Hey Mate, Set the lower limit to 18 degree Celcius ","Set the lower limit to 18 degree Celcius","Hey Mate,lower limit to 18 degree Celcius","Hey Mate, Set the lower limit to 18"
+            ],
+            "responses":["OK, Setting the lower limit to 18 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit19",
+            "patterns":["Hey Mate, Set the lower limit to 19 degree Celcius ","Set the lower limit to 19 degree Celcius","Hey Mate,lower limit to 19 degree Celcius","Hey Mate, Set the lower limit to 19"
+            ],
+            "responses":["OK, Setting the lower limit to 19 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit20",
+            "patterns":["Hey Mate, Set the lower limit to 20 degree Celcius ","Set the lower limit to 20 degree Celcius","Hey Mate,lower limit to 20 degree Celcius","Hey Mate, Set the lower limit to 20"
+            ],
+            "responses":["OK, Setting the lower limit to 20 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit21",
+            "patterns":["Hey Mate, Set the lower limit to 21 degree Celcius ","Set the lower limit to 21 degree Celcius","Hey Mate,lower limit to 21 degree Celcius","Hey Mate, Set the lower limit to 21"
+            ],
+            "responses":["OK, Setting the lower limit to 21 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit22",
+            "patterns":["Hey Mate, Set the lower limit to 22 degree Celcius ","Set the lower limit to 22 degree Celcius","Hey Mate,lower limit to 22 degree Celcius","Hey Mate, Set the lower limit to 22"
+            ],
+            "responses":["OK, Setting the lower limit to 22 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit23",
+            "patterns":["Hey Mate, Set the lower limit to 23 degree Celcius ","Set the lower limit to 23 degree Celcius","Hey Mate,lower limit to 23 degree Celcius","Hey Mate, Set the lower limit to 23"
+            ],
+            "responses":["OK, Setting the lower limit to 23 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit24",
+            "patterns":["Hey Mate, Set the lower limit to 24 degree Celcius ","Set the lower limit to 24 degree Celcius","Hey Mate,lower limit to 24 degree Celcius","Hey Mate, Set the lower limit to 24"
+            ],
+            "responses":["OK, Setting the lower limit to 24 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit25",
+            "patterns":["Hey Mate, Set the lower limit to 25 degree Celcius ","Set the lower limit to 25 degree Celcius","Hey Mate,lower limit to 25 degree Celcius","Hey Mate, Set the lower limit to 25"
+            ],
+            "responses":["OK, Setting the lower limit to 25 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit26",
+            "patterns":["Hey Mate, Set the lower limit to 26 degree Celcius ","Set the lower limit to 26 degree Celcius","Hey Mate,lower limit to 26 degree Celcius","Hey Mate, Set the lower limit to 26"
+            ],
+            "responses":["OK, Setting the lower limit to 26 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit27",
+            "patterns":["Hey Mate, Set the lower limit to 27 degree Celcius ","Set the lower limit to 27 degree Celcius","Hey Mate,lower limit to 27 degree Celcius","Hey Mate, Set the lower limit to 27"
+            ],
+            "responses":["OK, Setting the lower limit to 27 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit28",
+            "patterns":["Hey Mate, Set the lower limit to 28 degree Celcius ","Set the lower limit to 28 degree Celcius","Hey Mate,lower limit to 28 degree Celcius","Hey Mate, Set the lower limit to 28"
+            ],
+            "responses":["OK, Setting the lower limit to 28 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit29",
+            "patterns":["Hey Mate, Set the lower limit to 29 degree Celcius ","Set the lower limit to 29 degree Celcius","Hey Mate,lower limit to 29 degree Celcius","Hey Mate, Set the lower limit to 29"
+            ],
+            "responses":["OK, Setting the lower limit to 29 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit30",
+            "patterns":["Hey Mate, Set the lower limit to 30 degree Celcius ","Set the lower limit to 30 degree Celcius","Hey Mate,lower limit to 30 degree Celcius","Hey Mate, Set the lower limit to 30"
+            ],
+            "responses":["OK, Setting the lower limit to 30 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit31",
+            "patterns":["Hey Mate, Set the lower limit to 31 degree Celcius ","Set the lower limit to 31 degree Celcius","Hey Mate,lower limit to 31 degree Celcius","Hey Mate, Set the lower limit to 31"
+            ],
+            "responses":["OK, Setting the lower limit to 31 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit32",
+            "patterns":["Hey Mate, Set the lower limit to 32 degree Celcius ","Set the lower limit to 32 degree Celcius","Hey Mate,lower limit to 32 degree Celcius","Hey Mate, Set the lower limit to 32"
+            ],
+            "responses":["OK, Setting the lower limit to 32 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit33",
+            "patterns":["Hey Mate, Set the lower limit to 33 degree Celcius ","Set the lower limit to 33 degree Celcius","Hey Mate,lower limit to 33 degree Celcius","Hey Mate, Set the lower limit to 33"
+            ],
+            "responses":["OK, Setting the lower limit to 33 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit34",
+            "patterns":["Hey Mate, Set the lower limit to 34 degree Celcius ","Set the lower limit to 34 degree Celcius","Hey Mate,lower limit to 34 degree Celcius","Hey Mate, Set the lower limit to 34"
+            ],
+            "responses":["OK, Setting the lower limit to 34 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit35",
+            "patterns":["Hey Mate, Set the lower limit to 35 degree Celcius ","Set the lower limit to 35 degree Celcius","Hey Mate,lower limit to 35 degree Celcius","Hey Mate, Set the lower limit to 35"
+            ],
+            "responses":["OK, Setting the lower limit to 35 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit36",
+            "patterns":["Hey Mate, Set the lower limit to 36 degree Celcius ","Set the lower limit to 36 degree Celcius","Hey Mate,lower limit to 36 degree Celcius","Hey Mate, Set the lower limit to 36"
+            ],
+            "responses":["OK, Setting the lower limit to 36 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit37",
+            "patterns":["Hey Mate, Set the lower limit to 37 degree Celcius ","Set the lower limit to 37 degree Celcius","Hey Mate,lower limit to 37 degree Celcius","Hey Mate, Set the lower limit to 37"
+            ],
+            "responses":["OK, Setting the lower limit to 37 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit38",
+            "patterns":["Hey Mate, Set the lower limit to 38 degree Celcius ","Set the lower limit to 38 degree Celcius","Hey Mate,lower limit to 38 degree Celcius","Hey Mate, Set the lower limit to 38"
+            ],
+            "responses":["OK, Setting the lower limit to 38 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit39",
+            "patterns":["Hey Mate, Set the lower limit to 39 degree Celcius ","Set the lower limit to 39 degree Celcius","Hey Mate,lower limit to 39 degree Celcius","Hey Mate, Set the lower limit to 39"
+            ],
+            "responses":["OK, Setting the lower limit to 39 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit40",
+            "patterns":["Hey Mate, Set the lower limit to 40 degree Celcius ","Set the lower limit to 40 degree Celcius","Hey Mate,lower limit to 40 degree Celcius","Hey Mate, Set the lower limit to 40"
+            ],
+            "responses":["OK, Setting the lower limit to 40 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit41",
+            "patterns":["Hey Mate, Set the lower limit to 41 degree Celcius ","Set the lower limit to 41 degree Celcius","Hey Mate,lower limit to 41 degree Celcius","Hey Mate, Set the lower limit to 41"
+            ],
+            "responses":["OK, Setting the lower limit to 41 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit42",
+            "patterns":["Hey Mate, Set the lower limit to 42 degree Celcius ","Set the lower limit to 42 degree Celcius","Hey Mate,lower limit to 42 degree Celcius","Hey Mate, Set the lower limit to 42"
+            ],
+            "responses":["OK, Setting the lower limit to 42 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit43",
+            "patterns":["Hey Mate, Set the lower limit to 43 degree Celcius ","Set the lower limit to 43 degree Celcius","Hey Mate,lower limit to 43 degree Celcius","Hey Mate, Set the lower limit to 43"
+            ],
+            "responses":["OK, Setting the lower limit to 43 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit44",
+            "patterns":["Hey Mate, Set the lower limit to 44 degree Celcius ","Set the lower limit to 44 degree Celcius","Hey Mate,lower limit to 44 degree Celcius","Hey Mate, Set the lower limit to 44"
+            ],
+            "responses":["OK, Setting the lower limit to 44 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit45",
+            "patterns":["Hey Mate, Set the lower limit to 45 degree Celcius ","Set the lower limit to 45 degree Celcius","Hey Mate,lower limit to 45 degree Celcius","Hey Mate, Set the lower limit to 45"
+            ],
+            "responses":["OK, Setting the lower limit to 45 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit46",
+            "patterns":["Hey Mate, Set the lower limit to 46 degree Celcius ","Set the lower limit to 46 degree Celcius","Hey Mate,lower limit to 46 degree Celcius","Hey Mate, Set the lower limit to 46"
+            ],
+            "responses":["OK, Setting the lower limit to 46 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit47",
+            "patterns":["Hey Mate, Set the lower limit to 47 degree Celcius ","Set the lower limit to 47 degree Celcius","Hey Mate,lower limit to 47 degree Celcius","Hey Mate, Set the lower limit to 47"
+            ],
+            "responses":["OK, Setting the lower limit to 47 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit48",
+            "patterns":["Hey Mate, Set the lower limit to 48 degree Celcius ","Set the lower limit to 48 degree Celcius","Hey Mate,lower limit to 48 degree Celcius","Hey Mate, Set the lower limit to 48"
+            ],
+            "responses":["OK, Setting the lower limit to 48 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit49",
+            "patterns":["Hey Mate, Set the lower limit to 49 degree Celcius ","Set the lower limit to 49 degree Celcius","Hey Mate,lower limit to 49 degree Celcius","Hey Mate, Set the lower limit to 49"
+            ],
+            "responses":["OK, Setting the lower limit to 49 degree celcius."
+            ]
+        },
+        {
+            "tag":"lowerLimit50",
+            "patterns":["Hey Mate, Set the lower limit to 50 degree Celcius ","Set the lower limit to 50 degree Celcius","Hey Mate,lower limit to 50 degree Celcius","Hey Mate, Set the lower limit to 50"
+            ],
+            "responses":["OK, Setting the lower limit to 50 degree celcius."
+            ]
         }
     ]
 }
