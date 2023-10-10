@@ -1,13 +1,16 @@
+import 'package:cliMate/pages/homepage.dart';
+import 'package:cliMate/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'TemperaturePreferencesPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:dio/dio.dart';
 
 class SignUp extends StatelessWidget {
   final FlutterSecureStorage storage;
-
+  
   SignUp({required this.storage});
 
   @override
@@ -28,59 +31,44 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final Dio dio = Dio();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   String _userId = '';
   String _message = '';
 
   Future<void> _signUp() async {
+    final apiService = ApiService(dio);
     final String name = _nameController.text;
     final String email = _emailController.text;
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
     
     if (password == confirmPassword) {
-      final Map<String, dynamic> userData = {
-        'name': name,
-        'email': email,
-        'password': password,
-      };
-
-      final response = await http.post(
-        Uri.parse(
-            'http://your-django-api-url/register/'), // Replace with your registration endpoint URL
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(userData),
+      
+      final registrationData = await apiService.register({'username':name,'email':email,'password':password});
+      await widget.storage.write(key: "access_token", value: registrationData.token);
+      await widget.storage.write(key: "username", value: registrationData.name);
+      setState(() {
+        _userId = registrationData.name;
+        _message = 'Registration Done.';
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Dashboard(userId: _userId, storage: widget.storage),
+        ),
       );
-
-      if (response.statusCode == 200) {
-        final String token = 'user_id_from_django';
-
-        setState(() {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TemperaturePreferencesPage(userId: _userId,storage: widget.storage,),
-            ),
-          );
-          _message = 'Registration successful.';
-        });
-      } else {
-        setState(() {
-          _message = 'Registration failed: ${response.body}';
-        });
-      }
+    
     } else {
       setState(() {
         _message = 'Passwords do not match.';
         print(_message);
       });
+      
     }
   }
 

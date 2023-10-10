@@ -31,7 +31,7 @@ abstract class ApiService {
   );
 
   @POST('api/register/')
-  Future<void> register(@Body() Map<String, dynamic> body);
+  Future<LoginResponse> register(@Body() Map<String, dynamic> body);
 }
 
 class LoginResponse {
