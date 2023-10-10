@@ -102,7 +102,7 @@ Firebase is Google's mobile and web app development platform with a wide range o
 
 ## Instructions
 
-You can either use our apk file to use the app or launch the app yourself. The server has been already hosted in AWS so it will be easier if you use the apk file. Apk file link:
+You can either use our apk file to use the app or launch the app yourself. The server has been already hosted in AWS so it will be easier if you use the apk file. Please allow the permissions, if not prompted, allow it in settings. Apk file link:
 
 //apk file link
 
