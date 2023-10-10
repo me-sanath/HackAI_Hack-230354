@@ -156,7 +156,7 @@ class _TemperaturePreferencesPageState
                   Text(
                     'Minimum Temperature: $_minTemp °C',
                     style: GoogleFonts.alata(
-                      fontSize: 21,
+                      fontSize: 18,
                     ),
                   ),
                   Slider(
@@ -178,7 +178,7 @@ class _TemperaturePreferencesPageState
                   Text(
                     'Maximum Temperature: $_maxTemp °C',
                     style: GoogleFonts.alata(
-                      fontSize: 21,
+                      fontSize: 18,
                     ),
                   ),
                   Slider(

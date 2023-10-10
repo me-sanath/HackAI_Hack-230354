@@ -82,7 +82,6 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 // Stores the sentence to be spoken to user
   String outputWords = "";
 
-
   final GlobalKey<ForecastScreenState> forecastScreenKey =
       GlobalKey<ForecastScreenState>();
 
@@ -130,7 +129,8 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         });
         _speechToText.listen(
           onResult: (result) => setState(() {
-            inputWords = result.recognizedWords; // Update recognized speech text
+            inputWords =
+                result.recognizedWords; // Update recognized speech text
           }),
         );
       }
@@ -579,14 +579,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             _windSpeed.toString() +
                                 'km/h', // Replace with actual wind speed value
                             style: GoogleFonts.alata(
-                              fontSize: 18,
+                              fontSize: 16,
                               color: Colors.white,
                             ),
                           ),
                           Text(
                             'Wind Speed', // Replace with actual wind speed value
                             style: GoogleFonts.alata(
-                              fontSize: 14,
+                              fontSize: 12,
                               color: Colors.white,
                             ),
                           ),
@@ -1222,7 +1222,7 @@ class ForecastScreenState extends State<ForecastScreen> {
                                 Text(
                                   '${forecast.minTemperature}°C / ${forecast.maxTemperature}°C',
                                   style: GoogleFonts.alumniSans(
-                                      fontSize: 40,
+                                      fontSize: 36,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
@@ -1289,23 +1289,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
 // Function to fetch user data, you can add your implementation here
-  void fetchUserData() async{
-  try {
-    final minTempString = await widget.storage.read(key: 'mintemp');
-    final maxTempString = await widget.storage.read(key: 'maxtemp');
+  void fetchUserData() async {
+    try {
+      final minTempString = await widget.storage.read(key: 'mintemp');
+      final maxTempString = await widget.storage.read(key: 'maxtemp');
 
-    if (minTempString != null && maxTempString != null) {
-      setState(() {
-        _minTemperature = double.parse(minTempString);
-        _maxTemperature = double.parse(maxTempString);
-      });
-    } else {
-      print("One or both temperature values are null.");
+      if (minTempString != null && maxTempString != null) {
+        setState(() {
+          _minTemperature = double.parse(minTempString);
+          _maxTemperature = double.parse(maxTempString);
+        });
+      } else {
+        print("One or both temperature values are null.");
+      }
+    } catch (e) {
+      print("Error parsing temperature values: $e");
     }
-  } catch (e) {
-    print("Error parsing temperature values: $e");
   }
-}
 
 // Function to update temperature settings
   void updateTemperatureSettings() async {
