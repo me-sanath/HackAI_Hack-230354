@@ -10,17 +10,20 @@ import 'package:dio/dio.dart'; // Dio for making HTTP requests
 import 'package:firebase_messaging/firebase_messaging.dart'; // Firebase Cloud Messaging (FCM)
 
 // If you want to run the page uncomment:
-// void main() {
-//   final storage = FlutterSecureStorage();
-//   runApp(
-//     MaterialApp(
-//       home: Directionality(
-//         textDirection: TextDirection.ltr, // Set the text direction
-//         child: TemperaturePreferencesPage(userId: 'test',storage: storage,),
-//       ),
-//     ),
-//   );
-// }
+void main() {
+  final storage = FlutterSecureStorage();
+  runApp(
+    MaterialApp(
+      home: Directionality(
+        textDirection: TextDirection.ltr, // Set the text direction
+        child: TemperaturePreferencesPage(
+          userId: 'test',
+          storage: storage,
+        ),
+      ),
+    ),
+  );
+}
 
 class TemperaturePreferencesPage extends StatefulWidget {
   final String userId;
@@ -39,6 +42,11 @@ class _TemperaturePreferencesPageState
   double _minTemp = -50.0;
   double _maxTemp = 70.0;
   String _message = '';
+  Color _messageColor = Colors.black;
+  TextStyle _messageTextStyle = GoogleFonts.alata(
+    fontSize: 16,
+    color: Colors.red, // Set text color to red for error
+  );
 
 // Function to save temperature preferences
   Future<void> _saveTemperaturePreferences() async {
@@ -46,7 +54,14 @@ class _TemperaturePreferencesPageState
 
     // Check if the minimum temperature is greater than or equal to the maximum temperature
     if (_minTemp >= _maxTemp) {
-      _message = 'Error, Minimum Temperature should be lesser';
+      setState(() {
+        _message = 'Error, Minimum Temperature should be lesser';
+        _messageColor = Colors.red;
+        _messageTextStyle = GoogleFonts.alata(
+          fontSize: 16,
+          color: Colors.red, // Set text color to red for error
+        ); // Set text color to red for error
+      });
     } else {
       // Retrieve the access token from storage
       String? token = await widget.storage.read(key: 'access_token');
@@ -64,6 +79,11 @@ class _TemperaturePreferencesPageState
         // Update the message to indicate successful preferences saving
         setState(() {
           _message = 'Preferences saved successfully.';
+          _messageColor = Colors.green;
+          _messageTextStyle = GoogleFonts.alata(
+            fontSize: 16,
+            color: Colors.green, // Set text color to red for error
+          );
         });
 
         // Update stored minimum and maximum temperature values
@@ -73,6 +93,11 @@ class _TemperaturePreferencesPageState
         // Handle the case where saving preferences fails and update the message
         setState(() {
           _message = 'Failed to save preferences: $e';
+          _messageColor = Colors.red;
+          _messageTextStyle = GoogleFonts.alata(
+            fontSize: 16,
+            color: Colors.red, // Set text color to red for error
+          );
         });
       }
 
@@ -117,7 +142,6 @@ class _TemperaturePreferencesPageState
                   'Settings',
                   style: GoogleFonts.alata(
                     fontSize: 26,
-                    // fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -197,11 +221,17 @@ class _TemperaturePreferencesPageState
                     'Save Preferences',
                     style: GoogleFonts.alata(
                       fontSize: 20,
-                      // fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
                 ),
+              ),
+
+              // Display the message below the button
+              SizedBox(height: 20.0), // Add some spacing
+              Text(
+                _message,
+                style: _messageTextStyle, // Use the TextStyle for message
               ),
             ],
           ),

@@ -25,8 +25,8 @@ model.eval()
 
 Name = "Cli-Mate"
 
-def Main():
-    sentence = "Hello" # From App
+def Main(inputQuery):
+    sentence = inputQuery # From App
     
     if sentence == "bye":
         exit()
@@ -49,5 +49,5 @@ def Main():
         for intent in intents['intents']:
             if tag == intent["tag"]:
                 reply = random.choice(intent["responses"])
-                # Output to App
+                return reply
                 

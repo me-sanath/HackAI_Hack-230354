@@ -82,6 +82,9 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 // Stores the sentence to be spoken to user
   String outputWords = "";
 
+// Stores the url from Machine learning file
+  String url;
+
   final GlobalKey<ForecastScreenState> forecastScreenKey =
       GlobalKey<ForecastScreenState>();
 
@@ -138,13 +141,19 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         islistening = false; // Set listening to false
       });
       _speechToText.stop(); // Stop speech recognition
+      Data = await Getdata(url);
+      DecodedData = jsonDecode(Data);
+      setState( () {
+        outputWords = DecodedData['Query'];
+      });
       _speak(); // Calls speak function when speech regonition stops
     }
   }
 
 // Function to speak the recognized speech text
   void _speak() async {
-    await flutterTts.speak(outputWords); // Use Flutter Text-to-Speech to speak text
+    await flutterTts
+        .speak(outputWords); // Use Flutter Text-to-Speech to speak text
   }
 
   @override
@@ -162,6 +171,9 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
           // PageView to display different screens.
           PageView(
             controller: _pageController,
+            onChanged: (outString){
+              url = 'http://10.0.2.2:5000/process?Query='+outString.toString();
+            }
             children: _screens,
             onPageChanged: (index) {
               setState(() {
@@ -1287,9 +1299,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
 // Function to fetch user data, you can add your implementation here
-  void fetchUserData() async {
-    // Implement code to fetch user data, if needed
+  void fetchUserData() async{
+  try {
+    final minTempString = await widget.storage.read(key: 'mintemp');
+    final maxTempString = await widget.storage.read(key: 'maxtemp');
+
+    if (minTempString != null && maxTempString != null) {
+      setState(() {
+        _minTemperature = double.parse(minTempString);
+        _maxTemperature = double.parse(maxTempString);
+      });
+    } else {
+      print("One or both temperature values are null.");
+    }
+  } catch (e) {
+    print("Error parsing temperature values: $e");
   }
+}
 
 // Function to update temperature settings
   void updateTemperatureSettings() async {
