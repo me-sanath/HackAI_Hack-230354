@@ -129,7 +129,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         });
         _speechToText.listen(
           onResult: (result) => setState(() {
-            text = result.recognizedWords; // Update recognized speech text
+            var text = result.recognizedWords; // Update recognized speech text
           }),
         );
       }
