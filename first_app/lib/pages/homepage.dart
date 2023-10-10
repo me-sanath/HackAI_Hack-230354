@@ -583,36 +583,45 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showSearchDialog(BuildContext context, _message) {
-    String newCityName = "";
-    String error = _message;
+    String newCityName =
+        ""; // Initialize a variable to store the entered city name
+    String error = _message; // Store any error message received
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Search Weather'),
+          title: Text('Search Weather'), // Dialog title
           content: TextField(
             onChanged: (value) {
-              newCityName = value;
+              newCityName =
+                  value; // Update the newCityName variable as the user types
             },
             decoration: InputDecoration(
-              hintText: 'Enter city name',
+              hintText:
+                  'Enter city name', // Placeholder text for the text field
             ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context)
+                    .pop(); // Close the dialog when "Cancel" is pressed
               },
-              child: Text('Cancel'),
+              child: Text('Cancel'), // "Cancel" button text
             ),
             TextButton(
               onPressed: () {
-                _fetchWeatherData(cityName: newCityName);
-                Navigator.of(context).pop();
+                _fetchWeatherData(
+                    cityName:
+                        newCityName); // Fetch weather data for the entered city
+                Navigator.of(context).pop(); // Close the dialog after searching
               },
-              child: Text('Search'),
+              child: Text('Search'), // "Search" button text
             ),
-            if (error.isNotEmpty) Text("Location Not Found!")
+            if (error.isNotEmpty)
+              Text(
+                  "Location Not Found!") // Display an error message if it's not empty
           ],
         );
       },
@@ -620,6 +629,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Image getImageForCode(int code) {
+    // Various weather condition codes with corresponding images
     switch (code) {
       case 0:
         return Image.asset(
