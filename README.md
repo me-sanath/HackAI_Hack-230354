@@ -3,47 +3,174 @@
 
 cli-Mate is a feature-rich weather app designed to be your ultimate weather companion. With cli-Mate, you can stay informed about the current weather conditions and forecasts for any location around the world. Whether you're planning a trip, getting ready for outdoor activities, or just want to know what to expect outside, cli-Mate has you covered.
 
+## Table of Contents
+- [About](#about)
+  - [What is cli-Mate](#what-is-cli-mate)
+  - [Features](#features)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [TECH STACK used](#techstack---built-with)
+- [Screenshots](#screenshots)
+- [Team](#the-team)
 
-## What is cli-Mate?
+## About
+### What is cli-Mate?
+ In today's fast-paced world, staying prepared for changing weather conditions is more critical than ever. Weather can impact daily routines, travel plans, and outdoor activities, but many weather apps often fall short in providing accurate, easy-to-understand information and personalized notifications. That's where cli-Mate comes in.
 
-cli-Mate is a cutting-edge weather application designed to enhance your everyday life with comprehensive weather information and intelligent features. Developed with a focus on user-friendliness and accessibility, cli-Mate empowers users to make informed decisions based on weather data.
+  Developed with a focus on user-friendliness and accessibility, cli-Mate is a cutting-edge weather application designed to empower users with comprehensive weather data and intelligent features. It offers precise weather forecasts while allowing users to set temperature limits and receive notifications for high and low temperatures.
 
-In today's fast-paced world, being prepared for the weather is more critical than ever. Weather conditions can impact our daily routines, travel plans, and outdoor activities. However, many weather apps fall short in providing accurate, easy-to-understand, and customizable weather information and giving personalized notifications.
+  What sets cli-Mate apart is its advanced voice assistant, powered by Natural Language Processing (NLP). This voice assistant provides instant, conversational weather updates and enables users to configure temperature preferences through natural dialogue, offering a highly personalized weather experience.
 
-cli-Mate was born out of the need for a weather application that not only offers precise weather forecasts but also allows the user to set temperature limits and get notifications on high and low temperatures. Our mission is to simplify the way people interact with weather information and equip them with the tools they need to plan their lives effectively.
+  Under the hood, cli-Mate seamlessly integrates various programming languages and technologies. It's built with Dart and Flutter for its intuitive user interface, communicates with real-time weather data using REST APIs and JSON, relies on Django, a high-level Python web framework, for its back-end operations, and features an NLP-driven voice assistant to enhance accessibility and user-friendliness.
 
-Leveraging the latest advancements in AI and ML, cli-Mate incorporates a cutting-edge voice assistant driven by Natural Language Processing (NLP). Accessible via a dedicated button on the home screen, this feature elevates the cli-Mate experience in two key ways: it provides instant, conversational weather updates, enabling users to inquire about the day's weather, and it facilitates the effortless configuration of temperature preferences through natural dialogue. By seamlessly integrating voice technology, cli-Mate offers users a futuristic and highly personalized weather experience, combining convenience with tailored weather insights.
+cli-Mate's mission is to simplify the way people interact with weather information and equip them with the tools needed to plan their lives effectively in an ever-changing climate.
 
-cli-Mate is a dynamic and versatile weather application that seamlessly integrates various programming languages and technologies to provide users with an exceptional experience. At its core, the app is built with Dart, the language behind Flutter, which powers its intuitive and responsive user interface. To fetch and process real-time weather data, we utilize REST APIs and HTTP for communication. For efficient data manipulation and integration, we rely on JSON (JavaScript Object Notation). Furthermore, cli-Mate leverages the power of Django, a high-level Python web framework, for its back-end operations. With Django's robust capabilities, cli-Mate ensures efficient data management, secure user authentication, and seamless interaction with the front-end. Additionally, the app features a state-of-the-art voice assistant implemented using Natural Language Processing (NLP) libraries, enhancing its accessibility and user-friendliness. By seamlessly combining these technologies, cli-Mate offers a comprehensive and cutting-edge weather solution tailored to users' needs.
-## Features
+### Features
 
-1. **Personal Notifications**:
-- Set personalized temperature limits and receive instant notifications when the temperature exceeds your preferred range.
-- Stay informed and adapt to changing weather conditions effortlessly.
-2. **Real-Time Weather Data**:
-- Access real-time weather information, including temperature, wind speed, humidity, and more.
-- Make informed decisions based on up-to-the-minute weather updates.
-3. **Voice Assistance**:
-- Utilize advanced speech-to-text capabilities powered by Natural Language Processing (NLP).
-- Interact with cli-Mate using voice commands for a seamless and user-friendly experience.
-4. **7-Day Weather Forecast**:
-- Plan your entire week with confidence with cli-Mate's detailed 7-day weather forecast.
-- Receive information about daily minimum and maximum temperatures for effective scheduling.
-5. **Location-Based Weather**:
-- Get accurate weather data based on your current location.
-- Easily search and access weather updates for any city or region, ensuring you're prepared wherever you go.
-6. **Beautiful Visuals**:
-- Immerse yourself in stunning weather visuals and icons that reflect the current weather conditions.
-- Enjoy a visually appealing and engaging weather experience.
-7. **User-Friendly Interface**:
-- Navigate cli-Mate effortlessly with its intuitive and user-friendly interface.
-- Users of all ages can access and customize weather data with ease.
-8. **Secure Storage**:
-- Safeguard your personal settings and location preferences with secure storage and access control.
-- Rest assured that your data is protected and accessible only to you.
+- **Personalized Notifications**
+  - Set temperature limits and get instant notifications for weather changes.
+  - Adapt to changing conditions effortlessly.
+
+- **Real-Time Weather Data**
+  - Access live weather info: temperature, wind speed, humidity, and more.
+  - Make informed decisions with up-to-the-minute updates.
+
+- **Voice Assistance (NLP)**
+  - Utilize advanced Natural Language Processing (NLP) for seamless voice interaction.
+  - Interact with cli-Mate using voice commands for a user-friendly experience.
+
+- **7-Day Weather Forecast (Forecast)**
+  - Plan your week confidently with a detailed 7-day forecast.
+  - Know daily minimum and maximum temperatures for effective scheduling.
+
+- **Location-Based Weather**
+  - Get accurate weather data based on your location.
+  - Easily access weather updates for any city or region, ensuring preparedness.
+
+- **Stunning Visuals**
+  - Immerse yourself in captivating weather visuals reflecting current conditions.
+  - Enjoy an engaging weather experience with beautiful icons.
+
+- **User-Friendly Interface**
+  - Navigate cli-Mate effortlessly with an intuitive interface.
+  - Users of all ages can access and customize weather data easily.
+
+- **Secure Data Storage**
+  - Protect your settings and location preferences with secure storage.
+  - Your data is accessible only to you, ensuring privacy and security.
 
 
-## Built with
+## Getting Started
+## Prerequisites
+
+Before you begin, ensure that you have the following prerequisites installed on your development environment:
+
+1. **Python**: You'll need Python installed to run backend scripts microagents. You can download Python from the official website [here](https://www.python.org/downloads/).
+
+2. **Flutter with Android Studio**: To build and run the cli-Mate application, you must have Flutter and Android Studio installed. Follow the installation instructions for Flutter and Android Studio based on your operating system:
+
+   - [Flutter Installation Guide](https://flutter.dev/docs/get-started/install)
+   - [Android Studio Installation Guide](https://developer.android.com/studio)
+
+3. **Android SDK**: Android Studio usually comes with the Android SDK, but it's essential to ensure it's correctly installed and configured. Android SDK is necessary for building and running Android applications with Flutter.
+
+Make sure all the required paths are added to PATH in environment variables of you PC.
+
+After installing Flutter and Android Studio, it's highly recommended to run the following command to check for any additional requirements or corrections in your Flutter environment:
+
+```bash
+flutter doctor
+```
+
+## Installation
+We have already hosted the server on AWS for you :)
+You can just skip to to get started with cli-Mate using our Pre-Built apk and server hosted on AWS.
+Or
+Set up the server and compile the app yourself with instructions provided.
+
+### Option 1: Use Our Pre-Built APK File and server hosted on AWS
+
+1. **APK File Link**: You can download the pre-built APK file from [this link](insert-apk-file-link-here).
+
+2. **Installation**: After downloading the APK file, install it on your Android device.
+
+3. **Permissions**: Make sure to allow the required permissions when prompted during installation. If you don't receive any prompts, you can configure permissions in your device settings. The app requires notification, location, and microphone permissions for proper functioning.
+
+4. **Usage**: Once installed and permissions granted, launch the app to start using cli-Mate.
+
+### Option 2: Run Server Locally and Compile the App
+
+## Running the Server:
+
+1. **Clone the Repository**: Begin by cloning the cli-Mate repository from GitHub to your local machine. This step ensures you have the server's source code.
+    ```bash
+    git clone git_link
+    ```
+2. **Create a Virtual Environment**: It's a good practice to work in a virtual environment to manage dependencies cleanly. Create a virtual environment using your preferred method. For example, you can use Python's `virtualenv` or `venv`.
+
+    While in cloned directory, run
+    ```bash
+    python -m venv .venv
+    ```
+3. **Activate the Virtual Environment**: Activate the virtual environment to isolate your project's dependencies. This step ensures that you work within a controlled environment for your server.
+
+    - On Windows
+      ```bash
+      .venv\Scripts\activate
+      ```
+    - On macOs and Linux
+      ```bash
+      source .venv/bin/activate
+      ```
+4. **Install Requirements**: Use `pip` to install the required Python packages specified in the `requirements.txt` file. These packages are essential for the server's proper functioning.
+
+  ```bash
+  pip install -r requirements.txt
+  ```
+5. **Database Migration**: Apply the database migrations. This step ensures that your database schema is up to date.
+
+  ```bash
+  python manage.py migrate
+  ```
+
+6. **Start the Server**: Launch the server with the given command. This action starts the server locally, and it will be accessible at the specified address (usually `http://localhost:8000/`).
+
+  ```bash
+  python manage.py runserver
+  ```
+## Compiling the App:
+
+1. **Navigate to App Directory**: If you haven't already, navigate to the directory containing the Flutter app code. In this case, it appears to be in the "first_app" directory.
+
+  ```bash
+  cd first_app/
+  ```
+2. **Get Dependencies**: Run `flutter pub get` to fetch and install the necessary Flutter dependencies for the app. This step ensures that your app has access to required packages.
+  ```bash
+  flutter pub get
+  ```
+3. **Update Server Adress**: Before proceeding, ensure you have the server address where your backend is hosted. Open the api_service.dart and api_service.g.dart files located in `first_app/lib/service/`. Update server adress in base url of retrofitted API class. If you cannot find it, search for `CHANGELINK` keyword which is commented.
+
+4. **Build and Run**: Use `dart run build_run run` to build and run the app. This command will compile the app and make it ready for execution.
+  ```bash
+  dart run build_run run
+  ```
+4. **Connect Android Device or Emulator**: Ensure your Android device is connected to your computer via USB, and USB debugging is enabled in developer mode. Alternatively, you can use an emulator to test the app.
+  
+5. **Launch the App**: Run `flutter run` after selecting the target device or emulator. This command will install and launch the app on the specified device.
+
+These steps will help you set up and run both the server and the app smoothly. You're now ready to go!
+
+
+
+
+## TECHSTACK - Built with
+<div style="display: flex; justify-content: center; gap: 50px;align-items: center;">
+    <img src="https://github.com/me-sanath/cli-Mate/assets/120031221/6212cefe-88af-4dc8-80e5-397a7b0d68c8" width="45%">
+    <img src="https://github.com/me-sanath/cli-Mate/assets/120031221/eb4f8036-f5d6-4bb8-bdf5-c274886c0535" width="45%">
+</div>
+
 
 [![Tech](https://skillicons.dev/icons?i=flutter,dart,python,django,firebase,aws)](https://skillicons.dev)
 
@@ -100,76 +227,23 @@ Firebase is Google's mobile and web app development platform with a wide range o
 
 
 
-## Instructions
-
-You can either use our apk file to use the app or launch the app yourself. The server has been already hosted in AWS so it will be easier if you use the apk file. Please allow the permissions, if not prompted, allow it in settings. Apk file link:
-
-//apk file link
-
-Launching the app locally:
-
-
-Clone the project
-
-```bash
-  git clone https://github.com/me-sanath/cli-Mate.git
-```
-
-Go to the project directory
-
-```bash
-  cd cli-Mate
-```
-
-We have already hosted the server on aws for you :)
-You can just skip to launching the app part and use the aws server or you can use the local server by following steps:
-
-**Running the server locally**:
-
-Create virtual environment:
-
-Go to command palette and press Python: Create Environment
-
-Activate virtual environment
-
-```bash
-  scripts/activate/venv
-```
-
-Start the server
-
-```bash
-  py manage.py runserver
-```
-
-**Launch the application:**
-
-Go the the application directory
-
-```bash
-    cd ./first-app/
-```
-
-Get dependencies
-
-```bash
-    flutter pub get 
-```
-
-Run app
-
-```bash
-    flutter run 
-```
-
-Select your device(Virtual emulator or connect your phone and enable usb debugging) and you're ready to go!
-
 ## The Team:
+**Sanath Naik**
 
-Sanath Naik
+[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/me-sanath)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/sanath-naik/)
 
-Pranav Anantha Rao
+**Pranav Anantha Rao**
 
-K L Gireesh
+[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/PranavRao18)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/pranav-rao-b00926223/)
 
-Satwik Kini
+**K L Gireesh**
+
+[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/Gireesh-KL)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/k-l-gireesh-b9b16027b/)
+
+**Satwik Kini**
+
+[![GitHub](https://img.shields.io/badge/GitHub-black?style=flat&logo=github)](https://github.com/satwikkini-01)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/satwik-kini-26a949252/)
