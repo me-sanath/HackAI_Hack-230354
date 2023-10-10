@@ -6,23 +6,36 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 
 from .models import CustomUser
-from .serializers import CustomUserSerializer
+from .serializers import RegistrationSerializer
 
 User = get_user_model()
 
-class UserRegistrationView(generics.CreateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-    permission_classes = (permissions.AllowAny,)
-
-    def perform_create(self, serializer):
-        instance = serializer.save()
-        instance.set_password(self.request.data.get('password'))
-        instance.save()
+class RegistrationView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegistrationSerializer
 
         # Optionally, generate and return an authentication token upon registration
-        token, created = Token.objects.get_or_create(user=instance)
-        return token
+    def create(self, request, *args, **kwargs):
+        # Call the parent class's create method to perform user registration
+        response = super().create(request, *args, **kwargs)
+
+        # Check if the registration was successful and the user object is available
+        if response.status_code == status.HTTP_201_CREATED:
+            user = self.queryset.get(username=request.data['username'])
+
+            # Create token for the user
+            token = Token.objects.get_or_create(user=user)[0]
+
+            # Return Data
+            return Response(
+                {
+                    'token': token.key,
+                    'user_id': user.id,
+                    'username': user.username
+                },
+                status=status.HTTP_201_CREATED  
+            )
+        return response
 
 class UserLoginView(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -39,11 +52,3 @@ class UserLoginView(APIView):
 
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
-class UserProfileView(generics.RetrieveUpdateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-    authentication_classes = (TokenAuthentication,)
-
-    def get_object(self):
-        return self.request.user

@@ -162,3 +162,4 @@ cython_debug/
 # See https://www.dartlang.org/guides/libraries/private-files
 
 
+static
