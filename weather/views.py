@@ -177,6 +177,7 @@ class setPrefView(APIView):
         weather_pref = WeatherPref.objects.get_or_create(user=user)[0]  
         weather_pref.minumumTemperature = min_temperature
         weather_pref.maximumTemperature = max_temperature
+        weather_pref.toNofify = True
         weather_pref.save()
         return Response({'message': 'Weather preferences updated successfully'})
     
