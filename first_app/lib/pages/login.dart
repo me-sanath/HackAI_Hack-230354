@@ -80,7 +80,8 @@ class _LoginPageState extends State<LoginPage> {
     // Create an instance of the ApiService for making API requests.
     final apiService = ApiService(dio);
 
-    // Set the loading flag to true to show a loading spinner.
+    try{
+      // Set the loading flag to true to show a loading spinner.
     setState(() {
       _isLoading = true;
     });
@@ -121,6 +122,12 @@ class _LoginPageState extends State<LoginPage> {
       _message = 'Login successful.';
       _isLoading = false;
     });
+    } catch (e){
+      setState(() {
+        _isLoading = false;
+        _message = 'Invalid email or password';
+      });
+    }
   }
 
   // This method checks if an access token exists in secure storage.
@@ -261,7 +268,7 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               padding: EdgeInsets.all(10),
               child: OutlinedButton(
-                onPressed: _isLoading ? null : _login,
+                onPressed: _login,
                 style: OutlinedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 92, 187, 255),
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 40),
@@ -280,7 +287,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 20),
-            Text(_isLoading ? 'Logging in...' : _message),
+            Text(_isLoading ? 'Logging in...' : _message,
+              style: GoogleFonts.alata(
+                color: Colors.red
+              ),
+            ),
           ],
         ),
       ),

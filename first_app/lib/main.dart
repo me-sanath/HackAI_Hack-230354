@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:cliMate/api/firebase_api.dart';
 import 'package:cliMate/firebase_options.dart';
 import 'package:dio/dio.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Weather App',
+      title: 'cli-Mate',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -329,7 +330,7 @@ class _LandingPageState extends State<LandingPage> {
       );
 
       if (placemarks.isNotEmpty) {
-        final placeName = placemarks[0].subAdministrativeArea;
+        final placeName = placemarks[0].locality;
         final apiService = ApiService(dio);
         String? token = await widget.storage.read(key: 'access_token');
         final weatherData = await apiService.getDashboardData('Token $token',
@@ -409,7 +410,7 @@ class _LandingPageState extends State<LandingPage> {
                             ),
                             SizedBox(width: 15),
                             Text(
-                              _placeName == null ? 'Weather App' : _placeName!,
+                              _placeName == null ? 'cli-Mate' : _placeName!,
                               style: GoogleFonts.alata(
                                 backgroundColor:
                                     const Color.fromARGB(255, 206, 234, 255),
@@ -435,7 +436,7 @@ class _LandingPageState extends State<LandingPage> {
                         Text(
                           _temperature.toString() + '°',
                           style: GoogleFonts.alumniSans(
-                            fontSize: 150,
+                            fontSize: 130,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
