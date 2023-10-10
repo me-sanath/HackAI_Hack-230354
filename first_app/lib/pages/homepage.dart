@@ -14,6 +14,7 @@ import 'package:speech_to_text/speech_to_text.dart'
     as stts; // Import for speech-to-text functionality
 import 'package:flutter_tts/flutter_tts.dart'; // Import for text-to-speech functionality
 import '../services/api_service.dart'; // Importing an ApiService (check if needed)
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() {
   final storage = FlutterSecureStorage();
@@ -232,9 +233,10 @@ class _HomeScreenState extends State<HomeScreen> {
       print(cityName);
       await widget.storage.write(key: 'city', value: cityName);
       String? token = await widget.storage.read(key: 'access_token');
+      String? fcToken = await widget.storage.read(key: 'fc_token');
       final dashboardData = await apiService.getDashboardData(
         'Token $token',
-        {'latitude': position.latitude, 'longitude': position.longitude},
+        {'latitude': position.latitude, 'longitude': position.longitude,'fc_token':fcToken},
       );
       // _fetchWeatherData(latitude: position.latitude,longitude: position.longitude);
       setState(() {

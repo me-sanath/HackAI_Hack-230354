@@ -48,6 +48,8 @@ dependencies:
   json_annotation: ^4.8.1
   flutter_secure_storage: ^9.0.0
   flutter_launcher_icons: ^0.13.1
+  firebase_core: ^2.17.0
+  firebase_messaging: ^14.6.9
 
 flutter_launcher_icons:
   android: "launcher_icon"

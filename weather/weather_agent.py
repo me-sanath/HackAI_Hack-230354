@@ -1,6 +1,10 @@
 from uagents import Agent, Context, Model
 import httpx
 import asyncio
+from firebase_admin import credentials, messaging
+import firebase_admin
+
+
 
 temperature_alert_agent = Agent(name="temperature_alert")
 # Location
@@ -16,6 +20,26 @@ class TemperatureData(Model):
 
 async def alert_user(message):
     print(message)
+
+async def send_notification_to_token(fcm_token, title, body):
+    # Initialize Firebase Admin SDK with your service account credentials
+    
+
+    # Create a message
+    message = messaging.Message(
+        notification=messaging.Notification(
+            title=title,
+            body=body
+        ),
+        token=fcm_token,
+    )
+
+    # Send the message
+    try:
+        response = await messaging.send(message)
+        print("Notification sent successfully:", response)
+    except Exception as e:
+        print("Error sending notification:", str(e))
 
 async def fetch_temperature(ctx: Context):
     api_url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&current_weather=true"
@@ -43,4 +67,7 @@ async def check_temperature(ctx: Context):
     await fetch_temperature(ctx)
 
 if __name__ == "__main__":
+    cred = credentials.Certificate('path/to/your/serviceAccountKey.json')
+    firebase_admin.initialize_app(cred)
     temperature_alert_agent.run()
+

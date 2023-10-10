@@ -131,7 +131,7 @@ class _ApiService implements ApiService {
     )
         .compose(
           _dio.options,
-          'weather/setPref',
+          'weather/setpref/',
           queryParameters: queryParameters,
           data: _data,
         )

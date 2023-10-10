@@ -64,7 +64,6 @@ REST_FRAMEWORK = {
 }
 
 ROOT_URLCONF = 'cliMate.urls'
-AUTH_USER_MODEL = 'accounts.CustomUser'
 
 TEMPLATES = [
     {

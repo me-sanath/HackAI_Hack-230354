@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:cliMate/api/firebase_api.dart';
+import 'package:cliMate/firebase_options.dart';
 import 'package:dio/dio.dart';
 import 'package:cliMate/pages/homepage.dart';
 import 'package:cliMate/pages/login.dart';
@@ -11,10 +13,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 //Use this to run app
-void main() {
+void main() async{
   final storage =  FlutterSecureStorage();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseApi(storage: storage).initNotification();
   runApp(MyApp(storage: storage,));
 }
 

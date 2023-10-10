@@ -24,7 +24,7 @@ abstract class ApiService {
     @Body() Map<String, dynamic> body,
   );
 
-  @POST('weather/setPref')
+  @POST('weather/setpref/')
   Future<void> setTemperaturePreferences(
     @Header('Authorization') String token,
     @Body() Map<String, dynamic> body,

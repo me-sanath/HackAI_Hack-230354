@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../services/api_service.dart'; 
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 // If you want to run the page uncomment:
 void main() {
@@ -23,6 +24,7 @@ void main() {
 class TemperaturePreferencesPage extends StatefulWidget {
   final String userId;
   final FlutterSecureStorage storage;
+  
   TemperaturePreferencesPage({required this.userId,required this.storage});
 
   @override
@@ -35,7 +37,6 @@ class _TemperaturePreferencesPageState
       final Dio dio = Dio();
   double _minTemp = -50.0;
   double _maxTemp = 70.0;
-
   String _message = '';
 
   Future<void> _saveTemperaturePreferences() async {
