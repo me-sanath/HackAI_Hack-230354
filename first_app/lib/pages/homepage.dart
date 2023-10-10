@@ -144,7 +144,8 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 
 // Function to speak the recognized speech text
   void _speak() async {
-    await flutterTts.speak(outputWords); // Use Flutter Text-to-Speech to speak text
+    await flutterTts
+        .speak(outputWords); // Use Flutter Text-to-Speech to speak text
   }
 
   @override
