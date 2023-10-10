@@ -82,6 +82,9 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 // Stores the sentence to be spoken to user
   String outputWords = "";
 
+// Stores the url from Machine learning file
+  String url;
+
   final GlobalKey<ForecastScreenState> forecastScreenKey =
       GlobalKey<ForecastScreenState>();
 
@@ -138,6 +141,11 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         islistening = false; // Set listening to false
       });
       _speechToText.stop(); // Stop speech recognition
+      Data = await Getdata(url);
+      DecodedData = jsonDecode(Data);
+      setState( () {
+        outputWords = DecodedData['Query'];
+      });
       _speak(); // Calls speak function when speech regonition stops
     }
   }
@@ -163,6 +171,9 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
           // PageView to display different screens.
           PageView(
             controller: _pageController,
+            onChanged: (outString){
+              url = 'http://10.0.2.2:5000/process?Query='+outString.toString();
+            }
             children: _screens,
             onPageChanged: (index) {
               setState(() {
