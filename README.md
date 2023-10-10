@@ -125,37 +125,38 @@ Set up the server and compile the app yourself with instructions provided.
       ```
 4. **Install Requirements**: Use `pip` to install the required Python packages specified in the `requirements.txt` file. These packages are essential for the server's proper functioning.
 
-  ```bash
-  pip install -r requirements.txt
-  ```
+    ```bash
+    pip install -r requirements.txt
+    ```
 5. **Database Migration**: Apply the database migrations. This step ensures that your database schema is up to date.
 
-  ```bash
-  python manage.py migrate
-  ```
+    ```bash
+    python manage.py migrate
+    ```
 
 6. **Start the Server**: Launch the server with the given command. This action starts the server locally, and it will be accessible at the specified address (usually `http://localhost:8000/`).
 
-  ```bash
-  python manage.py runserver
-  ```
+    ```bash
+    python manage.py runserver
+    ```
 ## Compiling the App:
 
 1. **Navigate to App Directory**: If you haven't already, navigate to the directory containing the Flutter app code. In this case, it appears to be in the "first_app" directory.
 
-  ```bash
-  cd first_app/
-  ```
+    ```bash
+    cd first_app/
+    ```
 2. **Get Dependencies**: Run `flutter pub get` to fetch and install the necessary Flutter dependencies for the app. This step ensures that your app has access to required packages.
-  ```bash
-  flutter pub get
-  ```
-3. **Update Server Adress**: Before proceeding, ensure you have the server address where your backend is hosted. Open the api_service.dart and api_service.g.dart files located in `first_app/lib/service/`. Update server adress in base url of retrofitted API class. If you cannot find it, search for `CHANGELINK` keyword which is commented.
 
-4. **Build and Run**: Use `dart run build_run run` to build and run the app. This command will compile the app and make it ready for execution.
-  ```bash
-  dart run build_run run
-  ```
+    ```bash
+    flutter pub get
+    ```
+4. **Update Server Adress**: Before proceeding, ensure you have the server address where your backend is hosted. Open the api_service.dart and api_service.g.dart files located in `first_app/lib/service/`. Update server adress in base url of retrofitted API class. If you cannot find it, search for `CHANGELINK` keyword which is commented.
+
+5. **Build and Run**: Use `dart run build_run run` to build and run the app. This command will compile the app and make it ready for execution.
+    ```bash
+    dart run build_run run
+    ```
 4. **Connect Android Device or Emulator**: Ensure your Android device is connected to your computer via USB, and USB debugging is enabled in developer mode. Alternatively, you can use an emulator to test the app.
   
 5. **Launch the App**: Run `flutter run` after selecting the target device or emulator. This command will install and launch the app on the specified device.
