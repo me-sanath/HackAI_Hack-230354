@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 # Create your models here.
 
 class WeatherPref(models.Model):
@@ -9,4 +10,4 @@ class WeatherPref(models.Model):
     setLocation = models.JSONField(("locationPref"),default=list,blank=True,null=True)
     toNofify = models.BooleanField(default=False,verbose_name="Notify User")
     token = models.CharField(max_length=255, null = True,blank=True)
-    lastNotified = models.DateTimeField(null=True, blank=True)
+    lastNotified = models.DateTimeField(default = timezone.now,null=True, blank=True)
