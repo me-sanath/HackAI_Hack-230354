@@ -82,8 +82,6 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 // Stores the sentence to be spoken to user
   String outputWords = "";
 
-// Stores the url from Machine learning file
-  String url;
 
   final GlobalKey<ForecastScreenState> forecastScreenKey =
       GlobalKey<ForecastScreenState>();
@@ -166,9 +164,6 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
           // PageView to display different screens.
           PageView(
             controller: _pageController,
-            onChanged: (inputWords){
-              url = 'http://10.0.2.2:5000/process?Query='+inputWords.toString();
-            }
             children: _screens,
             onPageChanged: (index) {
               setState(() {
