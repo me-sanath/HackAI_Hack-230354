@@ -76,8 +76,11 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
 // Stores the name of the currently displayed city
   String _currentCity = "";
 
-// Stores text data (content not specified in the code)
-  String text = "";
+// Stores the sentence spoken by user
+  String inputWords = "";
+
+// Stores the sentence to be spoken to user
+  String outputWords = "";
 
   final GlobalKey<ForecastScreenState> forecastScreenKey =
       GlobalKey<ForecastScreenState>();
@@ -116,7 +119,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
     if (!islistening) {
       bool available = await _speechToText.initialize(
         // Initialize Speech-to-Text with event handlers
-        onStatus: (status) => print(text), // Handle status changes
+        onStatus: (status) => print(inputWords), // Handle status changes
         onError: (errorNotification) =>
             print("$errorNotification"), // Handle errors
       );
@@ -135,12 +138,13 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         islistening = false; // Set listening to false
       });
       _speechToText.stop(); // Stop speech recognition
+      _speak(); // Calls speak function when speech regonition stops
     }
   }
 
 // Function to speak the recognized speech text
   void _speak() async {
-    await flutterTts.speak(text); // Use Flutter Text-to-Speech to speak text
+    await flutterTts.speak(outputWords); // Use Flutter Text-to-Speech to speak text
   }
 
   @override
