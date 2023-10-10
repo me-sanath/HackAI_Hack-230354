@@ -9,17 +9,17 @@ import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 // If you want to run the page uncomment:
-void main() {
-  final storage = FlutterSecureStorage();
-  runApp(
-    MaterialApp(
-      home: Directionality(
-        textDirection: TextDirection.ltr, // Set the text direction
-        child: TemperaturePreferencesPage(userId: 'poop',storage: storage,),
-      ),
-    ),
-  );
-}
+// void main() {
+//   final storage = FlutterSecureStorage();
+//   runApp(
+//     MaterialApp(
+//       home: Directionality(
+//         textDirection: TextDirection.ltr, // Set the text direction
+//         child: TemperaturePreferencesPage(userId: 'test',storage: storage,),
+//       ),
+//     ),
+//   );
+// }
 
 class TemperaturePreferencesPage extends StatefulWidget {
   final String userId;
@@ -188,54 +188,5 @@ class _TemperaturePreferencesPageState
         ),
       ),
     );
-    // return Scaffold(
-    //   body: Padding(
-    //     padding: const EdgeInsets.all(16.0),
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       children: [
-    //         Column(
-    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //           children: [
-    //             Text('Minimum Temperature: ${_minTemp.toStringAsFixed(1)}°C'),
-    //             Slider(
-    //               value: _minTemp,
-    //               min: -50.0,
-    //               max: 70.0,
-    //               onChanged: (value) {
-    //                 setState(() {
-    //                   _minTemp = value;
-    //                 });
-    //               },
-    //             ),
-    //           ],
-    //         ),
-    //         Column(
-    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //           children: [
-    //             Text('Maximum Temperature: ${_maxTemp.toStringAsFixed(1)}°C'),
-    //             Slider(
-    //               value: _maxTemp,
-    //               min: -50.0,
-    //               max: 70.0,
-    //               onChanged: (value) {
-    //                 setState(() {
-    //                   _maxTemp = value;
-    //                 });
-    //               },
-    //             ),
-    //           ],
-    //         ),
-    //         SizedBox(height: 20),
-    //         ElevatedButton(
-    //           onPressed: _saveTemperaturePreferences,
-    //           child: Text('Save Preferences'),
-    //         ),
-    //         SizedBox(height: 20),
-    //         Text(_message),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }
