@@ -332,8 +332,7 @@ class _LandingPageState extends State<LandingPage> {
       if (placemarks.isNotEmpty) {
         final placeName = placemarks[0].locality;
         final apiService = ApiService(dio);
-        String? token = await widget.storage.read(key: 'access_token');
-        final weatherData = await apiService.getDashboardData('Token $token',
+        final weatherData = await apiService.getDashboardData('Token 4825543ccae5f9f0b4e1f9f26c199d9e73857aef',
             {'latitude': position.latitude, 'longitude': position.longitude});
         setState(() {
           _placeName = placeName;
