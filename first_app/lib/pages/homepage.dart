@@ -52,14 +52,31 @@ class BottomNavigationExample extends StatefulWidget {
 }
 
 class _BottomNavigationExampleState extends State<BottomNavigationExample> {
+  // Initialize the Flutter Text-to-Speech engine
   FlutterTts flutterTts = FlutterTts();
+
+// Initialize the Speech-to-Text engine
   var _speechToText = stts.SpeechToText();
+
+// Flag to track if speech recognition is currently active
   bool islistening = false;
+
+// Index to track the current screen in the bottom navigation
   int _currentIndex = 0;
+
+// Controller for managing page navigation
   final PageController _pageController = PageController();
+
+// List of screens to be displayed in the app
   List<Widget> _screens = [];
+
+// Stores the name of the selected city for weather information
   String _cityName = "";
+
+// Stores the name of the currently displayed city
   String _currentCity = "";
+
+// Stores text data (content not specified in the code)
   String text = "";
 
   final GlobalKey<ForecastScreenState> forecastScreenKey =
@@ -68,19 +85,23 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
   @override
   void initState() {
     super.initState();
+
+    // Initialize the speech recognition engine
     _speechToText = stts.SpeechToText();
+
+    // Create a list of screens to be displayed in the app
     _screens = [
       HomeScreen(
         userId: widget.userId,
         storage: widget.storage,
         onCityChange: (city) {
           setState(() {
-            _currentCity = city;
+            _currentCity = city; // Update the currently selected city
           });
         },
       ),
       ForecastScreen(
-        cityName: _cityName,
+        cityName: _cityName, // Pass the city name to the ForecastScreen
         storage: widget.storage,
       ),
       ProfileScreen(
@@ -252,9 +273,9 @@ class _HomeScreenState extends State<HomeScreen> {
     82: 'Violent Rain Showers',
     85: 'Slight Snow Showers',
     86: 'Heavy Snow Showers',
-    95: 'Slight or Moderate Thunderstorm',
-    96: 'Thunderstorm with Slight Hail',
-    99: 'Thunderstorm with Heavy Hail',
+    95: 'Moderate Thunderstorm',
+    96: 'Slight Hail Thunderstorm',
+    99: 'Heavy Hail Thunderstorm',
   };
 
   Future<void> _fetchWeatherForCurrentLocation() async {
@@ -475,7 +496,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         _description,
                         style: GoogleFonts.alata(
-                          fontSize: 28,
+                          fontSize: 22,
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
                         ),
@@ -540,7 +561,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       SizedBox(width: 20),
-                      Icon(
+                      const Icon(
                         Icons.speed,
                         size: 40,
                         color: Colors.white,
@@ -842,36 +863,52 @@ class ForecastScreen extends StatefulWidget {
 }
 
 class ForecastScreenState extends State<ForecastScreen> {
+  // Create an instance of Dio for making HTTP requests
   final Dio dio = Dio();
+
+// Initialize an empty list to store weather forecast data
   List<WeatherForecast> _forecastData = [];
+
+// Initialize the default city name to "Mumbai"
   String _cityName = "Mumbai";
 
   @override
   void initState() {
     super.initState();
+
+    // Check if a city name is available
     if (_cityName != null) {
+      // Fetch weather forecast data for the default city
       _fetchWeatherForecast(_cityName);
     } else {
       print("City not found");
     }
   }
 
+// Function to update the displayed city and fetch weather forecast data
   void updateCityName(String cityName) {
     _fetchWeatherForecast(cityName);
   }
 
+  // Fetch weather forecast data for a given city
   Future<void> _fetchWeatherForecast(String cityName) async {
     final apiService = ApiService(dio);
+
+    // Retrieve the selected city name from storage and update the display
     cityName = (await widget.storage.read(key: 'city'))!;
     setState(() {
       _cityName = cityName.toUpperCase();
     });
+
+    // Prepare the request body with the selected city name
     Map<String, dynamic> requestBody;
     requestBody = {'locationName': cityName};
 
+    // Retrieve the user's access token from storage
     String? token = await widget.storage.read(key: 'access_token');
 
     try {
+      // Fetch forecast data from the API using the access token and request body
       final data1 = await apiService.getForecastData(
         'Token $token',
         requestBody,
@@ -879,6 +916,8 @@ class ForecastScreenState extends State<ForecastScreen> {
 
       List<WeatherForecast> forecasts = [];
       final data = data1.forecast;
+
+      // Parse the fetched data into WeatherForecast objects
       for (var item in data) {
         forecasts.add(WeatherForecast(
           date: DateTime.parse(item.date as String),
@@ -889,6 +928,7 @@ class ForecastScreenState extends State<ForecastScreen> {
       }
 
       setState(() {
+        // Update the displayed city name and forecast data
         _cityName = cityName.toUpperCase();
         _forecastData = forecasts;
       });
@@ -898,6 +938,7 @@ class ForecastScreenState extends State<ForecastScreen> {
     }
   }
 
+// Various weather condition codes with corresponding images
   Image getImageForCode(int code) {
     switch (code) {
       case 0:
@@ -1237,16 +1278,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+    // Call the function to fetch user data when the widget initializes
     fetchUserData();
   }
 
-  void fetchUserData() async {}
+// Function to fetch user data, you can add your implementation here
+  void fetchUserData() async {
+    // Implement code to fetch user data, if needed
+  }
 
+// Function to update temperature settings
   void updateTemperatureSettings() async {
     final apiService = ApiService(dio);
     try {
-      // Sanath update the new mintemp and maxtemp here
-      // Replace with your backend API endpoint to update temperature settings
+      // Check if the minimum temperature is greater than or equal to the maximum temperature
       if (_minTemperature >= _maxTemperature) {
         setState(() {
           _message = "Error! Minimum Temperature should be lesser";
@@ -1260,10 +1305,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           "min_temperature": _minTemperature,
           "max_temperature": _maxTemperature,
         };
+        // Call the API to set temperature preferences
         await apiService.setTemperaturePreferences('Token $token', body);
         setState(() {
           _message = 'Preferences saved successfully.';
         });
+        // Update the stored minimum and maximum temperature values
         widget.storage.write(key: 'mintemp', value: _minTemperature.toString());
         widget.storage.write(key: 'maxtemp', value: _maxTemperature.toString());
       }
@@ -1272,6 +1319,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1283,6 +1331,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 10),
+
+              // Profile Title
               Container(
                 width: 350,
                 padding: const EdgeInsets.all(16.0),
@@ -1295,14 +1345,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   'Profile',
                   style: GoogleFonts.alata(
                     fontSize: 26,
-                    // fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               SizedBox(height: 30),
 
+              // User Profile
               Column(
                 children: [
+                  // User Avatar
                   const CircleAvatar(
                     radius: 70.0,
                     backgroundColor: Color.fromARGB(255, 196, 196, 196),
@@ -1311,6 +1362,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   SizedBox(height: 16.0),
+
+                  // User ID
                   Container(
                     height: 80,
                     width: 300,
@@ -1424,7 +1477,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     'Save Preferences',
                     style: GoogleFonts.alata(
                       fontSize: 20,
-                      // fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
@@ -1443,14 +1495,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: ElevatedButton(
                   onPressed: () async {
-                    // Navigate to the main screen (main.dart)
-                    // Navigator.pushReplacementNamed(context, '/main');
+                    // Handle user logout, e.g., deleting access token and navigating to the landing page
                     await widget.storage.delete(key: 'access_token');
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                LandingPage(storage: widget.storage)));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            LandingPage(storage: widget.storage),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 92, 187, 255),
