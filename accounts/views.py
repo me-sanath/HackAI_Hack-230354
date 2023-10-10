@@ -4,38 +4,32 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
-
-from .models import CustomUser
+from rest_framework.decorators import api_view
+from django.contrib.auth.models import User
 from .serializers import RegistrationSerializer
 
-User = get_user_model()
 
-class RegistrationView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = RegistrationSerializer
+@api_view(['POST'])
+def register(request):
+    data = request.data
+    password = data.get('password')
+    email = data.get('email')
+    user_name = data.get('username')
 
-        # Optionally, generate and return an authentication token upon registration
-    def create(self, request, *args, **kwargs):
-        # Call the parent class's create method to perform user registration
-        response = super().create(request, *args, **kwargs)
-
-        # Check if the registration was successful and the user object is available
-        if response.status_code == status.HTTP_201_CREATED:
-            user = self.queryset.get(username=request.data['username'])
-
-            # Create token for the user
-            token = Token.objects.get_or_create(user=user)[0]
-
-            # Return Data
-            return Response(
-                {
-                    'token': token.key,
+    try:
+        user = User()
+        user.email = email
+        user.set_password(password)
+        user.is_active = True
+        user.username = user_name
+        user.save()
+    except:
+        return Response({"error": "Email already exists"},status=409 )
+    token = Token.objects.create(user=user)
+    return Response({'token': token.key,
                     'user_id': user.id,
-                    'username': user.username
-                },
-                status=status.HTTP_201_CREATED  
-            )
-        return response
+                    'username': user.email},status=status.HTTP_201_CREATED)
+    return Response
 
 class UserLoginView(APIView):
     permission_classes = (permissions.AllowAny,)
