@@ -141,11 +141,6 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         islistening = false; // Set listening to false
       });
       _speechToText.stop(); // Stop speech recognition
-      Data = await Getdata(url);
-      DecodedData = jsonDecode(Data);
-      setState( () {
-        outputWords = DecodedData['Query'];
-      });
       _speak(); // Calls speak function when speech regonition stops
     }
   }
