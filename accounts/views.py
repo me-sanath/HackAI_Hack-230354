@@ -28,8 +28,7 @@ def register(request):
     token = Token.objects.create(user=user)
     return Response({'token': token.key,
                     'user_id': user.id,
-                    'username': user.email},status=status.HTTP_201_CREATED)
-    return Response
+                    'username': user_name},status=status.HTTP_201_CREATED)
 
 class UserLoginView(APIView):
     permission_classes = (permissions.AllowAny,)
