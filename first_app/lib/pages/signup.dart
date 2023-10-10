@@ -10,14 +10,16 @@ import 'package:dio/dio.dart';
 
 class SignUp extends StatelessWidget {
   final FlutterSecureStorage storage;
-  
+
   SignUp({required this.storage});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignUpPage(storage: storage,),
+      home: SignUpPage(
+        storage: storage,
+      ),
     );
   }
 }
@@ -35,7 +37,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   String _userId = '';
   String _message = '';
@@ -46,30 +49,36 @@ class _SignUpPageState extends State<SignUpPage> {
     final String email = _emailController.text;
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
-    
+
     if (password == confirmPassword) {
-      
-      final registrationData = await apiService.register({'username':name,'email':email,'password':password});
-      await widget.storage.write(key: "access_token", value: registrationData.token);
-      await widget.storage.write(key: "username", value: registrationData.name);
-      setState(() {
-        _userId = registrationData.name;
-        _message = 'Registration Done.';
-      });
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Dashboard(userId: _userId, storage: widget.storage),
-        ),
-      );
-    
+      try {
+        final registrationData = await apiService
+            .register({'username': name, 'email': email, 'password': password});
+        await widget.storage
+            .write(key: "access_token", value: registrationData.token);
+        await widget.storage
+            .write(key: "username", value: registrationData.name);
+        setState(() {
+          _userId = registrationData.name;
+          _message = 'Registration Done.';
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TemperaturePreferencesPage(
+                userId: _userId, storage: widget.storage),
+          ),
+        );
+      } catch (e) {
+        _message = 'Email already used';
+      }
     } else {
       setState(() {
         _message = 'Passwords do not match.';
         print(_message);
       });
-      
     }
+    print(_message);
   }
 
   @override
@@ -156,6 +165,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         fontSize: 20,
                       ),
                     ),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    _message,
+                    style: GoogleFonts.alata(color: Colors.red),
                   ),
                 ],
               ),

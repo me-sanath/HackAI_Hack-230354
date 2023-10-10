@@ -1287,9 +1287,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
 // Function to fetch user data, you can add your implementation here
-  void fetchUserData() async {
-    // Implement code to fetch user data, if needed
+  void fetchUserData() async{
+  try {
+    final minTempString = await widget.storage.read(key: 'mintemp');
+    final maxTempString = await widget.storage.read(key: 'maxtemp');
+
+    if (minTempString != null && maxTempString != null) {
+      setState(() {
+        _minTemperature = double.parse(minTempString);
+        _maxTemperature = double.parse(maxTempString);
+      });
+    } else {
+      print("One or both temperature values are null.");
+    }
+  } catch (e) {
+    print("Error parsing temperature values: $e");
   }
+}
 
 // Function to update temperature settings
   void updateTemperatureSettings() async {
