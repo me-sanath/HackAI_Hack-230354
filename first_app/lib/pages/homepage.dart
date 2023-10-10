@@ -16,13 +16,13 @@ import 'package:flutter_tts/flutter_tts.dart'; // Import for text-to-speech func
 import '../services/api_service.dart'; // Importing an ApiService (check if needed)
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-void main() {
-  final storage = FlutterSecureStorage();
-  runApp(Dashboard(
-    userId: 'Test_user', // User ID
-    storage: storage, // Storage for secure data storage
-  ));
-}
+// void main() {
+//   final storage = FlutterSecureStorage();
+//   runApp(Dashboard(
+//     userId: 'Test_user', // User ID
+//     storage: storage, // Storage for secure data storage
+//   ));
+// }
 
 class Dashboard extends StatelessWidget {
   final String userId; // User ID
@@ -277,9 +277,12 @@ class _HomeScreenState extends State<HomeScreen> {
       String? fcToken = await widget.storage.read(key: 'fc_token');
       final dashboardData = await apiService.getDashboardData(
         'Token $token',
-        {'latitude': position.latitude, 'longitude': position.longitude,'fc_token':fcToken},
+        {
+          'latitude': position.latitude,
+          'longitude': position.longitude,
+          'fc_token': fcToken
+        },
       );
-      // _fetchWeatherData(latitude: position.latitude,longitude: position.longitude);
       setState(() {
         _cityName = cityName!; // Update the city name.
         _temperature = dashboardData.temperature; // Update the temperature.
@@ -360,17 +363,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(_cityName.isEmpty ? 'Weather App' : _cityName),
-      //   actions: [
-      //     IconButton(
-      //       icon: Icon(Icons.search),
-      //       onPressed: () {
-      //         _showSearchDialog(context);
-      //       },
-      //     ),
-      //   ],
-      // ),
       body: Container(
         color: const Color.fromARGB(255, 240, 249, 255),
         child: Padding(
@@ -392,7 +384,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.location_on,
                           size: 32,
                         ), // Location icon on the left
@@ -412,7 +404,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             _showSearchDialog(context, '');
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.search,
                             size: 32,
                           ),
@@ -427,12 +419,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: MediaQuery.of(context).size.height * 0.37,
                 child: Container(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
                         Color.fromARGB(255, 175, 222, 255),
-                        const Color.fromARGB(255, 6, 123, 208)
+                        Color.fromARGB(255, 6, 123, 208)
                       ],
                     ),
                     borderRadius: BorderRadius.circular(50),
@@ -522,7 +514,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.water,
                         size: 40,
                         color: Colors.white,
@@ -599,7 +591,7 @@ class _HomeScreenState extends State<HomeScreen> {
               newCityName =
                   value; // Update the newCityName variable as the user types
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText:
                   'Enter city name', // Placeholder text for the text field
             ),
@@ -874,8 +866,6 @@ class ForecastScreenState extends State<ForecastScreen> {
     setState(() {
       _cityName = cityName.toUpperCase();
     });
-    // print("Hello");
-    // print(cityName);
     Map<String, dynamic> requestBody;
     requestBody = {'locationName': cityName};
 
@@ -1164,7 +1154,7 @@ class ForecastScreenState extends State<ForecastScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(22),
-                        gradient: RadialGradient(
+                        gradient: const RadialGradient(
                           center: Alignment(0.0, 0.0),
                           radius: 2,
                           colors: [
@@ -1212,42 +1202,6 @@ class ForecastScreenState extends State<ForecastScreen> {
       ),
     );
   }
-
-  // void _showSearchDialog(BuildContext context) {
-  //   String newCityName = "";
-
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text('Search Weather Forecast'),
-  //         content: TextField(
-  //           onChanged: (value) {
-  //             newCityName = value;
-  //           },
-  //           decoration: InputDecoration(
-  //             hintText: 'Enter city name',
-  //           ),
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: Text('Cancel'),
-  //           ),
-  //           TextButton(
-  //             onPressed: () {
-  //               _fetchWeatherForecast(newCityName);
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: Text('Search'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
 }
 
 class WeatherForecast {
@@ -1349,7 +1303,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
               Column(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 70.0,
                     backgroundColor: Color.fromARGB(255, 196, 196, 196),
                     backgroundImage: AssetImage(
@@ -1362,10 +1316,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     width: 300,
                     padding: EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                      gradient: const LinearGradient(
                         colors: [
                           Color.fromARGB(255, 175, 222, 255),
-                          const Color.fromARGB(255, 6, 123, 208)
+                          Color.fromARGB(255, 6, 123, 208)
                         ],
                       ),
                       borderRadius: BorderRadius.circular(44.0),
