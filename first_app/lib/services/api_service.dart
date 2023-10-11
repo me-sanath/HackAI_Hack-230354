@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 
 part 'api_service.g.dart';
 
-@RestApi(baseUrl: 'http://3.110.85.253/')
+@RestApi(baseUrl: 'http://3.110.85.253/') // Change with link where server is hosted : CHANGELINK
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
