@@ -12,12 +12,13 @@ import json
 temperature_alert_agent = Agent(name="temperature_alert")
 
 # Define the base URLs and routes for the server communication
-base_url = "http://127.0.0.1:8000/"
+base_url = "http://3.110.85.253/" #Change to local one if running locally
 server_url = base_url + "weather/getalldata/"
 update_notify = base_url + "weather/onNotify/"
 
 # Define the authentication token for server communication
-AUTH_TOKEN = "590c2387fcfbc53561d048173780a837016a081f"
+# Obtain this token by sending postman request to http://your-server-address/api/login with jsonbody containing email and password for superuser created
+AUTH_TOKEN = "0e65ba414e6e60e54225eafa12d6ed98c3943cbd" # Replace this token
 
 # Create a data model for temperature data
 class TemperatureData(Model):

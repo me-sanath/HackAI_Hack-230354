@@ -193,29 +193,30 @@ class getAllUserData(APIView):
                 if not user.is_staff:
                     weatherData = WeatherPref.objects.filter(user=user).first()
                     if weatherData:
-                        try:
-                            latitude = weatherData.setLocation[0]
-                            longitude = weatherData.setLocation[1]
-                        except:
-                            latitude = None
-                            longitude = None
-                        notification = weatherData.toNofify
-                        last_sent = weatherData.lastNotified
-                        min_temp = weatherData.minumumTemperature
-                        max_temp = weatherData.maximumTemperature
-                        fc_token = weatherData.token
-                        token = Token.objects.get_or_create(user=user)[0]
-                        userData = {
-                            "identifier":token.key,
-                            "user_token": fc_token,
-                            "latitude": latitude,
-                            "longitude": longitude,
-                            "notification": notification,
-                            "last_notified": last_sent.timestamp() if last_sent is not None else None,
-                            "min_temp": min_temp,
-                            "max_temp":max_temp,
-                        }
-                        response["users"].append(userData)
+                        if weatherData.minumumTemperature is not None:
+                            try:
+                                latitude = weatherData.setLocation[0]
+                                longitude = weatherData.setLocation[1]
+                            except:
+                                latitude = None
+                                longitude = None
+                            notification = weatherData.toNofify
+                            last_sent = weatherData.lastNotified
+                            min_temp = weatherData.minumumTemperature
+                            max_temp = weatherData.maximumTemperature
+                            fc_token = weatherData.token
+                            token = Token.objects.get_or_create(user=user)[0]
+                            userData = {
+                                "identifier":token.key,
+                                "user_token": fc_token,
+                                "latitude": latitude,
+                                "longitude": longitude,
+                                "notification": notification,
+                                "last_notified": last_sent.timestamp() if last_sent is not None else None,
+                                "min_temp": min_temp,
+                                "max_temp":max_temp,
+                            }
+                            response["users"].append(userData)
             response["result"]= True
             return JsonResponse(response,status=200)
         else:
