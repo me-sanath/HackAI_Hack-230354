@@ -93,6 +93,9 @@ Feel free to reach out to us if you have trouble following the guide. Contact de
 
 **⚠️ Important Notice:** Please note that the NLP (Natural Language Processing) features in the APK provided may not function as expected due to the absence of GPU support on our server. While we have made every effort to offer a fully functional app, voice assistance capabilities might be limited in this version. We appreciate your understanding, and we are continuously working to enhance the app's performance and features.
 
+**Note**: Please be aware that there might be a delay in receiving notifications from the server notifier. This delay has been intentionally set higher to avoid exceeding the rate limit imposed by the open meteo weather API we rely on for real-time weather data. We appreciate your understanding, and rest assured that we have implemented this delay to ensure the continued reliability.
+
+
 ### Option 1: Use Our Pre-Built APK File and server hosted on AWS
 
 1. **APK File Link**: You can download the pre-built APK file from [this link](https://drive.google.com/drive/folders/1UoZ2xSYXxeaGHCdkZjsd1ZVx4tyctLRR?usp=sharing).
