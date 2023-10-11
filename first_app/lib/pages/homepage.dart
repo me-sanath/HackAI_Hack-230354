@@ -205,7 +205,7 @@ class _BottomNavigationExampleState extends State<BottomNavigationExample> {
         animationDuration: Duration(
             milliseconds: 300), // Duration of animation when switching tabs.
         height: 70.0, // Height of the bottom navigation bar.
-        items: <Widget>[
+        items: const <Widget>[
           Icon(Icons.home, size: 35), // Icon for the Home tab.
           Icon(Icons.access_time, size: 35), // Icon for the Access Time tab.
           Icon(Icons.person, size: 35), // Icon for the Person tab.
@@ -257,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
     0: 'Clear Sky',
     1: 'Mainly Clear',
     2: 'Partly Cloudy',
-    3: 'Overcast',
+    3: 'Overcast Clouds',
     45: 'Fog',
     48: 'Depositing Rime Fog',
     51: 'Light Drizzle',
