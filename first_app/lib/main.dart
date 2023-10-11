@@ -1,20 +1,21 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:cliMate/api/firebase_api.dart';
-import 'package:cliMate/firebase_options.dart';
-import 'package:dio/dio.dart';
-import 'package:cliMate/pages/homepage.dart';
-import 'package:cliMate/pages/login.dart';
-import 'package:cliMate/pages/signup.dart';
-import 'package:cliMate/services/api_service.dart';
-import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'dart:convert'; // Import for handling JSON data
+import 'dart:io'; // Import for working with files and IO operations
+import 'package:cliMate/api/firebase_api.dart'; // Import for Firebase API
+import 'package:cliMate/firebase_options.dart'; // Import for Firebase options
+import 'package:dio/dio.dart'; // Import for making HTTP requests with Dio
+import 'package:cliMate/pages/homepage.dart'; // Import for the homepage
+import 'package:cliMate/pages/login.dart'; // Import for the login page
+import 'package:cliMate/pages/signup.dart'; // Import for the signup page
+import 'package:cliMate/services/api_service.dart'; // Import for your custom API service
+import 'package:flutter/material.dart'; // Import for Flutter's material library
+import 'package:geolocator/geolocator.dart'; // Import for geolocation services
+import 'package:geocoding/geocoding.dart'; // Import for geocoding services
+import 'package:google_fonts/google_fonts.dart'; // Import for Google Fonts
+import 'package:http/http.dart'
+    as http; // Import for making HTTP requests with http package
+import 'package:intl/intl.dart'; // Import for date and time formatting
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // Import for secure storage
+import 'package:firebase_core/firebase_core.dart'; // Import for Firebase Core
 
 //Use this to run app
 void main() async {
@@ -37,18 +38,20 @@ class LocationData {
 class MyApp extends StatelessWidget {
   final FlutterSecureStorage storage;
 
+  // Constructor to receive a FlutterSecureStorage object
   MyApp({required this.storage});
 
   @override
   Widget build(BuildContext context) {
+    // Configure the overall structure of the application
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'cli-Mate',
+      debugShowCheckedModeBanner: false, // Hide the debug banner
+      title: 'cli-Mate', // Set the app title
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blue, // Define the primary color theme
       ),
       home: LandingPage(
-        storage: storage,
+        storage: storage, // Pass the FlutterSecureStorage object to LandingPage
       ),
     );
   }
@@ -312,45 +315,54 @@ class _LandingPageState extends State<LandingPage> {
 
   Future<void> _initLocation() async {
     setState(() {
-      _isLoading = true;
+      _isLoading = true; // Set loading indicator to true while fetching data
     });
 
     try {
+      // Get the device's current location with high accuracy
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
       setState(() {
-        _locationData = LocationData(position.latitude, position.longitude);
+        _locationData = LocationData(
+            position.latitude, position.longitude); // Store the location data
       });
 
+      // Get location details (like city name) from the obtained coordinates
       final placemarks = await placemarkFromCoordinates(
         position.latitude,
         position.longitude,
       );
 
       if (placemarks.isNotEmpty) {
-        final placeName = placemarks[0].locality;
+        final placeName =
+            placemarks[0].locality; // Extract the locality (city name)
         final apiService = ApiService(dio);
-        final weatherData = await apiService.getDashboardData('Token 4825543ccae5f9f0b4e1f9f26c199d9e73857aef',
+
+        // Fetch weather data based on the obtained coordinates
+        final weatherData = await apiService.getDashboardData(
+            'Token 4825543ccae5f9f0b4e1f9f26c199d9e73857aef',
             {'latitude': position.latitude, 'longitude': position.longitude});
+
         setState(() {
-          _placeName = placeName;
-          _temperature = weatherData.temperature;
-          _code = weatherData.weathercode;
-          _image = getImageForCode(_code.toInt());
-          _isLoading = false;
+          _placeName = placeName; // Set the city name
+          _temperature = weatherData.temperature; // Set the temperature
+          _code = weatherData.weathercode; // Set the weather code
+          _image = getImageForCode(_code.toInt()); // Set the weather image
+          _isLoading = false; // Set loading indicator to false
         });
       } else {
         print('Location name not found');
         setState(() {
-          _isLoading = false;
+          _isLoading = false; // Set loading indicator to false
         });
       }
     } catch (e) {
-      print('Error getting location: $e');
+      print(
+          'Error getting location: $e'); // Handle errors and print error message
       setState(() {
-        _isLoading = false;
+        _isLoading = false; // Set loading indicator to false
       });
     }
   }
