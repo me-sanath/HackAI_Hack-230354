@@ -99,7 +99,7 @@ Feel free to reach out to us if you have trouble following the guide. Contact de
 
 2. **Installation**: After downloading the APK file, install it on your Android device.
 
-3. **Permissions**: Make sure to allow the required permissions when prompted during installation. If you don't receive any prompts, you can configure permissions in your device settings. The app requires notification, location, and microphone permissions for proper functioning.
+3. **⚠️ Permissions**: Make sure to allow the required permissions when prompted during installation. If you don't receive any prompts, you can configure permissions in your device settings. The app requires notification, location, and microphone permissions for proper functioning.
 
 4. **Usage**: Once installed and permissions granted, launch the app to start using cli-Mate.
 
@@ -134,11 +134,31 @@ Feel free to reach out to us if you have trouble following the guide. Contact de
     ```
 5. **Database Migration**: Apply the database migrations. This step ensures that your database schema is up to date.
 
+
     ```bash
     python manage.py migrate
     ```
+    
+6. **Create Super**: Create a super user for the supertoken required for uagents and without login weather fetch token.
 
-6. **Start the Server**: Launch the server with the given command. This action starts the server locally, and it will be accessible at the specified address (usually `http://localhost:8000/`).
+    ```bash
+    python manage.py createsuperuser
+    ```
+    Follow the instructions on screen
+
+7. **Postman Request**: Send postman request to `http://your-server-address/api/login/` 
+
+   Json body : Form data must contain email with superuser email and password of superuser
+      ```python
+      {
+      "token": "your-identifier",
+      "user_id": user-id,
+      "username": "username"
+      }
+      ```
+   Copy and paste this identifier in `weather_agents.py` file where indicated
+   
+9. **Start the Server**: Launch the server with the given command. This action starts the server locally, and it will be accessible at the specified address (usually `http://localhost:8000/`).
 
     ```bash
     python manage.py runserver
