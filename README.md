@@ -89,9 +89,13 @@ You can just skip to to get started with cli-Mate using our Pre-Built apk and se
 Or
 Set up the server and compile the app yourself with instructions provided.
 
+Feel free to reach out to us if you have trouble following the guide. Contact details can be found [here](#the-team)
+
+**⚠️ Important Notice:** Please note that the NLP (Natural Language Processing) features in the APK provided may not function as expected due to the absence of GPU support on our server. While we have made every effort to offer a fully functional app, voice assistance capabilities might be limited in this version. We appreciate your understanding, and we are continuously working to enhance the app's performance and features.
+
 ### Option 1: Use Our Pre-Built APK File and server hosted on AWS
 
-1. **APK File Link**: You can download the pre-built APK file from [this link](insert-apk-file-link-here).
+1. **APK File Link**: You can download the pre-built APK file from [this link](https://drive.google.com/drive/folders/1UoZ2xSYXxeaGHCdkZjsd1ZVx4tyctLRR?usp=sharing).
 
 2. **Installation**: After downloading the APK file, install it on your Android device.
 
@@ -105,7 +109,7 @@ Set up the server and compile the app yourself with instructions provided.
 
 1. **Clone the Repository**: Begin by cloning the cli-Mate repository from GitHub to your local machine. This step ensures you have the server's source code.
     ```bash
-    git clone git_link
+    git clone https://github.com/me-sanath/HackAI_Hack-230354.git
     ```
 2. **Create a Virtual Environment**: It's a good practice to work in a virtual environment to manage dependencies cleanly. Create a virtual environment using your preferred method. For example, you can use Python's `virtualenv` or `venv`.
 
@@ -138,6 +142,15 @@ Set up the server and compile the app yourself with instructions provided.
 
     ```bash
     python manage.py runserver
+    ```
+## Running the uagent for notifications
+  All the keys for running notifier is already added in the uagents
+
+  **Change URL** If server is run locally, change the adress in the base url with local address.
+
+  ** Run this command to start notifier server:
+    ```bash
+    python weather_agent.py
     ```
 ## Compiling the App:
 
