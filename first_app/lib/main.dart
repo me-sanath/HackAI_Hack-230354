@@ -374,7 +374,7 @@ class _LandingPageState extends State<LandingPage> {
 
         // Fetch weather data based on the obtained coordinates
         final weatherData = await apiService.getDashboardData(
-            'Token 4825543ccae5f9f0b4e1f9f26c199d9e73857aef',
+            'Token 0e65ba414e6e60e54225eafa12d6ed98c3943cbd',
             {'latitude': position.latitude, 'longitude': position.longitude});
 
         setState(() {
